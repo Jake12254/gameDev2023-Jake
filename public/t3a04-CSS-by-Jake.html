@@ -8,6 +8,11 @@ function () {
     document.getElementById('c').innerHTML = c;
   },3000);
   </script>
+  <style>
+    @keyframes blinker {  
+  50% { opacity: 0; }
+}
+  </style>
 </body>
 
 Version 0.0.1</br>
@@ -46,14 +51,6 @@ b {
   I've become desensitised to the horrid things being done to this page
   </textarea><br>
                                                                                                           
-  <textarea style=".blink_me {
-  animation: blinker 1s linear infinite;
-}
-
-@keyframes blinker {  
-  50% { opacity: 0; }
-}
-
-}; positon:relative; left:150; top:150; width:200; height:50; ">
+  <textarea style="positon:relative; left:150; top:150; width:200; height:50; animation: blinker 1s linear infinite; ">
   NOt done
   </textarea><br>
