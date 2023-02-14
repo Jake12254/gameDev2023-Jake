@@ -12,8 +12,17 @@ function () {
     @keyframes blinker {  
   50% { opacity: 0; }
 }
-     body { 
-       cursor: url("gameDev2023-Jake/public/Rainbow_Cursor_29.gif"),auto;
+    #container {
+   cursor   : none;
+}
+
+#cursor {
+  position  : absolute;
+  z-index   : 10000;
+  width     : 40px;
+  height    : 40px;
+  background: transparent url('public/Rainbow_Cursor_29.gif') 0 0 no-repeat;
+}
 }
   </style>
 <body>
