@@ -13,10 +13,10 @@ Are you sure?: <input type="checkbox" value="Yes"><br>
   
 I wont be mad, be honest.: <input type="checkbox" value="I'm sure."><br>
   
-Are you willing to take a lie detector test?: <input type="checkbox" id="myCheckbox2" name="yesno" value="Yes">
+Are you willing to take a lie detector test?: <input type="checkbox" id="myCheckbox" name="yesno" value="Yes">
   Yes
   <script>
-  const checkbox = document.getElementById('myCheckbox2');
+  const checkbox = document.getElementById('myCheckbox');
   const text = document.getElementById('myYesText');
 
   checkbox.addEventListener('change', function() {
@@ -33,10 +33,10 @@ Are you willing to take a lie detector test?: <input type="checkbox" id="myCheck
   <p id="myYesText" style="display: none;">Well I dont have one. </p>
 
 <label>
-  <input type="checkbox" id="myCheckbox" name="no" value="no">
+  <input type="checkbox" id="Checkbox" name="no" value="no">
   No
   <script>
-  const checkbox = document.getElementById('myCheckbox');
+  const checkbox = document.getElementById('Checkbox');
   const text = document.getElementById('myText');
 
   checkbox.addEventListener('change', function() {
