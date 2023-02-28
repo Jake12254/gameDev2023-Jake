@@ -17,7 +17,7 @@ Are you willing to take a lie detector test?: <input type="checkbox" id="myCheck
   Yes
   <script>
   const checkbox = document.getElementById('myCheckbox');
-  const text = document.getElementById('myYesText');
+  const text = document.getElementById('myText');
 
   checkbox.addEventListener('change', function() {
     if (this.checked) {
@@ -31,22 +31,6 @@ Are you willing to take a lie detector test?: <input type="checkbox" id="myCheck
   
   <p id="myText" style="display: none;">I KNEW IT, YOU AREN'T REAL!!</p>
   
-
-<label>
-  <input type="checkbox" id="Checkbox" name="no" value="no">
-  No
-  <script>
-  const checkbox = document.getElementById('Checkbox');
-  const text = document.getElementById('myText');
-
-  checkbox.addEventListener('change', function() {
-    if (this.checked) {
-      text.style.display = 'block';
-    } else {
-      text.style.display = 'none';
-    }
-  });
-    </script>
 </label><br/>
   
 
