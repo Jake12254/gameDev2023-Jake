@@ -14,27 +14,8 @@ Are you sure?: <input type="checkbox" value="Yes"><br>
 I wont be mad, be honest.: <input type="checkbox" value="I'm sure."><br>
   
 Are you willing to take a lie detector test?: <input type="checkbox" id="myCheckbox2" name="yesno" value="Yes">
-  Yes</label>
-  
-  <p id="myText" style="display: none;">I KNEW IT, YOU AREN'T REAL!!</p>
-  <p id="myYesText" style="display: none;">Well I dont have one. </p>
-
-<label>
-  <input type="checkbox" id="myCheckbox" name="no" value="no">
-  No
-</label><br/>
+  Yes<
   <script>
-  const checkbox = document.getElementById('myCheckbox');
-  const text = document.getElementById('myText');
-
-  checkbox.addEventListener('change', function() {
-    if (this.checked) {
-      text.style.display = 'block';
-    } else {
-      text.style.display = 'none';
-    }
-  });
-
   const checkbox = document.getElementById('myCheckbox2');
   const text = document.getElementById('myYesText');
 
@@ -46,6 +27,30 @@ Are you willing to take a lie detector test?: <input type="checkbox" id="myCheck
     }
   });
 </script>
+  </label>
+  
+  <p id="myText" style="display: none;">I KNEW IT, YOU AREN'T REAL!!</p>
+  <p id="myYesText" style="display: none;">Well I dont have one. </p>
+
+<label>
+  <input type="checkbox" id="myCheckbox" name="no" value="no">
+  No
+  <script>
+  const checkbox = document.getElementById('myCheckbox');
+  const text = document.getElementById('myText');
+
+  checkbox.addEventListener('change', function() {
+    if (this.checked) {
+      text.style.display = 'block';
+    } else {
+      text.style.display = 'none';
+    }
+  });
+    </script>
+</label><br/>
+  
+
+  
 Radio Buttons:<br>
 
 167.7 <input typesradio name="myRadel” value="">br>
