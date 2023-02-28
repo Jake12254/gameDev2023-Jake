@@ -13,13 +13,32 @@ Are you sure?: <input type=checkbox><br>
   
 I wont be mad, be honest.: <input type=checkbox><br>
   
-Are you willing to take a lie detector test?: <input type="checkbox" name="yesno" value="yes">
+Are you willing to take a lie detector test?: <input type="checkbox" id="mycheckbox" name="yesno" value="yes">
   Yes</label>
+  <p id="myText" style="display: none;">I KNEW IT, YOU AREN'T REAL!!</p>
 
 <label>
   <input type="checkbox" name="yesno" value="no">
   No
-</label>
+</label><br/>
+  <script>
+  const checkbox = document.getElementById('myCheckbox');
+  const text = document.getElementById('myText');
+
+  checkbox.addEventListener('change', function() {
+    if (this.checked) {
+      text.style.display = 'block';
+    } else {
+      text.style.display = 'none';
+    }
+  });
+</script>
+In the above code, we have created a checkbox with an ID of "myCheckbox" and a paragraph element with an ID of "myText" that initially has its display property set to "none". We then use JavaScript to add an event listener to the checkbox that listens for changes to its checked status. When the checkbox is checked, the text in the "myText" element will be displayed by setting its display property to "block". When the checkbox is unchecked, the text will be hidden again by setting the display property back to "none".
+
+
+
+
+
 
 Radio Buttons:<br>
 
