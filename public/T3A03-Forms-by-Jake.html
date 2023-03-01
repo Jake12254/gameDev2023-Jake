@@ -13,13 +13,18 @@ Checkbox: <br>
 <input type="checkbox" id="no-checkbox" name="no-checkbox" value="no">
 <label for="no-checkbox">No</label> <br>
 
-<br> <br> Are you sure?: <input type=checkbox id=Yes id=No><br>
+ Are you sure?: <input type="checkbox" id="checkbox2"><br>
   
   <input type="checkbox" id="reveal-text">
 <label for="reveal-text">Click to reveal text</label>
 <p id="hidden-text" style="display:none;">This is the text that will be revealed when the checkbox is clicked.</p>
   <br>
-
+<script>
+  document.getElementById("checkbox1").addEventListener("click", function() {
+        var checkbox2 = document.getElementById("checkbox2");
+        checkbox2.style.display = this.checked ? "inline" : "none";
+    });
+</script>
 <script>
   const checkbox = document.querySelector('#reveal-text');
   const hiddenText = document.querySelector('#hidden-text');
