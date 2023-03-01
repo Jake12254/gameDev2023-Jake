@@ -7,9 +7,25 @@ The following are all form elements (add to them):<br>
 Enter Your First Name:<input typestext id
 Checkbox: <br>
 
-Beef: <input type=checkbox><br>
+Are you a human?: <input type=checkbox value=Yes> <br>
 
-Vegey: <input type=checkbox><br>
+Are you sure?: <input type=checkbox value=Yes value=No><br>
+  <input type="checkbox" id="reveal-text">
+<label for="reveal-text">Click to reveal text</label>
+<p id="hidden-text" style="display:none;">This is the text that will be revealed when the checkbox is clicked.</p>
+
+<script>
+  const checkbox = document.querySelector('#reveal-text');
+  const hiddenText = document.querySelector('#hidden-text');
+  
+  checkbox.addEventListener('change', function() {
+    if (this.checked) {
+      hiddenText.style.display = 'block';
+    } else {
+      hiddenText.style.display = 'none';
+    }
+  });
+</script>
 
 Radio Buttons:<br>
 
