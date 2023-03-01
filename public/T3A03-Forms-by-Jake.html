@@ -10,7 +10,7 @@ Checkbox: <br>
 <label for="checkbox1">Are you human?</label>
 <input type="checkbox" id="checkbox1">
 <br>
-<label for="checkbox2" style="display:none;" id="checkbox2" >Are you sure?</label>
+<label for="checkbox2" style="display:none;" id="checkboxtext" >Are you sure?</label>
 <input type="checkbox" id="checkbox2" style="display:none;">
 <br>
 <script>
@@ -18,6 +18,10 @@ Checkbox: <br>
         var checkbox2 = document.getElementById("checkbox2");
         checkbox2.style.display = this.checked ? "inline" : "none";
     });
+    document.getElementById("checkbox1").addEventListener("click", function() {
+        var checkbox2 = document.getElementById("checkboxtext");
+        checkbox2.style.display = this.checked ? "inline" : "none";
+         });
 </script>
 
  <label for="reveal-text">Click to reveal text</label>
