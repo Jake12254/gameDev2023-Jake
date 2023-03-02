@@ -6,6 +6,12 @@ The following are all form elements (add to them):<br>
 
 Enter Your First Name:<input typestext id
 Checkbox: <br>
+    <div class="captcha">
+  <label for="captcha">Enter the code:</label>
+  <input type="text" id="captcha" name="captcha">
+  <img src="captcha.php" alt="Captcha image">
+  <a href="#" onclick="document.getElementById('captcha').src='captcha.php?'+Math.random(); return false;">Refresh captcha</a>
+</div>
 <br>
 <label for="checkbox1">Are you human?</label>
 <input type="checkbox" name="Yes" id="checkbox1"> Yes
@@ -22,6 +28,11 @@ Checkbox: <br>
         var checkbox2 = document.getElementById("checkboxtext");
         checkbox2.style.display = this.checked ? "inline" : "none";
          });
+    .captcha img {
+  border: 1px solid #ccc;
+  padding: 5px;
+  margin-right: 5px;
+}
 </script>
 
  <label for="reveal-text">Click to reveal text</label>
