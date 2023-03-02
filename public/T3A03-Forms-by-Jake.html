@@ -12,6 +12,8 @@ Checkbox: <br>
 <input type="checkbox" name="Yes" id="checkbox1"> Yes
 <br>
 <label for="checkbox2" style="display:none;" id="checkboxtext" >Are you sure?</label>
+<input type="checkbox" name="Yes" id="checkbox2" style="display:none;">
+<label for="checkbox2" style="display:none;" id="checkbox3" >Are you sure?</label>
 <input type="checkbox" name="Yes" id="checkbox2" style="display:none;"> 
 <br>
 <script>
@@ -19,6 +21,16 @@ Checkbox: <br>
         var checkbox2 = document.getElementById("checkbox2");
         checkbox2.style.display = this.checked ? "inline" : "none";
     });
+     document.getElementById("checkbox1").addEventListener("click", function() {
+        var checkbox2 = document.getElementById("checkboxtext");
+        checkbox2.style.display = this.checked ? "inline" : "none";
+    });
+     document.getElementById("checkbox2").addEventListener("click", function() {
+        var checkbox2 = document.getElementById("checkbox3");
+        checkbox2.style.display = this.checked ? "inline" : "none";
+    });
+ 
+ 
  
 </script>
 
