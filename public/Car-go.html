@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Car Driving Animation</title>
+	<style>
+		.car {
+			position: absolute;
+			top: 100px;
+			left: -200px;
+			width: 150px;
+			height: 75px;
+			background-color: red;
+			border-radius: 10px;
+			animation: drive 5s linear infinite;
+		}
+
+		@keyframes drive {
+			0% {left: -200px;}
+			100% {left: calc(100% + 200px);}
+		}
+	</style>
+</head>
+<body>
+	<div class="car"></div>
+</body>
+</html>
