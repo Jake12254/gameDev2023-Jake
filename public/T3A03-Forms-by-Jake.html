@@ -87,9 +87,61 @@ Checkbox: <br>
 		<input type="radio" name="q3" value="c" id="q3c">
 		<label for="q3c">c) Mumbai</label><br>
 
-		<input type="submit" value="Submit">
+		<input type="submit" value="Submit" onclick="calculateScore()">
 	</form>
+	<p id="score"></p>
 </body>
+	<script>
+		function calculateScore() {
+			var q1 = document.querySelector('input[name="q1"]:checked').value;
+			var q2 = document.querySelector('input[name="q2"]:checked').value;
+			var q3 = document.querySelector('input[name="q3"]:checked').value;
+			var score = 0;
+			if (q1 == "c") {
+				score += 1;
+			}
+			if (q2 == "a") {
+				score += 1;
+			}
+			if (q3 == "b") {
+				score += 1;
+			}
+			document.getElementById("score").innerHTML = "Your score is: " + score + "/3";
+		}
+	</script>
+</head>
+<body>
+	<h1>Quiz</h1>
+	<form>
+		<p>Question 1: What is the capital of France?</p>
+		<input type="radio" name="q1" value="a" id="q1a">
+		<label for="q1a">a) London</label><br>
+		<input type="radio" name="q1" value="b" id="q1b">
+		<label for="q1b">b) Paris</label><br>
+		<input type="radio" name="q1" value="c" id="q1c">
+		<label for="q1c">c) Berlin</label><br>
+
+		<p>Question 2: Who wrote the Harry Potter series?</p>
+		<input type="radio" name="q2" value="a" id="q2a">
+		<label for="q2a">a) J.K. Rowling</label><br>
+		<input type="radio" name="q2" value="b" id="q2b">
+		<label for="q2b">b) Stephenie Meyer</label><br>
+		<input type="radio" name="q2" value="c" id="q2c">
+		<label for="q2c">c) Suzanne Collins</label><br>
+
+		<p>Question 3: What is the highest mountain in the world?</p>
+		<input type="radio" name="q3" value="a" id="q3a">
+		<label for="q3a">a) Mount Kilimanjaro</label><br>
+		<input type="radio" name="q3" value="b" id="q3b">
+		<label for="q3b">b) Mount Everest</label><br>
+		<input type="radio" name="q3" value="c" id="q3c">
+		<label for="q3c">c) Mount Fuji</label><br>
+
+		<input type="button" value="Submit" onclick="calculateScore()">
+	</form>
+	<p id="score"></p>
+</body>
+</html>
 
 myTexto1” value="Fred”><br>
 
