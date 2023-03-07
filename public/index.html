@@ -38,8 +38,7 @@ function () {
           
           <div id="tree"></div>
 <button onclick="chop()">Chop!</button>
-          <script>
-            #tree {
+  <script>      #tree {
   width: 200px;
   height: 300px;
   background-image: url('tree.png');
@@ -73,9 +72,7 @@ function () {
     display: none;
   }
 }
-</script>
-          <script>
-            function chop() {
+function chop() {
   document.getElementById('axe').style.display = 'block';
   setTimeout(function() {
     document.getElementById('axe').style.display = 'none';
@@ -83,4 +80,3 @@ function () {
   }, 1000);
 }
           </script>
-
