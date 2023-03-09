@@ -19,4 +19,71 @@ let myAnswer = myInel * myInel;
 document.getElementById('myDive1').innerHTML = myInel + " squared = " + myAnswer;
 }"><br>
 
+Addition of two numbers:
+<pre>
+<h4>Example input output code</h4>
+<pre>
+let num1 = parseFloat(document.getElementById('num1').value);
+let num2 = parseFloat(document.getElementById('num2').value);
+let result = num1 + num2;
+document.getElementById('output').innerHTML = num1 + " + " + num2 + " = " + result;
+</pre>
+<h4>Example working code</h4>
+<input type="number" id="num1" value="5">
+<input type="number" id="num2" value="10">
+<button onclick="addNumbers()">Add Numbers</button>
+<div id="output"></div>
+<script>
+function addNumbers() {
+  let num1 = parseFloat(document.getElementById('num1').value);
+  let num2 = parseFloat(document.getElementById('num2').value);
+  let result = num1 + num2;
+  document.getElementById('output').innerHTML = num1 + " + " + num2 + " = " + result;
+}
+</script>
+</div>
+Celsius to Fahrenheit conversion:
+<pre>
+<h4>Example input output code</h4>
+<pre>
+let celsius = parseFloat(document.getElementById('celsius').value);
+let fahrenheit = (celsius * 9/5) + 32;
+document.getElementById('output').innerHTML = celsius + "°C = " + fahrenheit + "°F";
+</pre>
+<h4>Example working code</h4>
+<input type="number" id="celsius" value="25">
+<button onclick="convertTemperature()">Convert Temperature</button>
+<div id="output"></div>
+<script>
+function convertTemperature() {
+  let celsius = parseFloat(document.getElementById('celsius').value);
+  let fahrenheit = (celsius * 9/5) + 32;
+  document.getElementById('output').innerHTML = celsius + "°C = " + fahrenheit + "°F";
+}
+</script>
+</div>
+String concatenation:
+<pre>
+<h4>Example input output code</h4>
+<pre>
+let firstName = document.getElementById('firstName').value;
+let lastName = document.getElementById('lastName').value;
+let fullName = firstName + " " + lastName;
+document.getElementById('output').innerHTML = "Your name is: " + fullName;
+</pre>
+<h4>Example working code</h4>
+<input type="text" id="firstName" placeholder="First Name">
+<input type="text" id="lastName" placeholder="Last Name">
+<button onclick="concatenateStrings()">Concatenate Strings</button>
+<div id="output"></div>
+<script>
+function concatenateStrings() {
+  let firstName = document.getElementById('firstName').value;
+  let lastName = document.getElementById('lastName').value;
+  let fullName = firstName + " " + lastName;
+  document.getElementById('output').innerHTML = "Your name is: " + fullName;
+}
+</script>
+</div>
+
 <div id="myDive1"></div>
