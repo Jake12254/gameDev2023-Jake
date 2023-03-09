@@ -4,86 +4,56 @@ Version 0.1.2
 <a href="https://www.w3schools.com/jsref/prop_html_innerhtml.asp">Good reference to input output
 Javascript innerHTML value by Fred</a>
 
-<h4>Example input output code</h4>
-<pre>
-let myInel = document.getElementById('myNum61').value;
-document.getElementById('myDive1').innerHTML = myInel + " squared = " + myInel*myInel;
-</pre>
+<h4>Feature 1: Calculate area of a rectangle</h4>
+	<label for="lengthInput">Length:</label>
+	<input id="lengthInput" type="number" value="0">
+	<br>
+	<label for="widthInput">Width:</label>
+	<input id="widthInput" type="number" value="0">
+	<br>
+	<button onclick="calculateArea()">Calculate Area</button>
+	<div id="areaOutput"></div>
 
-<h4>Example working code</h4>
-<input id="myNum61" type="number" value="4" ><br>
+	<hr>
 
-<input type="button" value="myEvent squares" onclick="{
-let myInel = parseFloat(document.getElementById('myNum61').value);
-let myAnswer = myInel * myInel;
-document.getElementById('myDive1').innerHTML = myInel + " squared = " + myAnswer;
-}"><br>
+	<h4>Feature 2: Convert temperature from Celsius to Fahrenheit</h4>
+	<label for="celsiusInput">Celsius:</label>
+	<input id="celsiusInput" type="number" value="0">
+	<br>
+	<button onclick="convertToFahrenheit()">Convert to Fahrenheit</button>
+	<div id="fahrenheitOutput"></div>
 
-Addition of two numbers:
-<pre>
-<h4>Example input output code</h4>
-<pre>
-let num1 = parseFloat(document.getElementById('num1').value);
-let num2 = parseFloat(document.getElementById('num2').value);
-let result = num1 + num2;
-document.getElementById('output').innerHTML = num1 + " + " + num2 + " = " + result;
-</pre>
-<h4>Example working code</h4>
-<input type="number" id="num1" value="5">
-<input type="number" id="num2" value="10">
-<button onclick="addNumbers()">Add Numbers</button>
-<div id="output"></div>
-<script>
-function addNumbers() {
-  let num1 = parseFloat(document.getElementById('num1').value);
-  let num2 = parseFloat(document.getElementById('num2').value);
-  let result = num1 + num2;
-  document.getElementById('output').innerHTML = num1 + " + " + num2 + " = " + result;
-}
-</script>
-</div>
-Celsius to Fahrenheit conversion:
-<pre>
-<h4>Example input output code</h4>
-<pre>
-let celsius = parseFloat(document.getElementById('celsius').value);
-let fahrenheit = (celsius * 9/5) + 32;
-document.getElementById('output').innerHTML = celsius + "°C = " + fahrenheit + "°F";
-</pre>
-<h4>Example working code</h4>
-<input type="number" id="celsius" value="25">
-<button onclick="convertTemperature()">Convert Temperature</button>
-<div id="output"></div>
-<script>
-function convertTemperature() {
-  let celsius = parseFloat(document.getElementById('celsius').value);
-  let fahrenheit = (celsius * 9/5) + 32;
-  document.getElementById('output').innerHTML = celsius + "°C = " + fahrenheit + "°F";
-}
-</script>
-</div>
-String concatenation:
-<pre>
-<h4>Example input output code</h4>
-<pre>
-let firstName = document.getElementById('firstName').value;
-let lastName = document.getElementById('lastName').value;
-let fullName = firstName + " " + lastName;
-document.getElementById('output').innerHTML = "Your name is: " + fullName;
-</pre>
-<h4>Example working code</h4>
-<input type="text" id="firstName" placeholder="First Name">
-<input type="text" id="lastName" placeholder="Last Name">
-<button onclick="concatenateStrings()">Concatenate Strings</button>
-<div id="output"></div>
-<script>
-function concatenateStrings() {
-  let firstName = document.getElementById('firstName').value;
-  let lastName = document.getElementById('lastName').value;
-  let fullName = firstName + " " + lastName;
-  document.getElementById('output').innerHTML = "Your name is: " + fullName;
-}
-</script>
-</div>
+	<hr>
 
-<div id="myDive1"></div>
+	<h4>Feature 3: Check if a number is even or odd</h4>
+	<label for="numberInput">Number:</label>
+	<input id="numberInput" type="number" value="0">
+	<br>
+	<button onclick="checkEvenOrOdd()">Check Even/Odd</button>
+	<div id="evenOddOutput"></div>
+
+	<script>
+		function calculateArea() {
+			let length = parseFloat(document.getElementById("lengthInput").value);
+			let width = parseFloat(document.getElementById("widthInput").value);
+			let area = length * width;
+			document.getElementById("areaOutput").innerHTML = "Area: " + area;
+		}
+
+		function convertToFahrenheit() {
+			let celsius = parseFloat(document.getElementById("celsiusInput").value);
+			let fahrenheit = (celsius * 9/5) + 32;
+			document.getElementById("fahrenheitOutput").innerHTML = "Fahrenheit: " + fahrenheit;
+		}
+
+		function checkEvenOrOdd() {
+			let number = parseInt(document.getElementById("numberInput").value);
+			if (number % 2 == 0) {
+				document.getElementById("evenOddOutput").innerHTML = "Even";
+			} else {
+				document.getElementById("evenOddOutput").innerHTML = "Odd";
+			}
+		}
+	</script>
+</body>
+</html>
