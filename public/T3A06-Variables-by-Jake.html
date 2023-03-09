@@ -1,35 +1,31 @@
 enter>t1a06-variables-by-Jake.html</h2>
 
-You Fix: Good reference to Variables in Javascript
-and other languages</a><br>
+<h2>Variables in JavaScript</h2>
 
-Other Languages use: bool, int, float, char, string,
-int 8, int_16 etccbr>
+<p>Good reference to variables in JavaScript and other languages</p>
 
-Note: Javascript does use var and let for local variables.<br>
-For Global variables Mr. ELLis prefers to use document.myVarName
+<p>Other languages use: bool, int, float, char, string, int8, int16 etc.</p>
 
-<ha> Example input output code</hd>
+<p>Note: JavaScript uses var and let for local variables. For global variables, Mr. Ellis prefers to use document.myVarName.</p>
+
+<h3>Example input output code</h3>
+
 <pre>
-let myInol = document. getElementById( myTextel’). value
-document. getElementByTd(myDivel"
+let myInel = document.getElementById('myTextel').value;
+document.getElementById('myDivel').innerHTML = myInel;
 </pre>
 
-<ha> Example working code</ha>
+<h3>Example working code</h3>
 
-‘myTextol” type=text value="The dog " ><br>
+<input type="text" id="myTextel" value="The dog"><br>
 
-<input
+<input type="button" value="Show Variable" onclick="{
+  let myInel = document.getElementById('myTextel').value;
+  document.getElementById('myDivel').innerHTML = myInel;
+}"><br>
 
-<input type=button value="Show Variable” onclick="{
-let myInel = document.getElementById( myTextel’). value
-document. getElementById(‘myDivel') .innerHTHL = myInol
+<input type="button" value="Using no variable" onclick="{
+  document.getElementById('myDivel').innerHTML = document.getElementById('myTextel').value;
+}"><br>
 
-}7><br>
-<input type=button value="Using no variable” onclick="{
-document. getElementByTd(‘myDivel') .innerHTHL =
-document. getElementById(‘myTextol') value
-}7><br>,
-
-<div
-
+<div id="myDivel"></div>
