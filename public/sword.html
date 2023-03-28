@@ -1,0 +1,22 @@
+<div id="character1"></div>
+<div id="character2"></div>
+<script>
+@keyframes swordfight {
+    0% { /* starting position */
+        transform: translateX(0px) rotateY(0deg);
+    }
+    50% { /* mid-fight position */
+        transform: translateX(200px) rotateY(-180deg);
+    }
+    100% { /* ending position */
+        transform: translateX(400px) rotateY(0deg);
+    }
+}
+</script>
+<script>
+var character1 = document.getElementById("character1");
+var character2 = document.getElementById("character2");
+
+character1.style.animation = "swordfight 2s infinite";
+character2.style.animation = "swordfight 2s infinite";
+</script>
