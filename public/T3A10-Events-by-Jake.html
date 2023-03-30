@@ -1,28 +1,22 @@
-Version 0.0.6
-<h2 align=center>T3A10-Events-by-Jake.html</h2>
-<a href="https://way2tutorial.com/html/html5_events_handler_list.php">Good reference to HTML Events</a><br>
-Events are HTML code that activates Javascript code
-<h4> Example Functions code</h4>
-<pre>
-&lt input type=button value="Example onClick" onClick="{
-alert('hi')
-}" &gt </pre>
-<h4> Example working code</h4>
-<input type=text id="myText01" value="3"><br>
-<input type=button value="Example onClick" onclick="{
-}">
-document.getElementById('myDive1').innerHTML = document.getElementById('myText01').value
-|<div id="myDiv@1">...</div>
-}"
-<b id="myB01" onMouseout="{
-onMouseOver="{
-document.getElementById('myB01').innerHTML
-=
-'This is bold'
-}"
-document.getElementById('myB01').innerHTML > This is bold</b>
-=
-'This is cool'
-<br>
-You do at least 8 other events:<br>
-onClick, onDbClick, onChange, onBlue, on Focus, onMouseMove, onTouch, onkeyDown, onKeyPress, onDragStart, onTouchStart, onTouch End, onTouchMove
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>T3A10-Events-by-Jake</title>
+  </head>
+  <body>
+    <h2 align="center">T3A10-Events-by-Jake.html</h2>
+    <a href="https://way2tutorial.com/html/html5_events_handler_list.php">Good reference to HTML Events</a><br>
+    Events are HTML code that activates JavaScript code
+    <h4> Example Functions code</h4>
+    <input type="button" value="Example onClick" onClick="alert('hi')">
+    <h4> Example working code</h4>
+    <input type="text" id="myText01" value="3"><br>
+    <input type="button" value="Example onClick" onclick="document.getElementById('myDiv1').innerHTML = document.getElementById('myText01').value">
+    <div id="myDiv1">...</div>
+    <b id="myB01" onMouseOut="document.getElementById('myB01').innerHTML='This is cool'" onMouseOver="document.getElementById('myB01').innerHTML='This is bold'">This is cool</b>
+    <br>
+    You can use at least 8 other events:<br>
+    onClick, onDoubleClick, onChange, onBlur, onFocus, onMouseMove, onTouch, onKeyDown, onKeyPress, onDragStart, onTouchStart, onTouchEnd, onTouchMove
+    <footer>
+
