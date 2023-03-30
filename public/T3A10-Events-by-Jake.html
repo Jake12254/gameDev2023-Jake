@@ -1,22 +1,97 @@
 
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>T3A10-Events-by-Jake</title>
-  </head>
-  <body>
-    <h2 align="center">T3A10-Events-by-Jake.html</h2>
-    <a href="https://way2tutorial.com/html/html5_events_handler_list.php">Good reference to HTML Events</a><br>
-    Events are HTML code that activates JavaScript code
-    <h4> Example Functions code</h4>
-    <input type="button" value="Example onClick" onClick="alert('hi')">
-    <h4> Example working code</h4>
-    <input type="text" id="myText01" value="3"><br>
-    <input type="button" value="Example onClick" onclick="document.getElementById('myDiv1').innerHTML = document.getElementById('myText01').value">
-    <div id="myDiv1">...</div>
-    <b id="myB01" onMouseOut="document.getElementById('myB01').innerHTML='This is cool'" onMouseOver="document.getElementById('myB01').innerHTML='This is bold'">This is cool</b>
-    <br>
-    You can use at least 8 other events:<br>
-    onClick, onDoubleClick, onChange, onBlur, onFocus, onMouseMove, onTouch, onKeyDown, onKeyPress, onDragStart, onTouchStart, onTouchEnd, onTouchMove
-    </html>
+<head>
+	<title>T3A10-Events-by-Jake.html</title>
+	<meta charset="UTF-8">
+</head>
+<body>
+	<h2 align="center">T3A10-Events-by-Jake.html</h2>
+	<a href="https://way2tutorial.com/html/html5_events_handler_list.php">Good reference to HTML Events</a><br>
+	<p>Events are HTML code that activates JavaScript code</p>
 
+	<h4>Example Functions code</h4>
+	<pre>
+		<input type="button" value="Example onClick" onClick="alert('hi')">
+	</pre>
+
+	<h4>Example working code</h4>
+	<input type="text" id="myText01" value="3"><br>
+	<input type="button" value="Example onClick" onclick="document.getElementById('myDiv1').innerHTML = document.getElementById('myText01').value">
+	<div id="myDiv1">...</div>
+
+	<b id="myB01" onMouseOut="document.getElementById('myB01').innerHTML = 'This is cool'" onMouseOver="document.getElementById('myB01').innerHTML = 'This is bold'">This is cool</b><br>
+
+	<h4>Other events</h4>
+	<p>Click the button below to test the following events:</p>
+	<ul>
+		<li>onClick</li>
+		<li>onDoubleClick</li>
+		<li>onChange</li>
+		<li>onBlur</li>
+		<li>onFocus</li>
+		<li>onMouseMove</li>
+		<li>onTouch</li>
+		<li>onKeyDown</li>
+		<li>onKeyPress</li>
+		<li>onDragStart</li>
+		<li>onTouchStart</li>
+		<li>onTouchEnd</li>
+		<li>onTouchMove</li>
+	</ul>
+
+	<button id="testButton" onClick="testEvents()">Test Events</button>
+
+	<script>
+		function testEvents() {
+			alert("onClick event triggered");
+		}
+
+		function testDoubleClick() {
+			alert("onDoubleClick event triggered");
+		}
+
+		function testChange() {
+			alert("onChange event triggered");
+		}
+
+		function testBlur() {
+			alert("onBlur event triggered");
+		}
+
+		function testFocus() {
+			alert("onFocus event triggered");
+		}
+
+		function testMouseMove() {
+			alert("onMouseMove event triggered");
+		}
+
+		function testTouch() {
+			alert("onTouch event triggered");
+		}
+
+		function testKeyDown() {
+			alert("onKeyDown event triggered");
+		}
+
+		function testKeyPress() {
+			alert("onKeyPress event triggered");
+		}
+
+		function testDragStart() {
+			alert("onDragStart event triggered");
+		}
+
+		function testTouchStart() {
+			alert("onTouchStart event triggered");
+		}
+
+		function testTouchEnd() {
+			alert("onTouchEnd event triggered");
+		}
+
+		function testTouchMove() {
+			alert("onTouchMove event triggered");
+		}
+	</script>
