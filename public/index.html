@@ -1,13 +1,11 @@
-<body>
-  <h1 id="c">#ffffff</h1>
-  <script>
-    setInterval(
-function () {
-    var c = '#' + Math.floor(Math.random() * 16777215).toString(16);
-    document.body.style.background = c;
-    document.getElementById('c').innerHTML = c;
-  },3000);
-	</script>
+<body> 
+	<style>
+	background-image: url("https://gifdb.com/images/high/pixel-art-china-town-t2jrxaqaxu37yecj.gif");
+			background-repeat: no-repeat;
+			background-size: cover;
+	</style>
+</body>
+	</script>		<image src=
 </body>        
 <h5> Version 0.0.8</H5>
 <h1 align=center style="color:#52c1e8;">index.html for Game Dev by Jake<h1>
@@ -32,80 +30,3 @@ function () {
 		<li><a style="color:#6d3cs6;" href="T4A10a-b-translate-and-sound-by-Jake.html">T4A10a-b-Translate-and-Sound-by-Jake</a>
 		<li><a style="coloe:#74043f;" href="T3AReview-by-Jake.html">T3AReview-by-Jake</a>
 			
-			<script>
-				let speed = 20;
-let scale = 0.17; // Image scale (I work on 1080p monitor)
-let canvas;
-let ctx;
-let logoColor;
-
-let dvd = {
-    x: 200,
-    y: 300,
-    xspeed: 10,
-    yspeed: 10,
-    img: new Image()
-};
-
-(function main(){
-    canvas = document.getElementById("tv-screen");
-    ctx = canvas.getContext("2d");
-    dvd.img.src = 'dvd-logo.png';
-
-    //Draw the "tv screen"
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    pickColor();
-    update();
-})();
-
-function update() {
-    setTimeout(() => {
-        //Draw the canvas background
-        ctx.fillStyle = '#000';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        //Draw DVD Logo and his background
-        ctx.fillStyle = logoColor;
-        ctx.fillRect(dvd.x, dvd.y, dvd.img.width*scale, dvd.img.height*scale);
-        ctx.drawImage(dvd.img, dvd.x, dvd.y, dvd.img.width*scale, dvd.img.height*scale);
-        //Move the logo
-        dvd.x+=dvd.xspeed;
-        dvd.y+=dvd.yspeed;
-        //Check for collision 
-        checkHitBox();
-        update();   
-    }, speed)
-}
-
-//Check for border collision
-function checkHitBox(){
-    if(dvd.x+dvd.img.width*scale >= canvas.width || dvd.x <= 0){
-        dvd.xspeed *= -1;
-        pickColor();
-    }
-        
-    if(dvd.y+dvd.img.height*scale >= canvas.height || dvd.y <= 0){
-        dvd.yspeed *= -1;
-        pickColor();
-    }    
-}
-
-//Pick a random color in RGB format
-function pickColor(){
-    r = Math.random() * (254 - 0) + 0;
-    g = Math.random() * (254 - 0) + 0;
-    b = Math.random() * (254 - 0) + 0;
-
-    logoColor = 'rgb('+r+','+g+', '+b+')';
-}
-			</script>
-					
-	<h3> Neat Stuff</h3>
-		<li><a href="https://gist.github.com/archfizz/6248994">Source For Color Changing Background Script</a>
-		<li><a href="https://github.com/hpssjellis/high-school-javascript-game-dev-assignment-images">Mr Ellis Website</a>
-		  <li><a href="Car-go.html">Car that goes.</a>
-		<li><a href="sword.html">Spinning Cubes.</a>
-	
-	
-
