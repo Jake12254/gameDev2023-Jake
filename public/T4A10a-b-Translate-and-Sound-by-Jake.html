@@ -1,33 +1,59 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<title>t4a10-translate-by-jake</title>
+	<meta charset="utf-8">
+	<title>Language Translation System</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-	<script src="https://code.responsivevoice.org/responsivevoice.js"></script>
+	<style>
+		#google_translate_element { display: none; }
+		#translation { min-height: 100px; }
+	</style>
 </head>
 <body>
-	<h1 align="center">t2a10-translate-by-jake</h1>
-
-	<div id="google_translate_element">I really like javascript</div>
-
-	<input type="button" value="Initialize speak" onclick="speak()">
-
+	<h1>Language Translation System</h1>
+	
+	<div id="google_translate_element"></div>
+	
+	<div>
+		<textarea id="original-text" placeholder="Enter text to translate"></textarea>
+		<button id="translate-btn">Translate</button>
+	</div>
+	
+	<div id="translation"></div>
+	
 	<script>
 		function googleTranslateElementInit() {
 			new google.translate.TranslateElement({
-				pageLanguage: 'en',
-				includedLanguages: 'en,fr,de,ru',
-				layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-				autoDisplay: false
+				pageLanguage: 'en', 
+				layout: google.translate.TranslateElement.InlineLayout.SIMPLE
 			}, 'google_translate_element');
 		}
 
-		function speak() {
-			let myVoice = 'Russian Female';
-			let text = document.getElementById('google_translate_element').textContent;
-			responsiveVoice.speak(text, myVoice, {pitch: 1, rate: 1, volume: 1});
-		}
+		$(document).ready(function() {
+			$('#translate-btn').click(function() {
+				var originalText = $('#original-text').val();
+				googleTranslate(originalText, function(result) {
+					$('#translation').html(result);
+				});
+			});
+
+			function googleTranslate(text, callback) {
+				var sourceLang = 'en';
+				var targetLang = 'es';
+				var url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=' 
+				          + sourceLang + '&tl=' + targetLang + '&dt=t&q=' + encodeURI(text);
+
+				$.ajax({
+					url: url,
+					dataType: 'jsonp',
+					success: function(data) {
+						var translatedText = data[0][0][0];
+						callback(translatedText);
+					}
+				});
+			}
+		});
 	</script>
 </body>
 </html>
