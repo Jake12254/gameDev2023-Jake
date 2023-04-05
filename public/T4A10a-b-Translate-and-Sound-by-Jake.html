@@ -1,21 +1,33 @@
-<script src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-<script src='https://code.responsivevoice.org/responsivevoice.js'></script>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>t4a10-translate-by-jake</title>
+	<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+	<script src="https://code.responsivevoice.org/responsivevoice.js"></script>
+</head>
+<body>
+	<h1 align="center">t2a10-translate-by-jake</h1>
 
-<script>
-    function googleTranslateElementInit() {
-  new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'en,fr,de,ru', layout:google.translate.TranslateElement.InlineLayout.SIMPLE, autoDisplay: false}, 'google_translate_element');
+	<div id="google_translate_element">I really like javascript</div>
 
-    }
-</script>
+	<input type="button" value="Initialize speak" onclick="speak()">
 
+	<script>
+		function googleTranslateElementInit() {
+			new google.translate.TranslateElement({
+				pageLanguage: 'en',
+				includedLanguages: 'en,fr,de,ru',
+				layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+				autoDisplay: false
+			}, 'google_translate_element');
+		}
 
-
-<h1 align=center>t2a10-translate-by-jake</h1>
-
-<div id="google_translate_element">I really like javascript</div>
-
-
-<input  type="button" value="initilize speak" onclick="{  
-   let myVoice = 'Russian Female'
-   responsiveVoice.speak(document.getElementById('google_translate_element').innerText, myVoice, {pitch: 1, rate: 1, volume : 1})                                              
-}"><br><br>
+		function speak() {
+			let myVoice = 'Russian Female';
+			let text = document.getElementById('google_translate_element').textContent;
+			responsiveVoice.speak(text, myVoice, {pitch: 1, rate: 1, volume: 1});
+		}
+	</script>
+</body>
+</html>
