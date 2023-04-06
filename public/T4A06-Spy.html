@@ -6,12 +6,13 @@
   let myTemp = '';
   myString = document.getElementById('myArea01').value.toLowerCase().split('');
   for (let myLoop = 0; myLoop < myString.length; myLoop++) {
-    myTemp = myString[myLoop];
-    if (myString[myLoop] == 'e') {
-      myTemp = 'f';
-    }
-    if (myString[myLoop] == 'h') {
-      myTemp = 'i';
+    let myCharCode = myString[myLoop].charCodeAt(0);
+    if (myCharCode >= 97 && myCharCode <= 121) {
+      myTemp = String.fromCharCode(myCharCode + 1);
+    } else if (myCharCode == 122) {
+      myTemp = 'a';
+    } else {
+      myTemp = myString[myLoop];
     }
     myString[myLoop] = myTemp;
   }
@@ -24,12 +25,13 @@
   let myTemp = '';
   myString = document.getElementById('myArea02').value.toLowerCase().split('');
   for (let myLoop = 0; myLoop < myString.length; myLoop++) {
-    myTemp = myString[myLoop];
-    if (myString[myLoop] == 'f') {
-      myTemp = 'e';
-    }
-    if (myString[myLoop] == 'i') {
-      myTemp = 'h';
+    let myCharCode = myString[myLoop].charCodeAt(0);
+    if (myCharCode >= 98 && myCharCode <= 122) {
+      myTemp = String.fromCharCode(myCharCode - 1);
+    } else if (myCharCode == 97) {
+      myTemp = 'z';
+    } else {
+      myTemp = myString[myLoop];
     }
     myString[myLoop] = myTemp;
   }
