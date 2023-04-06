@@ -1,12 +1,10 @@
-enter>t1a06-variables-by-Jake.html</h2>
-
 <h2>Variables in JavaScript</h2>
 
 <p>Good reference to variables in JavaScript and other languages</p>
 
 <p>Other languages use: bool, int, float, char, string, int8, int16 etc.</p>
 
-<p>Note: JavaScript uses var and let for local variables. For global variables, Mr. Ellis prefers to use document.myVarName.</p>
+<p>Note: JavaScript uses var and let for local variables. For global variables, it's better to use the const keyword.</p>
 
 <h3>Example input output code</h3>
 
@@ -29,3 +27,16 @@ document.getElementById('myDivel').innerHTML = myInel;
 }"><br>
 
 <div id="myDivel"></div>
+
+<script>
+  // Some cool variables
+  const pi = 3.14159;
+  let myFavoriteColor = "blue";
+  var myLuckyNumber = 42;
+  const myFavoriteFoods = ["pizza", "sushi", "chocolate"];
+
+  console.log("The value of pi is: " + pi);
+  console.log("My favorite color is: " + myFavoriteColor);
+  console.log("My lucky number is: " + myLuckyNumber);
+  console.log("My favorite foods are: " + myFavoriteFoods.join(", "));
+</script>
