@@ -1,29 +1,69 @@
-<h1 align=center>t2a12 Sort by Jake</h1>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>t2a12 Sort by Jake</title>
+</head>
+<body>
+
+<h1 align="center">t2a12 Sort by Jake</h1>
 
 <script>
-   let myMax = 3      // 52 when working
-   let myCards = new Array(myMax)  
+	// Define the maximum number of cards
+	let myMax = 3;
+
+	// Create an array to store the cards
+	let myCards = new Array(myMax);
+
+	// Function to generate random numbers for the cards
+	function setRandom() {
+		for (let myLoop = 0; myLoop < myMax; myLoop++) {
+			myCards[myLoop] = Math.floor(Math.random() * 10);
+		}
+		updateOutput();
+	}
+
+	// Function to sort the cards in ascending order
+	function sortAsc() {
+		myCards.sort(function(a, b) {
+			return a - b;
+		});
+		updateOutput();
+	}
+
+	// Function to sort the cards in descending order
+	function sortDesc() {
+		myCards.sort(function(a, b) {
+			return b - a;
+		});
+		updateOutput();
+	}
+
+	// Function to sort the cards in random order
+	function sortRandom() {
+		myCards.sort(function() {
+			return 0.5 - Math.random();
+		});
+		updateOutput();
+	}
+
+	// Function to update the output on the page
+	function updateOutput() {
+		let table = "<table>";
+		table += "<tr><th>Card Number</th><th>Card Value</th></tr>";
+		for (let myLoop = 0; myLoop < myMax; myLoop++) {
+			table += "<tr><td>" + myLoop + "</td><td>" + myCards[myLoop] + "</td></tr>";
+		}
+		table += "</table>";
+		document.getElementById('myDiv01').innerHTML = table;
+	}
 </script>
 
-<input type=button value="Set Random" onclick="{
-  for ( let myLoop = 0;   myLoop < myMax;  myLoop++){
-     myCards[myLoop] = Math.floor(Math.random()*10)
-  }
-}">
+<input type="button" value="Set Random" onclick="setRandom();">
+<input type="button" value="Sort Ascending" onclick="sortAsc();">
+<input type="button" value="Sort Descending" onclick="sortDesc();">
+<input type="button" value="Sort Randomly" onclick="sortRandom();">
 
-<input type=button value="Show" onclick="{
-  let myTemp = ''
-  for ( let myLoop = 0;   myLoop < myMax;  myLoop++){
-     myTemp += myLoop + ' = '+ myCards[myLoop] + '<br>'
-  }
-   document.getElementById('myDiv01').innerHTML = myTemp
-}">
+<div id="myDiv01"></div>
 
-<input type=button value="Sort" onclick="{
-  let myTemp = 0
-  for ( let myLoop = 0;   myLoop < myMax;  myLoop++){
-     myCards[myLoop] = 0 // you do this stuff
-  }
-}">
-
-<dir id="myDiv01"></div>
+</body>
+</html>
