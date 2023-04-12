@@ -9,7 +9,7 @@
 
 <script>
 	// Define the maximum number of cards
-	let myMax = 6;
+	let myMax = 10;
 
 	// Create an array to store the cards
 	let myCards = new Array(myMax);
@@ -52,7 +52,7 @@
 		table += "<tr><th>Card Number</th><th>Card Value</th></tr>";
 		for (let myLoop = 0; myLoop < myMax; myLoop++) {
 			table += "<tr><td>" + myLoop + "</td><td>" + myCards[myLoop] + "</td></tr>";
-			if (myLoop == 2) {
+			if (myLoop == 3 || myLoop == 7) {
 				table += "<tr><td colspan='2'>----</td></tr>";
 			}
 		}
