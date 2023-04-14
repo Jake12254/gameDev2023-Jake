@@ -42,62 +42,6 @@
     }
     }
     }">
-<br>
-<div id="myDiv01"></div>
-
-<script>
-	// Define the maximum number of cards
-	let myMax = 10;
-
-	// Create an array to store the cards
-	let myCards = new Array(myMax);
-
-	// Function to generate random numbers for the cards
-	function setRandom() {
-		for (let myLoop = 0; myLoop < myMax; myLoop++) {
-			myCards[myLoop] = Math.floor(Math.random() * 10);
-		}
-		updateOutput();
-	}
-
-	// Function to sort the cards in ascending order
-	function sortAsc() {
-		myCards.sort(function(a, b) {
-			return a - b;
-		});
-		updateOutput();
-	}
-
-	// Function to sort the cards in descending order
-	function sortDesc() {
-		myCards.sort(function(a, b) {
-			return b - a;
-		});
-		updateOutput();
-	}
-
-	// Function to sort the cards in random order
-	function sortRandom() {
-		myCards.sort(function() {
-			return 0.5 - Math.random();
-		});
-		updateOutput();
-	}
-
-	// Function to update the output on the page
-	function updateOutput() {
-		let table = "<table>";
-		table += "<tr><th>Card Number</th><th>Card Value</th></tr>";
-		for (let myLoop = 0; myLoop < myMax; myLoop++) {
-			table += "<tr><td>" + myLoop + "</td><td>" + myCards[myLoop] + "</td></tr>";
-			if (myLoop == 3 || myLoop == 7) {
-				table += "<tr><td colspan='2'>----</td></tr>";
-			}
-		}
-		table += "</table>";
-		document.getElementById('myDiv01').innerHTML = table;
-	}
-</script>
 
 <input type="button" value="Set Random" onclick="setRandom();">
 <input type="button" value="Sort Ascending" onclick="sortAsc();">
