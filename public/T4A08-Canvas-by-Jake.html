@@ -1,127 +1,48 @@
-<h2 align=center>t2a08-canvas by Jake</h2>
-You use loops and variables to make fast fancy drawings 
+<h2 align="center">t2a08-canvas by Jake</h2>
 
-<input type="button" value="Add Deer" onclick="drawDeer()">
-
-<canvas id="myCanvas" width="500" height="500"></canvas>
-
-<script>
-    const canvas = document.getElementById("myCanvas");
-    const ctx = canvas.getContext("2d");
-
-    function drawDeer() {
-        // Draw deer body
-        ctx.beginPath();
-        ctx.arc(250, 250, 100, 0, 2 * Math.PI);
-        ctx.fillStyle = "#8B4513";
-        ctx.fill();
-
-        // Draw deer head
-        ctx.beginPath();
-        ctx.arc(170, 220, 60, 0, 2 * Math.PI);
-        ctx.fillStyle = "#8B4513";
-        ctx.fill();
-
-        // Draw deer ears
-        ctx.beginPath();
-        ctx.moveTo(130, 190);
-        ctx.lineTo(180, 190);
-        ctx.lineTo(170, 220);
-        ctx.fillStyle = "#8B4513";
-        ctx.fill();
-        ctx.beginPath();
-        ctx.moveTo(220, 190);
-        ctx.lineTo(270, 190);
-        ctx.lineTo(250, 220);
-        ctx.fillStyle = "#8B4513";
-        ctx.fill();
-
-        // Draw deer eyes
-        ctx.beginPath();
-        ctx.arc(160, 220, 10, 0, 2 * Math.PI);
-        ctx.fillStyle = "white";
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(160, 220, 5, 0, 2 * Math.PI);
-        ctx.fillStyle = "black";
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(180, 220, 10, 0, 2 * Math.PI);
-        ctx.fillStyle = "white";
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(180, 220, 5, 0, 2 * Math.PI);
-        ctx.fillStyle = "black";
-        ctx.fill();
-
-        // Draw deer nose
-        ctx.beginPath();
-        ctx.arc(170, 230, 5, 0, 2 * Math.PI);
-        ctx.fillStyle = "black";
-        ctx.fill();
-
-        // Draw deer antlers
-        ctx.beginPath();
-        ctx.moveTo(170, 170);
-        ctx.lineTo(120, 120);
-        ctx.lineWidth = 10;
-        ctx.lineCap = "round";
-        ctx.strokeStyle = "#8B4513";
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(170, 170);
-        ctx.lineTo(220, 120);
-        ctx.lineWidth = 10;
-        ctx.lineCap = "round";
-        ctx.strokeStyle = "#8B4513";
-        ctx.stroke();
-    }
-</script>
-
-
-<input type=button value="Angry Face" onclick="{
-    myContext.beginPath();
-    myContext.arc(75, 75, 50, 0, Math.PI * 2, true);
-    myContext.moveTo(110, 75);
-    myContext.arc(75, 75, 35, 0, Math.PI, false);
-    myContext.moveTo(65, 65);
-    myContext.arc(60, 65, 5, 0, Math.PI * 2, true);
-    myContext.moveTo(95, 65);
-    myContext.arc(90, 65, 5, 0, Math.PI * 2, true);
-    myContext.stroke();
+<input type="button" value="Happy Face" onclick="{
+   myContext.beginPath();
+   myContext.arc(75, 75, 50, 0, Math.PI * 2, true);
+   myContext.moveTo(110, 75);
+   myContext.arc(75, 75, 35, 0, Math.PI, false);
+   myContext.moveTo(65, 65);
+   myContext.arc(60, 65, 5, 0, Math.PI * 2, true);
+   myContext.moveTo(95, 65);
+   myContext.arc(90, 65, 5, 0, Math.PI * 2, true);
+   myContext.stroke();
 }">
 
-<input type=button value="Stickman with Sword" onclick="{
-    myContext.beginPath();
-    myContext.strokeStyle = 'black';
-    myContext.lineWidth = 2;
-    myContext.arc(75, 40, 20, 0, Math.PI * 2, true);
-    myContext.moveTo(75, 60);
-    myContext.lineTo(75, 100);
-    myContext.lineTo(60, 130);
-    myContext.moveTo(75, 100);
-    myContext.lineTo(90, 130);
-    myContext.moveTo(60, 70);
-    myContext.lineTo(90, 70);
-    myContext.stroke();
-    myContext.beginPath();
-    myContext.strokeStyle = 'silver';
-    myContext.lineWidth = 5;
-    myContext.moveTo(90, 70);
-    myContext.lineTo(140, 90);
-    myContext.lineTo(140, 110);
-    myContext.lineTo(90, 90);
-    myContext.lineTo(90, 70);
-    myContext.stroke();
-    myContext.beginPath();
-    myContext.strokeStyle = 'gray';
-    myContext.lineWidth = 1;
-    myContext.moveTo(140, 90);
-    myContext.lineTo(180, 110);
-    myContext.lineTo(180, 120);
-    myContext.lineTo(140, 100);
-    myContext.lineTo(140, 90);
-    myContext.stroke();
+<input type="button" value="Stickman with Sword" onclick="{
+   myContext.beginPath();
+   myContext.strokeStyle = 'black';
+   myContext.lineWidth = 2;
+   myContext.arc(75, 40, 20, 0, Math.PI * 2, true);
+   myContext.moveTo(75, 60);
+   myContext.lineTo(75, 100);
+   myContext.lineTo(60, 130);
+   myContext.moveTo(75, 100);
+   myContext.lineTo(90, 130);
+   myContext.moveTo(60, 70);
+   myContext.lineTo(90, 70);
+   myContext.stroke();
+   myContext.beginPath();
+   myContext.strokeStyle = 'silver';
+   myContext.lineWidth = 5;
+   myContext.moveTo(90, 70);
+   myContext.lineTo(140, 90);
+   myContext.lineTo(140, 110);
+   myContext.lineTo(90, 90);
+   myContext.lineTo(90, 70);
+   myContext.stroke();
+   myContext.beginPath();
+   myContext.strokeStyle = 'gray';
+   myContext.lineWidth = 1;
+   myContext.moveTo(140, 90);
+   myContext.lineTo(180, 110);
+   myContext.lineTo(180, 120);
+   myContext.lineTo(140, 100);
+   myContext.lineTo(140, 90);
+   myContext.stroke();
 }">
 
 <input type="button" value=".lineTo(30,200)" onclick="{
@@ -148,39 +69,10 @@ You use loops and variables to make fast fancy drawings
    myContext.fillText('Hello World', 10, 10);
    myContext.stroke();
    myContext.resetTransform();  
-   //myContext.rotate(-60 * Math.PI / 180); 
 }">
 
 <input type="button" value=".quadraticCurveTo(100,220,240,110)" onclick="{
    myContext.beginPath();
    myContext.moveTo(300,100);
-   myContext.quadraticCurveTo(100,220,240,110);
-   myContext.stroke();
-}">
+   myContext.quadraticCurveTo(100
 
-<input type="button" value=".createLinearGradient(100, 300, 200, 400)" onclick="{
-   let myGradient = myContext.createLinearGradient(100, 300, 200, 400);
-   myGradient.addColorStop(0, 'red');
-   myGradient.addColorStop(0.5, 'blue');
-   myGradient.addColorStop(1, 'yellow');
-   myContext.fillStyle = myGradient;
-   myContext.fillRect(100, 300, 200, 400);
-   // reset fillstyle
-   myContext.fillStyle = 'black';
-}"><br><br>
-
-<input type="button" value="clearRect(20, 20, 50, 50)" onclick="{
-   myContext.clearRect(20, 20, 50, 50);
-}">
-
-<input type="button" value="Clear all" onclick="{
-   myContext.clearRect(0, 0, myCanvas.width, myCanvas.height);
-}"><br><br>
-
-<canvas id="myCoolTag" width="1000" height="600" style="border:1px solid #000000;"></canvas>
-
-<script>
-   // set up global variables
-   let myCanvas=document.getElementById('myCoolTag');
-   let myContext=myCanvas.getContext('2d');
-</script>
