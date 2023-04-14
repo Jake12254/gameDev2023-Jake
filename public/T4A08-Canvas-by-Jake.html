@@ -1,6 +1,18 @@
 <h2 align=center>t2a08-canvas by Jake</h2>
 You use loops and variables to make fast fancy drawings 
 
+<input type=button value="Angry Face" onclick="{
+    myContext.beginPath();
+    myContext.arc(75, 75, 50, 0, Math.PI * 2, true);
+    myContext.moveTo(110, 75);
+    myContext.arc(75, 75, 35, 0, Math.PI, false);
+    myContext.moveTo(65, 65);
+    myContext.arc(60, 65, 5, 0, Math.PI * 2, true);
+    myContext.moveTo(95, 65);
+    myContext.arc(90, 65, 5, 0, Math.PI * 2, true);
+    myContext.stroke();
+}">
+
 <input type=button value="Stickman with Sword" onclick="{
     myContext.beginPath();
     myContext.moveTo(75, 50);
