@@ -13,17 +13,18 @@ You use loops and variables to make fast fancy drawings
     myContext.stroke();
 }">
 
-<input type=button value="Stickman with Sword" onclick="{
+<input type=button value="Stickman" onclick="{
     myContext.beginPath();
-    myContext.moveTo(75, 50);
-    myContext.lineTo(75, 150);
-    myContext.lineTo(100, 150);
-    myContext.moveTo(75, 75);
-    myContext.lineTo(50, 100);
-    myContext.lineTo(100, 100);
-    myContext.lineTo(75, 75);
-    myContext.moveTo(100, 125);
-    myContext.lineTo(125, 100);
+    myContext.strokeStyle = 'black';
+    myContext.lineWidth = 2;
+    myContext.arc(75, 40, 20, 0, Math.PI * 2, true);
+    myContext.moveTo(75, 60);
+    myContext.lineTo(75, 100);
+    myContext.lineTo(60, 130);
+    myContext.moveTo(75, 100);
+    myContext.lineTo(90, 130);
+    myContext.moveTo(60, 70);
+    myContext.lineTo(90, 70);
     myContext.stroke();
 }">
 
