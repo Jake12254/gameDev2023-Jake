@@ -1,38 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Translation Example</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-</head>
-<body>
-    <div>
-        <h1>Hello World</h1>
-        <p>This is some text that we want to translate.</p>
-        <button id="translateButton">Translate</button>
-        <div id="translationContainer"></div>
-    </div>
+<script src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script src='https://code.responsivevoice.org/responsivevoice.js'></script>
 
-    <script>
-        function translateText() {
-            // Replace YOUR_API_KEY with your actual API key.
-            var apiKey = '""';
-            var textToTranslate = $('p').text();
-            var targetLanguage = 'es'; // Spanish
+<script>
+    function googleTranslateElementInit() {
+  new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'en,fr,de,ru', layout:google.translate.TranslateElement.InlineLayout.SIMPLE, autoDisplay: false}, 'google_translate_element');
 
-            var apiUrl = 'https://translation.googleapis.com/language/translate/v2?key=' + apiKey;
-            $.post(apiUrl, {
-                q: textToTranslate,
-                target: targetLanguage
-            }, function(response) {
-                var translatedText = response.data.translations[0].translatedText;
-                $('#translationContainer').text(translatedText);
-            });
-        }
+    }
+</script>
 
-        $('#translateButton').click(function() {
-            translateText();
-        });
-    </script>
-</body>
-</html>
+
+
+<h1 align=center>t2a10-translate-name</h1>
+
+<div id="google_translate_element">I really like javascript</div>
+
+
+<input  type="button" value="initilize speak" onclick="{  
+   let myVoice = 'Russian Female'
+   responsiveVoice.speak(document.getElementById('google_translate_element').innerText, myVoice, {pitch: 1, rate: 1, volume : 1})                                              
+}"><br><br>
