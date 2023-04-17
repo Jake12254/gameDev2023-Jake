@@ -1,49 +1,84 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>t4a12 Sort by Jake</title>
-</head>
-<body>
+Version 8.12	
+<h1>Language Translation System</h1>
+	
+	<div id="google_translate_element"></div>
+	
+	<div>
+		<select id="source-lang">
+			<option value="en">English</option>
+			<option value="fr">French</option>
+			<option value="de">German</option>
+			<option value="es">Spanish</option>
+		</select>
+		<button id="switch-lang-btn">&harr;</button>
+		<select id="target-lang">
+			<option value="fr">French</option>
+			<option value="en">English</option>
+			<option value="de">German</option>
+			<option value="es">Spanish</option>
+		</select>
+		<textarea id="original-text" placeholder="Enter text to translate"></textarea>
+		<button id="translate-btn">Translate</button>
+	</div>
 
-<h1 align="center">t4a12 Sort by Jake</h1>
+	<div>
+		<textarea id="translated-text" placeholder="Translated text"></textarea>
+		<button id="translate-back-btn">Translate back</button>
+	</div>
+	
+	<script>
+		var sourceLang = 'en';
+		var targetLang = 'fr';
+		
+		function googleTranslateElementInit() {
+			new google.translate.TranslateElement({
+				pageLanguage: 'en', 
+				layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+			}, 'google_translate_element');
+		}
 
-<script>
-   let myMax = 60      // 52 when working
-   let myCards = new Array(myMax)  
-</script>
+		$(document).ready(function() {
+			$('#switch-lang-btn').click(function() {
+				var tmpLang = sourceLang;
+				sourceLang = targetLang;
+				targetLang = tmpLang;
+				
+				var tmpText = $('#original-text').val();
+				$('#original-text').val($('#translated-text').val());
+				$('#translated-text').val(tmpText);
+				$('#translation').empty();
+			});
+			
+			$('#translate-btn').click(function() {
+				var originalText = $('#original-text').val();
+				googleTranslate(originalText, function(result) {
+					$('#translation').html(result);
+					$('#translated-text').val(result);
+				});
+			});
 
-<input type=button value="Set Random (Simple)" onclick="{
-  for ( let myLoop = 0;   myLoop < myMax;  myLoop++){
-     myCards[myLoop] = Math.floor(Math.random()*10)
-  }
-  document.getElementById('show').click();
-  }">
+			$('#translate-back-btn').click(function() {
+				var translatedText = $('#translated-text').val();
+				googleTranslate(translatedText, function(result) {
+					$('#translation').html(result);
+					$('#original-text').val(result);
+				});
+			});
 
-<input id="show" type=hidden value="Show" onclick="{
-    let myTemp = ''
-    for ( let myLoop = 0;   myLoop < myMax;  myLoop++){
-        myTemp +=  myCards[myLoop] + '<br>'
-    }
-    document.getElementById('myDiv01').innerHTML = myTemp
-    }">
+			function googleTranslate(text, callback) {
+				var url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=' 
+				          + sourceLang + '&tl=' + targetLang + '&dt=t&q=' + encodeURI(text);
 
- <input type=button value="Sort (Simple)" onclick="{
-    for ( let myLoop = 0;   myLoop < myMax;  myLoop++){
-        let myTemp = 0
-        for (let myLoop = 0; myLoop < myMax; myLoop++){
-        if (myCards[myLoop] >= myCards[myLoop+1]) {
-            myTemp = myCards[myLoop]
-            myCards[myLoop] = myCards[myLoop+1]
-            myCards[myLoop+1] = myTemp
-        }  else {
-        myTemp = myTemp
-        }
-        document.getElementById('show').click();
-    }
-    }
-    }">
-
-<div id="myDiv01"></div>
-
+				$.ajax({
+					url: url,
+					dataType: 'jsonp',
+					success: function(data) {
+						var translatedText = data[0][0][0];
+						callback(translatedText);
+					}
+				});
+			}
+		});
+	</script>
 </body>
 </html>
