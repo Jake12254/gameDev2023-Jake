@@ -1,91 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<title>Language Translation System</title>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-	<style>
-		#google_translate_element { display: none; }
-		#translation { min-height: 100px; }
-	</style>
+    <meta charset="UTF-8">
+    <title>Translation Example</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
-	<h1>Language Translation System</h1>
-	
-	<div id="google_translate_element"></div>
-	
-	<div>
-		<select id="source-lang">
-			<option value="en">English</option>
-			<option value="fr">French</option>
-			<option value="de">German</option>
-			<option value="es">Spanish</option>
-		</select>
-		<button id="switch-lang-btn">&harr;</button>
-		<select id="target-lang">
-			<option value="fr">French</option>
-			<option value="en">English</option>
-			<option value="de">German</option>
-			<option value="es">Spanish</option>
-		</select>
-		<textarea id="original-text" placeholder="Enter text to translate"></textarea>
-		<button id="translate-btn">Translate</button>
-		<button id="speak-btn">Speak</button>
-	</div>
-	
-	<div id="translation"></div>
-	
-	<script>
-		var sourceLang = 'en';
-		var targetLang = 'fr';
-		var synth = window.speechSynthesis;
-		var utterance = new SpeechSynthesisUtterance();
-		
-		function googleTranslateElementInit() {
-			new google.translate.TranslateElement({
-				pageLanguage: 'en', 
-				layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-			}, 'google_translate_element');
-		}
+    <div>
+        <h1>Hello World</h1>
+        <p>This is some text that we want to translate.</p>
+        <button id="translateButton">Translate</button>
+        <div id="translationContainer"></div>
+    </div>
 
-		$(document).ready(function() {
-			$('#switch-lang-btn').click(function() {
-				var tmpLang = sourceLang;
-				sourceLang = targetLang;
-				targetLang = tmpLang;
-				
-				var tmpText = $('#original-text').val();
-				$('#original-text').val($('#translation').html());
-				$('#translation').html(tmpText);
-			});
-			
-			$('#translate-btn').click(function() {
-				var originalText = $('#original-text').val();
-				googleTranslate(originalText, function(result) {
-					$('#translation').html(result);
-					utterance.text = result;
-				});
-			});
+    <script>
+        function translateText() {
+            // Replace YOUR_API_KEY with your actual API key.
+            var apiKey = '""';
+            var textToTranslate = $('p').text();
+            var targetLanguage = 'es'; // Spanish
 
-			$('#speak-btn').click(function() {
-				synth.speak(utterance);
-			});
+            var apiUrl = 'https://translation.googleapis.com/language/translate/v2?key=' + apiKey;
+            $.post(apiUrl, {
+                q: textToTranslate,
+                target: targetLanguage
+            }, function(response) {
+                var translatedText = response.data.translations[0].translatedText;
+                $('#translationContainer').text(translatedText);
+            });
+        }
 
-			function googleTranslate(text, callback) {
-				var url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=' 
-				          + sourceLang + '&tl=' + targetLang + '&dt=t&q=' + encodeURI(text);
-
-				$.ajax({
-					url: url,
-					dataType: 'jsonp',
-					success: function(data) {
-						var translatedText = data[0][0][0];
-						callback(translatedText);
-					}
-				});
-			}
-		});
-	</script>
+        $('#translateButton').click(function() {
+            translateText();
+        });
+    </script>
 </body>
 </html>
