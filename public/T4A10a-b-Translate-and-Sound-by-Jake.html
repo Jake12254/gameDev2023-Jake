@@ -31,6 +31,7 @@
 		</select>
 		<textarea id="original-text" placeholder="Enter text to translate"></textarea>
 		<button id="translate-btn">Translate</button>
+		<button id="speak-btn">Speak</button>
 	</div>
 	
 	<div id="translation"></div>
@@ -38,6 +39,8 @@
 	<script>
 		var sourceLang = 'en';
 		var targetLang = 'fr';
+		var synth = window.speechSynthesis;
+		var utterance = new SpeechSynthesisUtterance();
 		
 		function googleTranslateElementInit() {
 			new google.translate.TranslateElement({
@@ -61,7 +64,12 @@
 				var originalText = $('#original-text').val();
 				googleTranslate(originalText, function(result) {
 					$('#translation').html(result);
+					utterance.text = result;
 				});
+			});
+
+			$('#speak-btn').click(function() {
+				synth.speak(utterance);
 			});
 
 			function googleTranslate(text, callback) {
