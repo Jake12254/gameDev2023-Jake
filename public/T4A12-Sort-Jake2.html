@@ -1,83 +1,39 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>Language Translation System</title>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-	<style>
-		#google_translate_element { display: none; }
-		#translation { min-height: 100px; }
-		.box {
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-			margin-top: 10px;
-		}
-		.box textarea {
-			flex-grow: 1;
-			margin-right: 5px;
-			min-height: 100px;
-			font-size: 16px;
-		}
-		.box button {
-			font-size: 16px;
-			font-weight: bold;
-			background-color: #4CAF50;
-			color: white;
-			border: none;
-			padding: 10px;
-			cursor: pointer;
-		}
-		.box button:hover {
-			background-color: #3e8e41;
-		}
-	</style>
-</head>
-<body>
-	<h1>Language Translation System</h1>
-	
-	<div id="google_translate_element"></div>
-	
-	<div class="box">
-		<textarea id="source-text" placeholder="Enter text to translate"></textarea>
-		<button id="translate-btn">&harr;</button>
-		<textarea id="target-text" placeholder="Translation"></textarea>
-	</div>
+<h1 align=center>t4a12-sort-jake.html</h1>
 
-	<script>
-		var sourceLang = 'en';
-		var targetLang = 'fr';
-		
-		function googleTranslateElementInit() {
-			new google.translate.TranslateElement({
-				pageLanguage: 'en', 
-				layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-			}, 'google_translate_element');
-		}
+<script>
+   let myMax = 52      // 52 when working
+   let myCards = new Array(myMax)  
+</script>
 
-		$(document).ready(function() {
-			$('#translate-btn').click(function() {
-				var sourceText = $('#source-text').val();
-				googleTranslate(sourceText, function(result) {
-					$('#target-text').val(result);
-				});
-			});
+<input type=button value="Set Random" onclick="{
+  for ( let myLoop = 0;   myLoop < myMax;  myLoop++){
+     myCards[myLoop] = Math.floor(Math.random()*10)
+  }
+  document.getElementById('show').click();
+  }">
 
-			function googleTranslate(text, callback) {
-				var url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=' 
-				          + sourceLang + '&tl=' + targetLang + '&dt=t&q=' + encodeURI(text);
+<input id="show" type=hidden value="Show" onclick="{
+    let myTemp = ''
+    for ( let myLoop = 0;   myLoop < myMax;  myLoop++){
+        myTemp +=  myCards[myLoop] + '<br>'
+    }
+    document.getElementById('myDiv01').innerHTML = myTemp
+    }">
 
-				$.ajax({
-					url: url,
-					dataType: 'jsonp',
-					success: function(data) {
-						var translatedText = data[0][0][0];
-						callback(translatedText);
-					}
-				});
-			}
-		});
-	</script>
-</body>
-</html>
+ <input type=button value="Sort" onclick="{
+    for ( let myLoop = 0;   myLoop < myMax;  myLoop++){
+        let myTemp = 0
+        for (let myLoop = 0; myLoop < myMax; myLoop++){
+        if (myCards[myLoop] >= myCards[myLoop+1]) {
+            myTemp = myCards[myLoop]
+            myCards[myLoop] = myCards[myLoop+1]
+            myCards[myLoop+1] = myTemp
+        }  else {
+        myTemp = myTemp
+        }
+        document.getElementById('show').click();
+    }
+    }
+    }">
+
+<div id="myDiv01"></div>
