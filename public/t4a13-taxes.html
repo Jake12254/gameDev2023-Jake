@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tax Calculator</title>
+</head>
+<body>
+	<h1>Tax Calculator</h1>
+	<form>
+		<label for="hourly-pay">Hourly Pay:</label>
+		<input type="number" id="hourly-pay" name="hourly-pay" step="0.01" required><br><br>
+		<label for="hours-per-day">Hours per Day:</label>
+		<input type="number" id="hours-per-day" name="hours-per-day" step="0.01" required><br><br>
+		<input type="button" value="Calculate" onclick="calculateTax()"><br><br>
+		<label for="gross-pay">Gross Pay:</label>
+		<input type="text" id="gross-pay" readonly><br><br>
+		<label for="tax">Tax:</label>
+		<input type="text" id="tax" readonly><br><br>
+		<label for="net-pay">Net Pay:</label>
+		<input type="text" id="net-pay" readonly><br><br>
+	</form>
+	<script>
+		function calculateTax() {
+			var hourly_pay = parseFloat(document.getElementById("hourly-pay").value);
+			var hours_per_day = parseFloat(document.getElementById("hours-per-day").value);
+
+			var gross_pay = hourly_pay * hours_per_day * 7;  // 7 days in a week
+
+			var tax = gross_pay * 0.3;  // 30% tax
+
+			var net_pay = gross_pay - tax;
+
+			document.getElementById("gross-pay").value = "$" + gross_pay.toFixed(2);
+			document.getElementById("tax").value = "$" + tax.toFixed(2);
+			document.getElementById("net-pay").value = "$" + net_pay.toFixed(2);
+		}
+	</script>
+</body>
+</html>
