@@ -8,8 +8,8 @@
 	<form>
 		<label for="hourly-pay">Hourly Pay:</label>
 		<input type="number" id="hourly-pay" name="hourly-pay" step="0.01" required><br><br>
-		<label for="hours-per-day">Hours per Day:</label>
-		<input type="number" id="hours-per-day" name="hours-per-day" step="0.01" required><br><br>
+		<label for="workdays-per-month">Workdays per Month:</label>
+		<input type="number" id="workdays-per-month" name="workdays-per-month" step="1" required><br><br>
 		<input type="button" value="Calculate" onclick="calculateTax()"><br><br>
 		<label for="gross-pay">Gross Pay:</label>
 		<input type="text" id="gross-pay" readonly><br><br>
@@ -18,8 +18,8 @@
 		<label for="net-pay">Net Pay:</label>
 		<input type="text" id="net-pay" readonly><br><br>
 		<hr>
-		<label for="num-of-days">Number of Days:</label>
-		<input type="number" id="num-of-days" name="num-of-days" step="1" required><br><br>
+		<label for="months">Number of Months:</label>
+		<input type="number" id="months" name="months" step="1" required><br><br>
 		<input type="button" value="Calculate Pay" onclick="calculatePay()"><br><br>
 		<label for="pay">Pay:</label>
 		<input type="text" id="pay" readonly><br><br>
@@ -27,9 +27,11 @@
 	<script>
 		function calculateTax() {
 			var hourly_pay = parseFloat(document.getElementById("hourly-pay").value);
-			var hours_per_day = parseFloat(document.getElementById("hours-per-day").value);
+			var workdays_per_month = parseFloat(document.getElementById("workdays-per-month").value);
 
-			var gross_pay = hourly_pay * hours_per_day * 7;  // 7 days in a week
+			var workdays_per_year = workdays_per_month * 12;  // assuming 12 months in a year
+			var workhours_per_year = workdays_per_year * 8;   // assuming 8 hours of work per day
+			var gross_pay = hourly_pay * workhours_per_year;
 
 			var tax = gross_pay * 0.3;  // 30% tax
 
@@ -42,10 +44,11 @@
 
 		function calculatePay() {
 			var hourly_pay = parseFloat(document.getElementById("hourly-pay").value);
-			var hours_per_day = parseFloat(document.getElementById("hours-per-day").value);
-			var num_of_days = parseInt(document.getElementById("num-of-days").value);
+			var workdays_per_month = parseFloat(document.getElementById("workdays-per-month").value);
+			var months = parseInt(document.getElementById("months").value);
 
-			var pay = hourly_pay * hours_per_day * num_of_days;
+			var workdays_per_year = workdays_per_month * 12;  // assuming 12 months in a year
+			var pay = hourly_pay * workdays_per_year * months * 8;  // assuming 8 hours of work per day
 
 			document.getElementById("pay").value = "$" + pay.toFixed(2);
 		}
