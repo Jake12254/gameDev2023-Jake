@@ -6,53 +6,27 @@
 <body>
 	<h1>Tax Calculator</h1>
 	<form>
-		<label for="hourly-pay">Hourly Pay:</label>
-		<input type="number" id="hourly-pay" name="hourly-pay" step="0.01" required><br><br>
-		<label for="workdays-per-month">Workdays per Month:</label>
-		<input type="number" id="workdays-per-month" name="workdays-per-month" step="1" required><br><br>
-		<input type="button" value="Calculate" onclick="calculateTax()"><br><br>
-		<label for="gross-pay">Gross Pay:</label>
-		<input type="text" id="gross-pay" readonly><br><br>
-		<label for="tax">Tax:</label>
-		<input type="text" id="tax" readonly><br><br>
-		<label for="net-pay">Net Pay:</label>
-		<input type="text" id="net-pay" readonly><br><br>
-		<hr>
-		<label for="months">Number of Months:</label>
-		<input type="number" id="months" name="months" step="1" required><br><br>
-		<input type="button" value="Calculate Pay" onclick="calculatePay()"><br><br>
-		<label for="pay">Pay:</label>
-		<input type="text" id="pay" readonly><br><br>
+		<label for="hours">Hours worked:</label>
+		<input type="number" id="hours" name="hours" min="0" max="24" value="8"><br>
+
+		<label for="pay">Hourly pay rate:</label>
+		<input type="number" id="pay" name="pay" min="0" step="0.01" value="15"><br>
+
+		<input type="button" value="Calculate Tax" onclick="calculateTax()">
 	</form>
+	
+	<p id="result"></p>
+
 	<script>
 		function calculateTax() {
-			var hourly_pay = parseFloat(document.getElementById("hourly-pay").value);
-			var workdays_per_month = parseFloat(document.getElementById("workdays-per-month").value);
+			const hoursWorked = parseFloat(document.getElementById('hours').value);
+			const hourlyPayRate = parseFloat(document.getElementById('pay').value);
+			const grossPay = hoursWorked * hourlyPayRate;
+			const taxRate = 0.3;
+			const taxAmount = grossPay * taxRate;
+			const netPay = grossPay - taxAmount;
 
-			var workdays_per_year = workdays_per_month * 12;  // assuming 12 months in a year
-			var workhours_per_year = workdays_per_year * 8;   // assuming 8 hours of work per day
-			var gross_pay = hourly_pay * workhours_per_year;
-
-			var tax = gross_pay * 0.3;  // 30% tax
-
-			var net_pay = gross_pay - tax;
-
-			document.getElementById("gross-pay").value = "$" + gross_pay.toFixed(2);
-			document.getElementById("tax").value = "$" + tax.toFixed(2);
-			document.getElementById("net-pay").value = "$" + net_pay.toFixed(2);
-		}
-
-		function calculatePay() {
-			var hourly_pay = parseFloat(document.getElementById("hourly-pay").value);
-			var workdays_per_month = parseFloat(document.getElementById("workdays-per-month").value);
-			var months = parseInt(document.getElementById("months").value);
-
-			var workdays_per_year = workdays_per_month * 12;  // assuming 12 months in a year
-			var gross_pay = hourly_pay * workdays_per_year * months * 8;  // assuming 8 hours of work per day
-			var tax = gross_pay * 0.3;  // 30% tax
-			var net_pay = gross_pay - tax;
-
-			document.getElementById("pay").value = "$" + net_pay.toFixed(2);
+			document.getElementById('result').innerHTML = `Gross Pay: $${grossPay.toFixed(2)}<br>Tax Amount: $${taxAmount.toFixed(2)}<br>Net Pay: $${netPay.toFixed(2)}`;
 		}
 	</script>
 </body>
