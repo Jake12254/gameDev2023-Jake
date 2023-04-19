@@ -22,14 +22,14 @@
 		function sortNumbers() {
 			var numbers = document.getElementById("numbers").value.trim();
 			if (numbers === "") {
-				alert("1,2,3,4,5,6,7,8,9,10.");
+				alert("Please Enter Numbers to be Sorted.");
 				return;
 			}
 			var array = numbers.split(",");
 			for (var i = 0; i < array.length; i++) {
 				array[i] = parseFloat(array[i]);
 				if (isNaN(array[i])) {
-					alert("1,2,3,4,5,6,7,8,9,10.");
+					alert("Please Enter Numbers to be Sorted.");
 					return;
 				}
 			}
