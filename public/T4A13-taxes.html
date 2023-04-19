@@ -12,8 +12,11 @@
 		<label for="pay">Hourly pay rate:</label>
 		<input type="number" id="pay" name="pay" min="0" step="0.01" value="15"><br>
 
-		<label for="days">Days worked per month:</label>
-		<input type="number" id="days" name="days" min="0" max="31" value="20"><br>
+		<label for="daysPerMonth">Days worked per month:</label>
+		<input type="number" id="daysPerMonth" name="daysPerMonth" min="0" max="31" value="20"><br>
+
+		<label for="daysPerYear">Days worked per year:</label>
+		<input type="number" id="daysPerYear" name="daysPerYear" min="0" max="366" value="240"><br>
 
 		<input type="button" value="Calculate Tax and Pay" onclick="calculateTaxAndPay()">
 	</form>
@@ -21,20 +24,24 @@
 	<h2>Results</h2>
 	<p id="result"></p>
 	<p id="payResult"></p>
+	<p id="payResultYearly"></p>
 
 	<script>
 		function calculateTaxAndPay() {
 			const hoursPerDay = parseFloat(document.getElementById('hours').value);
 			const hourlyPayRate = parseFloat(document.getElementById('pay').value);
-			const daysPerMonth = parseFloat(document.getElementById('days').value);
+			const daysPerMonth = parseFloat(document.getElementById('daysPerMonth').value);
+			const daysPerYear = parseFloat(document.getElementById('daysPerYear').value);
 			const grossPayPerDay = hoursPerDay * hourlyPayRate;
 			const grossPayPerMonth = grossPayPerDay * daysPerMonth;
+			const grossPayPerYear = grossPayPerMonth * (daysPerYear / 12);
 			const taxRate = 0.3;
-			const taxAmount = grossPayPerMonth * taxRate;
-			const netPayPerMonth = grossPayPerMonth - taxAmount;
+			const taxAmount = grossPayPerYear * taxRate;
+			const netPayPerYear = grossPayPerYear - taxAmount;
 
-			document.getElementById('result').innerHTML = `Gross Pay per Month: $${grossPayPerMonth.toFixed(2)}<br>Tax Amount: $${taxAmount.toFixed(2)}<br>Net Pay per Month: $${netPayPerMonth.toFixed(2)}`;
+			document.getElementById('result').innerHTML = `Gross Pay per Year: $${grossPayPerYear.toFixed(2)}<br>Tax Amount: $${taxAmount.toFixed(2)}<br>Net Pay per Year: $${netPayPerYear.toFixed(2)}`;
 			document.getElementById('payResult').innerHTML = `Pay per Day: $${grossPayPerDay.toFixed(2)}<br>Pay per Month: $${grossPayPerMonth.toFixed(2)}`;
+			document.getElementById('payResultYearly').innerHTML = `Pay per Year: $${grossPayPerYear.toFixed(2)}`;
 		}
 	</script>
 </body>
