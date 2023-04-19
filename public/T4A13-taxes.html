@@ -17,6 +17,12 @@
 		<input type="text" id="tax" readonly><br><br>
 		<label for="net-pay">Net Pay:</label>
 		<input type="text" id="net-pay" readonly><br><br>
+		<hr>
+		<label for="num-of-days">Number of Days:</label>
+		<input type="number" id="num-of-days" name="num-of-days" step="1" required><br><br>
+		<input type="button" value="Calculate Pay" onclick="calculatePay()"><br><br>
+		<label for="pay">Pay:</label>
+		<input type="text" id="pay" readonly><br><br>
 	</form>
 	<script>
 		function calculateTax() {
@@ -32,6 +38,16 @@
 			document.getElementById("gross-pay").value = "$" + gross_pay.toFixed(2);
 			document.getElementById("tax").value = "$" + tax.toFixed(2);
 			document.getElementById("net-pay").value = "$" + net_pay.toFixed(2);
+		}
+
+		function calculatePay() {
+			var hourly_pay = parseFloat(document.getElementById("hourly-pay").value);
+			var hours_per_day = parseFloat(document.getElementById("hours-per-day").value);
+			var num_of_days = parseInt(document.getElementById("num-of-days").value);
+
+			var pay = hourly_pay * hours_per_day * num_of_days;
+
+			document.getElementById("pay").value = "$" + pay.toFixed(2);
 		}
 	</script>
 </body>
