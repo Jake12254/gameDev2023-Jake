@@ -1,1 +1,42 @@
-
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sort-Advanced-by-jake</title>
+</head>
+<body>
+	<h1>Sorting Page</h1>
+	
+	<p>Please enter the list of numbers to be sorted:</p>
+	
+	<form>
+		<label for="numbers">Numbers:</label>
+		<input type="text" id="numbers" name="numbers" placeholder="e.g. 1, 5, 3, 9"><br>
+		<small>Enter a list of comma-separated numbers.</small><br><br>
+		
+		<input type="button" value="Sort" onclick="sortNumbers()">
+	</form>
+	
+	<p id="sorted"></p>
+	
+	<script>
+		function sortNumbers() {
+			var numbers = document.getElementById("numbers").value.trim();
+			if (numbers === "") {
+				alert("1,2,3,4,5,6,7,8,9,10.");
+				return;
+			}
+			var array = numbers.split(",");
+			for (var i = 0; i < array.length; i++) {
+				array[i] = parseFloat(array[i]);
+				if (isNaN(array[i])) {
+					alert("1,2,3,4,5,6,7,8,9,10.");
+					return;
+				}
+			}
+			array.sort(function(a, b){return a - b});
+			document.getElementById("sorted").innerHTML = "Sorted numbers: " + array.join(", ");
+		}
+	</script>
+	
+</body>
+</html>
