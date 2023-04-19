@@ -1,32 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Tax Calculator</title>
+	<title>Tax and Pay Calculator</title>
 </head>
 <body>
-	<h1>Tax Calculator</h1>
+	<h1>Tax and Pay Calculator</h1>
 	<form>
-		<label for="hours">Hours worked:</label>
+		<label for="hours">Hours worked per day:</label>
 		<input type="number" id="hours" name="hours" min="0" max="24" value="8"><br>
 
 		<label for="pay">Hourly pay rate:</label>
 		<input type="number" id="pay" name="pay" min="0" step="0.01" value="15"><br>
 
-		<input type="button" value="Calculate Tax" onclick="calculateTax()">
+		<label for="days">Days worked per month:</label>
+		<input type="number" id="days" name="days" min="0" max="31" value="20"><br>
+
+		<input type="button" value="Calculate Tax and Pay" onclick="calculateTaxAndPay()">
 	</form>
-	
+
+	<h2>Results</h2>
 	<p id="result"></p>
+	<p id="payResult"></p>
 
 	<script>
-		function calculateTax() {
-			const hoursWorked = parseFloat(document.getElementById('hours').value);
+		function calculateTaxAndPay() {
+			const hoursPerDay = parseFloat(document.getElementById('hours').value);
 			const hourlyPayRate = parseFloat(document.getElementById('pay').value);
-			const grossPay = hoursWorked * hourlyPayRate;
+			const daysPerMonth = parseFloat(document.getElementById('days').value);
+			const grossPayPerDay = hoursPerDay * hourlyPayRate;
+			const grossPayPerMonth = grossPayPerDay * daysPerMonth;
 			const taxRate = 0.3;
-			const taxAmount = grossPay * taxRate;
-			const netPay = grossPay - taxAmount;
+			const taxAmount = grossPayPerMonth * taxRate;
+			const netPayPerMonth = grossPayPerMonth - taxAmount;
 
-			document.getElementById('result').innerHTML = `Gross Pay: $${grossPay.toFixed(2)}<br>Tax Amount: $${taxAmount.toFixed(2)}<br>Net Pay: $${netPay.toFixed(2)}`;
+			document.getElementById('result').innerHTML = `Gross Pay per Month: $${grossPayPerMonth.toFixed(2)}<br>Tax Amount: $${taxAmount.toFixed(2)}<br>Net Pay per Month: $${netPayPerMonth.toFixed(2)}`;
+			document.getElementById('payResult').innerHTML = `Pay per Day: $${grossPayPerDay.toFixed(2)}<br>Pay per Month: $${grossPayPerMonth.toFixed(2)}`;
 		}
 	</script>
 </body>
