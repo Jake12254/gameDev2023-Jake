@@ -48,9 +48,11 @@
 			var months = parseInt(document.getElementById("months").value);
 
 			var workdays_per_year = workdays_per_month * 12;  // assuming 12 months in a year
-			var pay = hourly_pay * workdays_per_year * months * 8;  // assuming 8 hours of work per day
+			var gross_pay = hourly_pay * workdays_per_year * months * 8;  // assuming 8 hours of work per day
+			var tax = gross_pay * 0.3;  // 30% tax
+			var net_pay = gross_pay - tax;
 
-			document.getElementById("pay").value = "$" + pay.toFixed(2);
+			document.getElementById("pay").value = "$" + net_pay.toFixed(2);
 		}
 	</script>
 </body>
