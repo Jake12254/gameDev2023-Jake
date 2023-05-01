@@ -27,6 +27,8 @@
 		let player2Score = 0;
 		let winningScore = 3;
 		let gameOver = false;
+		let paddleSpeed = 5;
+		let keys = {};
 
 		// Mouse and Keyboard event listeners
 		canvas.addEventListener("mousemove", function(event) {
@@ -35,14 +37,11 @@
 		});
 
 		window.addEventListener("keydown", function(event) {
-			switch(event.keyCode) {
-				case 38:
-					paddle2Y -= 20;
-					break;
-				case 40:
-					paddle2Y += 20;
-					break;
-			}
+			keys[event.key] = true;
+		});
+
+		window.addEventListener("keyup", function(event) {
+			keys[event.key] = false;
 		});
 
 		// Helper function to calculate mouse position
@@ -81,64 +80,34 @@
 			ctx.fillRect(leftX, topY, width, height);
 		}
 
-		// Helper function to draw circles
-		function drawCircle(centerX, centerY, radius, color) {
-			ctx.fillStyle = color;
-			ctx.beginPath();
-			ctx.arc(centerX, centerY, radius, 0, Math.PI * 2, true);
-			ctx.fill();
-		}
+		// Helper function
+// Game loop
+function gameLoop() {
+  // Update game state
+  movePaddles();
+  moveBall();
+  checkCollision();
+  checkGameOver();
 
-		// Helper function to draw text
-		function drawText(text, leftX, topY, color) {
-			ctx.fillStyle = color;
-			ctx.fillText(text, leftX, topY);
-		}
+  // Clear canvas
+  drawRect(0, 0, canvas.width, canvas.height, "black");
 
-		// Main game loop
-		function draw() {
-			// Clear canvas
-			drawRect(0, 0, canvas.width, canvas.height, "black");
+  // Draw game elements
+  drawNet();
+  drawPaddles();
+  drawScore();
+  drawBall();
 
-			// Draw net
-			drawNet();
-
-			function drawPaddles() {
-  // draw player 1 paddle
-  ctx.fillStyle = 'white';
-  ctx.fillRect(paddle1.x, paddle1.y, paddle1.width, paddle1.height);
-  
-  // draw player 2 paddle
-  ctx.fillStyle = 'white';
-  ctx.fillRect(paddle2.x, paddle2.y, paddle2.width, paddle2.height);
-}
-
-         function movePaddles() {
-  // move player 1 paddle
-  if (keys['ArrowUp']) {
-    paddle1.y -= paddleSpeed;
-  } else if (keys['ArrowDown']) {
-    paddle1.y += paddleSpeed;
-  }
-  
-  // move player 2 paddle
-  if (keys['w']) {
-    paddle2.y -= paddleSpeed;
-  } else if (keys['s']) {
-    paddle2.y += paddleSpeed;
-  }
-  
-  // prevent paddles from going out of bounds
-  if (paddle1.y < 0) {
-    paddle1.y = 0;
-  } else if (paddle1.y + paddle1.height > canvas.height) {
-    paddle1.y = canvas.height - paddle1.height;
-  }
-  
-  if (paddle2.y < 0) {
-    paddle2.y = 0;
-  } else if (paddle2.y + paddle2.height > canvas.height) {
-    paddle2.y = canvas.height - paddle2.height;
+  // Check if game is over
+  if (!gameOver) {
+    // Request next frame
+    requestAnimationFrame(gameLoop);
+  } else {
+    // Game over, display winner
+    let winner = player1Score > player2Score ? "Player 1" : "Player 2";
+    drawText(`Game Over! ${winner} wins!`, canvas.width / 2, canvas.height / 2, "white");
   }
 }
 
+// Start game loop
+gameLoop();
