@@ -80,34 +80,25 @@
 			ctx.fillRect(leftX, topY, width, height);
 		}
 
-		// Helper function
-// Game loop
-function gameLoop() {
-  // Update game state
-  movePaddles();
-  moveBall();
-  checkCollision();
-  checkGameOver();
+		// Helper function to draw text
+		function drawText(text, x, y, color) {
+			ctx.fillStyle = color;
+			ctx.font = "bold 20px Arial";
+			ctx.textAlign = "center";
+			ctx.fillText(text, x, y);
+		}
 
-  // Clear canvas
-  drawRect(0, 0, canvas.width, canvas.height, "black");
+		// Helper function to draw paddles
+		function drawPaddles() {
+			drawRect(0, paddle1Y, paddleWidth, paddleHeight, "white");
+			drawRect(canvas.width - paddleWidth, paddle2Y, paddleWidth, paddleHeight, "white");
+		}
 
-  // Draw game elements
-  drawNet();
-  drawPaddles();
-  drawScore();
-  drawBall();
+		// Helper function to move paddles
+		function movePaddles() {
+			if (keys["w"] && paddle1Y > 0) {
+				paddle1Y -= paddleSpeed;
+			}
 
-  // Check if game is over
-  if (!gameOver) {
-    // Request next frame
-    requestAnimationFrame(gameLoop);
-  } else {
-    // Game over, display winner
-    let winner = player1Score > player2Score ? "Player 1" : "Player 2";
-    drawText(`Game Over! ${winner} wins!`, canvas.width / 2, canvas.height / 2, "white");
-  }
-}
-
-// Start game loop
-gameLoop();
+			if (keys["s"] && paddle1
+	
