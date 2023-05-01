@@ -1,108 +1,178 @@
-version 1
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Pong Game</title>
-	<style>
-		canvas {
-			border: 2px solid black;
-		}
-	</style>
-</head>
-<body>
-	<canvas id="canvas" width="600" height="400"></canvas>
+  <head>
+    <meta charset="UTF-8">
+    <title>Pong Game</title>
+    <style>
+      canvas {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+	 
 
-	<script>
-		// Game variables
-		let canvas = document.getElementById("canvas");
-		let ctx = canvas.getContext("2d");
-		let ballX = canvas.width / 2;
-		let ballY = canvas.height / 2;
-		let ballSpeedX = 5;
-		let ballSpeedY = 5;
-		let paddle1Y = canvas.height / 2 - 50;
-		let paddle2Y = canvas.height / 2 - 50;
-		let paddleHeight = 100;
-		let paddleWidth = 10;
-		let player1Score = 0;
-		let player2Score = 0;
-		let winningScore = 3;
-		let gameOver = false;
-		let paddleSpeed = 5;
-		let keys = {};
+    <canvas id="canvas"></canvas>
+    <script src="pong.js"></script>
+  </body>
+</html>
 
-		// Mouse and Keyboard event listeners
-		canvas.addEventListener("mousemove", function(event) {
-			let mousePos = calculateMousePos(event);
-			paddle1Y = mousePos.y - paddleHeight / 2;
-		});
+ body {
+  margin: 0;
+  padding: 0;
+}
 
-		window.addEventListener("keydown", function(event) {
-			keys[event.key] = true;
-		});
+canvas {
+  display: block;
+}
+<script>
+	const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
 
-		window.addEventListener("keyup", function(event) {
-			keys[event.key] = false;
-		});
+// Paddle variables
+let paddleHeight = 100;
+let paddleWidth = 10;
+let leftPaddleY = (canvas.height - paddleHeight) / 2;
+let rightPaddleY = (canvas.height - paddleHeight) / 2;
+const paddleSpeed = 7;
 
-		// Helper function to calculate mouse position
-		function calculateMousePos(event) {
-			let rect = canvas.getBoundingClientRect();
-			let root = document.documentElement;
-			let mouseX = event.clientX - rect.left - root.scrollLeft;
-			let mouseY = event.clientY - rect.top - root.scrollTop;
-			return {
-				x: mouseX,
-				y: mouseY
-			};
-		}
+// Ball variables
+let ballX = canvas.width / 2;
+let ballY = canvas.height / 2;
+let ballSpeedX = 5;
+let ballSpeedY = 5;
+const ballSize = 10;
 
-		// Helper function to reset ball position
-		function ballReset() {
-			if (player1Score >= winningScore || player2Score >= winningScore) {
-				gameOver = true;
-			}
+// Score variables
+let leftScore = 0;
+let rightScore = 0;
 
-			ballSpeedX = -ballSpeedX;
-			ballX = canvas.width / 2;
-			ballY = canvas.height / 2;
-		}
+function draw() {
+  // Draw the background
+  ctx.fillStyle = 'black';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  // Draw the left paddle
+  ctx.fillStyle = 'white';
+  ctx.fillRect(0, leftPaddleY, paddleWidth, paddleHeight);
+  
+  // Draw the right paddle
+  ctx.fillRect(canvas.width - paddleWidth, rightPaddleY, paddleWidth, paddleHeight);
+  
+  // Draw the ball
+  ctx.beginPath();
+  ctx.arc(ballX, ballY, ballSize, 0, Math.PI * 2);
+  ctx.fillStyle = 'white';
+  ctx.fill();
+  
+  // Draw the score
+  ctx.fillStyle = 'white';
+  ctx.font = 'bold 16px Arial';
+  ctx.fillText('Player 1: ' + leftScore, 20, 20);
+  ctx.fillText('Player 2: ' + rightScore, canvas.width - 100, 20);
+}
 
-		// Helper function to draw net on canvas
-		function drawNet() {
-			for (let i = 0; i < canvas.height; i += 40) {
-				drawRect(canvas.width / 2 - 1, i, 2, 20, "white");
-			}
-		}
+function update() {
+  // Update the ball position
+  ballX += ballSpeedX;
+  ballY += ballSpeedY;
+  
+  // Check if the ball hits the top or bottom of the canvas
+  if (ballY + ballSize > canvas.height || ballY - ballSize < 0) {
+    ballSpeedY = -ballSpeedY;
+  }
+  
+  // Check if the ball hits the left or right paddle
+  if (ballX - ballSize < paddleWidth && ballY > leftPaddleY && ballY < leftPaddleY + paddleHeight) {
+    ballSpeedX = -ballSpeedX;
+  }
+  if (ballX + ballSize > canvas.width - paddleWidth && ballY > rightPaddleY && ballY < rightPaddleY + paddleHeight) {
+    ballSpeedX = -ballSpeedX;
+  }
+  
+  // Check if the ball goes out of bounds
+  if (ballX < 0) {
+    rightScore++;
+    resetBall();
+  }
+  if (ballX > canvas.width) {
+    leftScore++;
+    resetBall();
+  }
+  
+  // Move the left paddle
+  if (keys.up) {
+    leftPaddleY -= paddleSpeed;
+  }
+  if (keys.down) {
+    leftPaddleY += paddleSpeed;
+  }
+  
+  //
+	  // Move the right paddle
+  if (keys.w) {
+    rightPaddleY -= paddleSpeed;
+  }
+  if (keys.s) {
+    rightPaddleY += paddleSpeed;
+  }
+}
 
-		// Helper function to draw rectangles
-		function drawRect(leftX, topY, width, height, color) {
-			ctx.fillStyle = color;
-			ctx.fillRect(leftX, topY, width, height);
-		}
+function resetBall() {
+  ballX = canvas.width / 2;
+  ballY = canvas.height / 2;
+  ballSpeedX = -ballSpeedX;
+  ballSpeedY = Math.random() * 10 - 5;
+}
 
-		// Helper function to draw text
-		function drawText(text, x, y, color) {
-			ctx.fillStyle = color;
-			ctx.font = "bold 20px Arial";
-			ctx.textAlign = "center";
-			ctx.fillText(text, x, y);
-		}
+function keyDownHandler(event) {
+  if (event.keyCode === 87) {
+    keys.w = true;
+  }
+  if (event.keyCode === 83) {
+    keys.s = true;
+  }
+  if (event.keyCode === 38) {
+    keys.up = true;
+  }
+  if (event.keyCode === 40) {
+    keys.down = true;
+  }
+}
 
-		// Helper function to draw paddles
-		function drawPaddles() {
-			drawRect(0, paddle1Y, paddleWidth, paddleHeight, "white");
-			drawRect(canvas.width - paddleWidth, paddle2Y, paddleWidth, paddleHeight, "white");
-		}
+function keyUpHandler(event) {
+  if (event.keyCode === 87) {
+    keys.w = false;
+  }
+  if (event.keyCode === 83) {
+    keys.s = false;
+  }
+  if (event.keyCode === 38) {
+    keys.up = false;
+  }
+  if (event.keyCode === 40) {
+    keys.down = false;
+  }
+}
 
-		// Helper function to move paddles
-		function movePaddles() {
-			if (keys["w"] && paddle1Y > 0) {
-				paddle1Y -= paddleSpeed;
-			}
+const keys = {
+  up: false,
+  down: false,
+  w: false,
+  s: false,
+};
 
-			if (keys["s"] && paddle1Y > 0) {
-				paddle1Y -= paddleSpeed;
-			}
-	
+document.addEventListener('keydown', keyDownHandler);
+document.addEventListener('keyup', keyUpHandler);
+
+function gameLoop() {
+  draw();
+  update();
+  
+  requestAnimationFrame(gameLoop);
+}
+
+resetBall();
+gameLoop();
+	}
 </script>
