@@ -95,8 +95,10 @@ class Tetromino {
           const r = this.row + i;
           const c = this.col + j;
 
-          if           board[r][c] = 0;
-        }
+        if (board[r][c] === 0) {
+  board[r][c] = 0;
+}
+
       }
     }
   }
@@ -144,6 +146,7 @@ function gameLoop() {
   if (tetromino.isColliding()) {
     tetromino.moveUp();
     tetromino.draw();
+	  tetromino.moveUp();
 
     for (let i = 0; i < ROWS; i++) {
       if (board[i].every(cell => cell)) {
