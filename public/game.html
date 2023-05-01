@@ -1,178 +1,175 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Pong Game</title>
-    <style>
-      canvas {
-        border: 1px solid black;
+<script> // Define the game board
+const ROWS = 20;
+const COLS = 10;
+const board = [];
+
+for (let i = 0; i < ROWS; i++) {
+  board[i] = [];
+  for (let j = 0; j < COLS; j++) {
+    board[i][j] = 0;
+  }
+}
+
+// Define the Tetromino shapes
+const SHAPES = [
+  [1, 1, 1, 1],  // I
+  [1, 1, 0, 0,  // J
+   1, 0, 0, 0],
+  [1, 1, 0, 0,  // L
+   0, 1, 0, 0],
+  [1, 1, 0, 0,  // S
+   0, 1, 1, 0],
+  [0, 1, 1, 0,  // Z
+   1, 1, 0, 0],
+  [1, 1, 1, 0,  // T
+   0, 1, 0, 0],
+  [0, 0, 1, 0,  // O
+   1, 1, 0, 0],
+];
+
+// Define the Tetromino colors
+const COLORS = [
+  "#00ffff",  // I
+  "#0000ff",  // J
+  "#ff8000",  // L
+  "#00ff00",  // S
+  "#ff0000",  // Z
+  "#800080",  // T
+  "#ffff00",  // O
+];
+
+// Define the Tetromino class
+class Tetromino {
+  constructor(shape, color) {
+    this.shape = shape;
+    this.color = color;
+    this.row = 0;
+    this.col = Math.floor(COLS / 2) - Math.floor(shape.length / 2);
+  }
+
+  moveDown() {
+    this.row++;
+  }
+
+  moveLeft() {
+    this.col--;
+  }
+
+  moveRight() {
+    this.col++;
+  }
+
+  rotate() {
+    const rotated = [];
+
+    for (let i = 0; i < this.shape.length; i++) {
+      rotated[i] = [];
+
+      for (let j = 0; j < this.shape.length; j++) {
+        rotated[i][j] = this.shape[this.shape.length - j - 1][i];
       }
-    </style>
-  </head>
-  <body>
-	 
+    }
 
-    <canvas id="canvas"></canvas>
-    <script src="pong.js"></script>
-  </body>
-</html>
+    this.shape = rotated;
+  }
 
- body {
-  margin: 0;
-  padding: 0;
-}
+  draw() {
+    for (let i = 0; i < this.shape.length; i++) {
+      for (let j = 0; j < this.shape.length; j++) {
+        if (this.shape[i][j]) {
+          const r = this.row + i;
+          const c = this.col + j;
 
-canvas {
-  display: block;
-}
-<script>
-	const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
+          if (r >= 0 && r < ROWS && c >= 0 && c < COLS) {
+            board[r][c] = this.color;
+          }
+        }
+      }
+    }
+  }
 
-// Paddle variables
-let paddleHeight = 100;
-let paddleWidth = 10;
-let leftPaddleY = (canvas.height - paddleHeight) / 2;
-let rightPaddleY = (canvas.height - paddleHeight) / 2;
-const paddleSpeed = 7;
+  undraw() {
+    for (let i = 0; i < this.shape.length; i++) {
+      for (let j = 0; j < this.shape.length; j++) {
+        if (this.shape[i][j]) {
+          const r = this.row + i;
+          const c = this.col + j;
 
-// Ball variables
-let ballX = canvas.width / 2;
-let ballY = canvas.height / 2;
-let ballSpeedX = 5;
-let ballSpeedY = 5;
-const ballSize = 10;
+          if           board[r][c] = 0;
+        }
+      }
+    }
+  }
 
-// Score variables
-let leftScore = 0;
-let rightScore = 0;
+  isColliding() {
+    for (let i = 0; i < this.shape.length; i++) {
+      for (let j = 0; j < this.shape.length; j++) {
+        if (this.shape[i][j]) {
+          const r = this.row + i;
+          const c = this.col + j;
 
-function draw() {
-  // Draw the background
-  ctx.fillStyle = 'black';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
-  // Draw the left paddle
-  ctx.fillStyle = 'white';
-  ctx.fillRect(0, leftPaddleY, paddleWidth, paddleHeight);
-  
-  // Draw the right paddle
-  ctx.fillRect(canvas.width - paddleWidth, rightPaddleY, paddleWidth, paddleHeight);
-  
-  // Draw the ball
-  ctx.beginPath();
-  ctx.arc(ballX, ballY, ballSize, 0, Math.PI * 2);
-  ctx.fillStyle = 'white';
-  ctx.fill();
-  
-  // Draw the score
-  ctx.fillStyle = 'white';
-  ctx.font = 'bold 16px Arial';
-  ctx.fillText('Player 1: ' + leftScore, 20, 20);
-  ctx.fillText('Player 2: ' + rightScore, canvas.width - 100, 20);
-}
+          if (r >= ROWS || c < 0 || c >= COLS || board[r][c]) {
+            return true;
+          }
+        }
+      }
+    }
 
-function update() {
-  // Update the ball position
-  ballX += ballSpeedX;
-  ballY += ballSpeedY;
-  
-  // Check if the ball hits the top or bottom of the canvas
-  if (ballY + ballSize > canvas.height || ballY - ballSize < 0) {
-    ballSpeedY = -ballSpeedY;
+    return false;
   }
-  
-  // Check if the ball hits the left or right paddle
-  if (ballX - ballSize < paddleWidth && ballY > leftPaddleY && ballY < leftPaddleY + paddleHeight) {
-    ballSpeedX = -ballSpeedX;
-  }
-  if (ballX + ballSize > canvas.width - paddleWidth && ballY > rightPaddleY && ballY < rightPaddleY + paddleHeight) {
-    ballSpeedX = -ballSpeedX;
-  }
-  
-  // Check if the ball goes out of bounds
-  if (ballX < 0) {
-    rightScore++;
-    resetBall();
-  }
-  if (ballX > canvas.width) {
-    leftScore++;
-    resetBall();
-  }
-  
-  // Move the left paddle
-  if (keys.up) {
-    leftPaddleY -= paddleSpeed;
-  }
-  if (keys.down) {
-    leftPaddleY += paddleSpeed;
-  }
-  
-  //
-	  // Move the right paddle
-  if (keys.w) {
-    rightPaddleY -= paddleSpeed;
-  }
-  if (keys.s) {
-    rightPaddleY += paddleSpeed;
+
+  isGameOver() {
+    return this.row === 0 && this.isColliding();
   }
 }
 
-function resetBall() {
-  ballX = canvas.width / 2;
-  ballY = canvas.height / 2;
-  ballSpeedX = -ballSpeedX;
-  ballSpeedY = Math.random() * 10 - 5;
+// Define the game loop
+let tetromino = null;
+let interval = null;
+let score = 0;
+
+function startGame() {
+  tetromino = new Tetromino(
+    SHAPES[Math.floor(Math.random() * SHAPES.length)],
+    COLORS[Math.floor(Math.random() * COLORS.length)]
+  );
+  score = 0;
+  interval = setInterval(gameLoop, 500);
 }
-
-function keyDownHandler(event) {
-  if (event.keyCode === 87) {
-    keys.w = true;
-  }
-  if (event.keyCode === 83) {
-    keys.s = true;
-  }
-  if (event.keyCode === 38) {
-    keys.up = true;
-  }
-  if (event.keyCode === 40) {
-    keys.down = true;
-  }
-}
-
-function keyUpHandler(event) {
-  if (event.keyCode === 87) {
-    keys.w = false;
-  }
-  if (event.keyCode === 83) {
-    keys.s = false;
-  }
-  if (event.keyCode === 38) {
-    keys.up = false;
-  }
-  if (event.keyCode === 40) {
-    keys.down = false;
-  }
-}
-
-const keys = {
-  up: false,
-  down: false,
-  w: false,
-  s: false,
-};
-
-document.addEventListener('keydown', keyDownHandler);
-document.addEventListener('keyup', keyUpHandler);
 
 function gameLoop() {
-  draw();
-  update();
-  
-  requestAnimationFrame(gameLoop);
+  tetromino.undraw();
+  tetromino.moveDown();
+
+  if (tetromino.isColliding()) {
+    tetromino.moveUp();
+    tetromino.draw();
+
+    for (let i = 0; i < ROWS; i++) {
+      if (board[i].every(cell => cell)) {
+        board.splice(i, 1);
+        board.unshift(new Array(COLS).fill(0));
+        score += 10;
+      }
+    }
+
+    if (tetromino.isGameOver()) {
+      clearInterval(interval);
+      alert(`Game Over! Score: ${score}`);
+      return;
+    }
+
+    tetromino = new Tetromino(
+      SHAPES[Math.floor(Math.random() * SHAPES.length)],
+      COLORS[Math.floor(Math.random() * COLORS.length)]
+    );
+  }
+
+  tetromino.draw();
 }
 
-resetBall();
-gameLoop();
-	}
-</script>
+// Start the game
+startGame();
+		  </script>
+
+	
