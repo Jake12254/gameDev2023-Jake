@@ -1,179 +1,80 @@
+<!DOCTYPE html>
 <html>
-<script> // Define the game board
-const ROWS = 20;
-const COLS = 10;
-const board = [];
+<head>
+	<title>Tetris Game</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<div class="game-container">
+		<div class="game-board"></div>
+		<div class="game-info">
+			<div class="score">Score: 0</div>
+			<button class="start-btn">Start Game</button>
+		</div>
+	</div>
 
-for (let i = 0; i < ROWS; i++) {
-  board[i] = [];
-  for (let j = 0; j < COLS; j++) {
-    board[i][j] = 0;
-  }
+	<script src="script.js"></script>
+</body>
+</html>
+<script>
+.game-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
 }
 
-// Define the Tetromino shapes
-const SHAPES = [
-  [1, 1, 1, 1],  // I
-  [1, 1, 0, 0,  // J
-   1, 0, 0, 0],
-  [1, 1, 0, 0,  // L
-   0, 1, 0, 0],
-  [1, 1, 0, 0,  // S
-   0, 1, 1, 0],
-  [0, 1, 1, 0,  // Z
-   1, 1, 0, 0],
-  [1, 1, 1, 0,  // T
-   0, 1, 0, 0],
-  [0, 0, 1, 0,  // O
-   1, 1, 0, 0],
-];
-
-// Define the Tetromino colors
-const COLORS = [
-  "#00ffff",  // I
-  "#0000ff",  // J
-  "#ff8000",  // L
-  "#00ff00",  // S
-  "#ff0000",  // Z
-  "#800080",  // T
-  "#ffff00",  // O
-];
-
-// Define the Tetromino class
-class Tetromino {
-  constructor(shape, color) {
-    this.shape = shape;
-    this.color = color;
-    this.row = 0;
-    this.col = Math.floor(COLS / 2) - Math.floor(shape.length / 2);
-  }
-
-  moveDown() {
-    this.row++;
-  }
-
-  moveLeft() {
-    this.col--;
-  }
-
-  moveRight() {
-    this.col++;
-  }
-
-  rotate() {
-    const rotated = [];
-
-    for (let i = 0; i < this.shape.length; i++) {
-      rotated[i] = [];
-
-      for (let j = 0; j < this.shape.length; j++) {
-        rotated[i][j] = this.shape[this.shape.length - j - 1][i];
-      }
-    }
-
-    this.shape = rotated;
-  }
-
-  draw() {
-    for (let i = 0; i < this.shape.length; i++) {
-      for (let j = 0; j < this.shape.length; j++) {
-        if (this.shape[i][j]) {
-          const r = this.row + i;
-          const c = this.col + j;
-
-          if (r >= 0 && r < ROWS && c >= 0 && c < COLS) {
-            board[r][c] = this.color;
-          }
-        }
-      }
-    }
-  }
-
-  undraw() {
-    for (let i = 0; i < this.shape.length; i++) {
-      for (let j = 0; j < this.shape.length; j++) {
-        if (this.shape[i][j]) {
-          const r = this.row + i;
-          const c = this.col + j;
-
-        if (board[r][c] === 0) {
-  board[r][c] = 0;
+.game-board {
+	width: 300px;
+	height: 600px;
+	border: 1px solid #000;
 }
 
-      }
-    }
-  }
-
-  isColliding() {
-    for (let i = 0; i < this.shape.length; i++) {
-      for (let j = 0; j < this.shape.length; j++) {
-        if (this.shape[i][j]) {
-          const r = this.row + i;
-          const c = this.col + j;
-
-          if (r >= ROWS || c < 0 || c >= COLS || board[r][c]) {
-            return true;
-          }
-        }
-      }
-    }
-
-    return false;
-  }
-
-  isGameOver() {
-    return this.row === 0 && this.isColliding();
-  }
+.game-info {
+	display: flex;
+	flex-direction: column;
+	margin-left: 20px;
 }
 
-// Define the game loop
-let tetromino = null;
-let interval = null;
+.score {
+	font-size: 24px;
+	margin-bottom: 10px;
+}
+
+.start-btn {
+	font-size: 20px;
+	padding: 10px 20px;
+	border: none;
+	background-color: #000;
+	color: #fff;
+	cursor: pointer;
+}
+	const board = document.querySelector('.game-board');
+const scoreDisplay = document.querySelector('.score');
+const startButton = document.querySelector('.start-btn');
+
+const width = 10;
+const height = 20;
+const cellSize = 30;
+
 let score = 0;
+let squares = Array.from({ length: width * height });
+
+function draw() {
+	board.innerHTML = '';
+	squares.forEach(square => {
+		board.appendChild(square);
+	});
+}
+
+function updateScore() {
+	scoreDisplay.innerText = `Score: ${score}`;
+}
 
 function startGame() {
-  tetromino = new Tetromino(
-    SHAPES[Math.floor(Math.random() * SHAPES.length)],
-    COLORS[Math.floor(Math.random() * COLORS.length)]
-  );
-  score = 0;
-  interval = setInterval(gameLoop, 500);
+	// TODO: Implement the game logic
 }
 
-function gameLoop() {
-  tetromino.undraw();
-  tetromino.moveDown();
+startButton.addEventListener('click', startGame);
 
-  if (tetromino.isColliding()) {
-    tetromino.moveUp();
-    tetromino.draw();
-	  tetromino.moveUp();
-
-    for (let i = 0; i < ROWS; i++) {
-      if (board[i].every(cell => cell)) {
-        board.splice(i, 1);
-        board.unshift(new Array(COLS).fill(0));
-        score += 10;
-      }
-    }
-
-    if (tetromino.isGameOver()) {
-      clearInterval(interval);
-      alert(`Game Over! Score: ${score}`);
-      return;
-    }
-
-    tetromino = new Tetromino(
-      SHAPES[Math.floor(Math.random() * SHAPES.length)],
-      COLORS[Math.floor(Math.random() * COLORS.length)]
-    );
-  }
-
-  tetromino.draw();
-}
-
-// Start the game
-startGame();
-		  </script>
-
-	
+</script>
