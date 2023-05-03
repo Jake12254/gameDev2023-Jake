@@ -113,7 +113,7 @@
 
   function moveLeft() {
     document.getElementById("myImg01").style.left =
-      parseInt(document.getElementById("myImg01").style.left) -
+      parseInt(document.getElementById("myImg01").style.left) - 20px
       movementSpeed +
       "px";
     myCheckHit(); // checks for all collisions
@@ -121,7 +121,7 @@
 
   function moveRight() {
     document.getElementById("myImg01").style.left =
-      parseInt(document.getElementById("myImg01").style.left) +
+      parseInt(document.getElementById("myImg01").style.left) + 20px
       movementSpeed +
       "px";
     myCheckHit(); // checks for all collisions
@@ -129,7 +129,7 @@
 
   function moveUp() {
     document.getElementById("myImg01").style.top =
-      parseInt(document.getElementById("myImg01").style.top) -
+      parseInt(document.getElementById("myImg01").style.top) - 20px
       movementSpeed +
       "px";
     myCheckHit(); // checks for all collisions
@@ -137,8 +137,8 @@
 
   function moveDown() {
     document.getElementById("myImg01").style.top =
-      parseInt(document.getElementById("myImg01").style.top) +
-      movementSpeed +
+      parseInt(document.getElementById("myImg01").style.top) + 20px
+      movementSpeed + 
       "px";
     myCheckHit(); // checks for all collisions
   }
