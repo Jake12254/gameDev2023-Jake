@@ -95,4 +95,55 @@ function checkWin(row, col) {
   while (startRow >= 0 && startCol < COLS) {
     if (boardArray[startRow][startCol] === currentPlayer) {
       count++;
-      if (count === 4) return
+      if (count === 4) return true;
+    }
+    } else {
+      count = 0;
+    }
+    startRow--;
+    startCol++;
+  }
+
+  return false;
+}
+
+// Check if the board is full and there is no winner
+function checkDraw() {
+  for (let j = 0; j < COLS; j++) {
+    if (boardArray[0][j] === EMPTY) {
+      return false;
+    }
+  }
+  return true;
+}
+
+// Reset the game
+function resetGame() {
+  currentPlayer = PLAYER_1;
+  gameOver = false;
+  playerTurn.textContent = `Player ${currentPlayer}'s turn`;
+  boardArray = [];
+  for (let i = 0; i < ROWS; i++) {
+    boardArray.push([]);
+    for (let j = 0; j < COLS; j++) {
+      boardArray[i][j] = EMPTY;
+      cells[i * COLS + j].classList.remove('player1', 'player2');
+    }
+  }
+}
+
+// Add click event listener to the cells
+cells.forEach((cell, index) => {
+  cell.addEventListener('click', () => {
+    if (!gameOver) {
+      const column = index % COLS;
+      makeMove(column);
+    }
+  });
+});
+
+// Add click event listener to the reset button
+resetButton.addEventListener('click', resetGame);
+
+// Initialize the game
+resetGame();
