@@ -54,16 +54,18 @@ setInterval(function() {
        }
    }
 
-   function myCheckHit(){
-    if (myHitOther('myImg01','myImg02')){
-        alert('YOU DIED');
-        document.getElementById('myImg01').style.left = '20px';
-    }   
-
-    if (myHitOther('myImg01','myImg03')){
-        alert('YOU DIED');
-        document.getElementById('myImg01').style.left = '20px';
-    }   
+  function myCheckHit(){
+   if (myHitOther('myImg01','myImg02')){
+       alert('YOU DIED');
+       location.reload();
+       document.getElementById('myImg01').style.left = '20px'
+   }   
+   
+   if (myHitOther('myImg01','myImg03')){
+       alert('YOU DIED');
+       location.reload();
+       document.getElementById('myImg01').style.left = '20px'
+   }   
        
        // YOU WIN and go to next level!
        if (myHitOther('myImg01','myImg04')){
