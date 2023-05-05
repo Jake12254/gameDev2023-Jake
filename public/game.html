@@ -81,7 +81,53 @@
                break
        }
    })
+var myPlayer01 = {
+  x: 10,
+  y: 10
+};
 
+var myEnemy01 = {
+  x: 50,
+  y: 50,
+  speed: 2
+};
+
+var myEnemy02 = {
+  x: 80,
+  y: 80,
+  speed: 1.5
+};
+
+function update() {
+  // Calculate the distance between each enemy and the player
+  var dist01 = Math.sqrt((myPlayer01.x - myEnemy01.x) * (myPlayer01.x - myEnemy01.x) + (myPlayer01.y - myEnemy01.y) * (myPlayer01.y - myEnemy01.y));
+  var dist02 = Math.sqrt((myPlayer01.x - myEnemy02.x) * (myPlayer01.x - myEnemy02.x) + (myPlayer01.y - myEnemy02.y) * (myPlayer01.y - myEnemy02.y));
+
+  // If the distance is greater than 1 pixel, move the enemy towards the player
+  if (dist01 > 1) {
+    myEnemy01.x += (myPlayer01.x - myEnemy01.x) * 0.01 * myEnemy01.speed;
+    myEnemy01.y += (myPlayer01.y - myEnemy01.y) * 0.01 * myEnemy01.speed;
+  }
+  
+  if (dist02 > 1) {
+    myEnemy02.x += (myPlayer01.x - myEnemy02.x) * 0.01 * myEnemy02.speed;
+    myEnemy02.y += (myPlayer01.y - myEnemy02.y) * 0.01 * myEnemy02.speed;
+  }
+
+  // Draw the player and enemies
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.fillStyle = 'blue';
+  context.fillRect(myPlayer01.x, myPlayer01.y, 10, 10);
+  context.fillStyle = 'red';
+  context.fillRect(myEnemy01.x, myEnemy01.y, 10, 10);
+  context.fillRect(myEnemy02.x, myEnemy02.y, 10, 10);
+
+  // Call update() again
+  requestAnimationFrame(update);
+}
+
+// Call update() to start the game loop
+update();
 </script>
 
 <input type=button value="Auto Background Right" onclick="{
@@ -97,3 +143,51 @@ myClock = setInterval(myAutoBackground, 50)
 <img id="myImg03" src="https://cdna.artstation.com/p/assets/images/images/022/485/264/original/john-abreu-samurai-copia.gif?1575588917" style="position:absolute; top:300px; left:500px; width:50px; height:50px">
 <img id="myImg04" src="myGoal01.png"  style="position:absolute; top:200px; left:800px; width:50px; height:50px"> 
 </body>
+var myPlayer01 = {
+  x: 10,
+  y: 10
+};
+
+var myEnemy01 = {
+  x: 50,
+  y: 50,
+  speed: 2
+};
+
+var myEnemy02 = {
+  x: 80,
+  y: 80,
+  speed: 1.5
+};
+
+function update() {
+  // Calculate the distance between each enemy and the player
+  var dist01 = Math.sqrt((myPlayer01.x - myEnemy01.x) * (myPlayer01.x - myEnemy01.x) + (myPlayer01.y - myEnemy01.y) * (myPlayer01.y - myEnemy01.y));
+  var dist02 = Math.sqrt((myPlayer01.x - myEnemy02.x) * (myPlayer01.x - myEnemy02.x) + (myPlayer01.y - myEnemy02.y) * (myPlayer01.y - myEnemy02.y));
+
+  // If the distance is greater than 1 pixel, move the enemy towards the player
+  if (dist01 > 1) {
+    myEnemy01.x += (myPlayer01.x - myEnemy01.x) * 0.01 * myEnemy01.speed;
+    myEnemy01.y += (myPlayer01.y - myEnemy01.y) * 0.01 * myEnemy01.speed;
+  }
+  
+  if (dist02 > 1) {
+    myEnemy02.x += (myPlayer01.x - myEnemy02.x) * 0.01 * myEnemy02.speed;
+    myEnemy02.y += (myPlayer01.y - myEnemy02.y) * 0.01 * myEnemy02.speed;
+  }
+
+  // Draw the player and enemies
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.fillStyle = 'blue';
+  context.fillRect(myPlayer01.x, myPlayer01.y, 10, 10);
+  context.fillStyle = 'red';
+  context.fillRect(myEnemy01.x, myEnemy01.y, 10, 10);
+  context.fillRect(myEnemy02.x, myEnemy02.y, 10, 10);
+
+  // Call update() again
+  requestAnimationFrame(update);
+}
+
+// Call update() to start the game loop
+update();
+
