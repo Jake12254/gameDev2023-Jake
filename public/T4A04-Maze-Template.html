@@ -100,24 +100,56 @@ setInterval(function() {
        myCheckHit() // checks for all collisions
    }
 
-   document.addEventListener('keydown', function(event) {
-       switch(event.keyCode){
-           case 87: // W key
-               moveUp()
-               break
-           case 83: // S key
-               moveDown()
-               break
-           case 65: // A key
-               moveLeft()
-               break
-           case 68: // D key
-               moveRight()
-               break
-           default:
-               break
-       }
-   })
+  document.addEventListener('keydown', function(event) {
+    switch(event.keyCode){
+        case 87: // W key
+            if (event.shiftKey && event.keyCode == 65) { // A key
+                moveUp();
+                moveLeft();
+            } else if (event.shiftKey && event.keyCode == 68) { // D key
+                moveUp();
+                moveRight();
+            } else {
+                moveUp();
+            }
+            break;
+        case 83: // S key
+            if (event.shiftKey && event.keyCode == 65) { // A key
+                moveDown();
+                moveLeft();
+            } else if (event.shiftKey && event.keyCode == 68) { // D key
+                moveDown();
+                moveRight();
+            } else {
+                moveDown();
+            }
+            break;
+        case 65: // A key
+            if (event.shiftKey && event.keyCode == 87) { // W key
+                moveUp();
+                moveLeft();
+            } else if (event.shiftKey && event.keyCode == 83) { // S key
+                moveDown();
+                moveLeft();
+            } else {
+                moveLeft();
+            }
+            break;
+        case 68: // D key
+            if (event.shiftKey && event.keyCode == 87) { // W key
+                moveUp();
+                moveRight();
+            } else if (event.shiftKey && event.keyCode == 83) { // S key
+                moveDown();
+                moveRight();
+            } else {
+                moveRight();
+            }
+            break;
+        default:
+            break;
+    }
+});
 
 </script>
 
