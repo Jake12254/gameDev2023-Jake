@@ -2,15 +2,37 @@
 
 
 <script>
-  function follow(){
-    document.getElementById('myImg02').style.top = parseInt(document.getElementById('myImg01').style.top) + 10 + 'px'
-    document.getElementById('myImg02').style.left = parseInt(document.getElementById('myImg01').style.left) + 10 + 'px'
+  let chaseSpeed = 5 // adjust the speed of the chasers here
 
-    document.getElementById('myImg03').style.top = parseInt(document.getElementById('myImg01').style.top) + 10 + 'px'
-    document.getElementById('myImg03').style.left = parseInt(document.getElementById('myImg01').style.left) + 10 + 'px'
+function chase(myChaser, myTarget){
+    let chaser = document.getElementById(myChaser)
+    let target = document.getElementById(myTarget)
+    let chaserX = parseInt(chaser.style.left)
+    let chaserY = parseInt(chaser.style.top)
+    let targetX = parseInt(target.style.left)
+    let targetY = parseInt(target.style.top)
+
+    if (chaserX < targetX) {
+        chaserX += chaseSpeed
+    } else if (chaserX > targetX) {
+        chaserX -= chaseSpeed
+    }
+
+    if (chaserY < targetY) {
+        chaserY += chaseSpeed
+    } else if (chaserY > targetY) {
+        chaserY -= chaseSpeed
+    }
+
+    chaser.style.left = chaserX + 'px'
+    chaser.style.top = chaserY + 'px'
 }
 
-setInterval(follow, 30)
+setInterval(function() {
+    chase('myImg02', 'myImg01')
+    chase('myImg03', 'myImg01')
+}, 50)
+
    
    // global variables here
    let myGlobalX = 0
