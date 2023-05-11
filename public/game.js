@@ -61,9 +61,10 @@ var enemies = [
 var canvas = document.getElementById("gameCanvas");
 var ctx = canvas.getContext("2d");
 
-function update() {
+
   // Update the game state
-  // ...
+  function update() {
+     updatePlayer();
 
   // Check for collisions
   // ...
