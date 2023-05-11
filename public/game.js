@@ -41,8 +41,8 @@ function updatePlayer() {
 
 // Define game objects
 var player = {
-  x: 200, 
-  y: 100,
+  x: canvas.width / 2 - 25,
+  y: canvas.height - 50,
   speed: 3,
   width: 50,
   height: 50
