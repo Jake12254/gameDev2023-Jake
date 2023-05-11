@@ -1,11 +1,5 @@
 
-// Define the player object
-var player = {
-  x: canvas.width / 2,
-  y: canvas.height / 2,
-  width: 50,
-  height: 50
-};
+
 
 // Define a dictionary to store key states
 var keys = {};
@@ -62,6 +56,13 @@ var enemies = [
 var canvas = document.getElementById("gameCanvas");
 var ctx = canvas.getContext("2d");
 
+// Define the player object
+var player = {
+  x: canvas.width / 2,
+  y: canvas.height / 2,
+  width: 50,
+  height: 50
+};
 
   // Update the game state
   function update() {
