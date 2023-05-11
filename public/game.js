@@ -1,4 +1,12 @@
 
+// Define the player object
+var player = {
+  x: canvas.width / 2,
+  y: canvas.height / 2,
+  width: 50,
+  height: 50
+};
+
 // Define a dictionary to store key states
 var keys = {};
 
@@ -40,13 +48,6 @@ function updatePlayer() {
 }
 
 // Define game objects
-var player = {
-  x: canvas.width / 2 - 25,
-  y: canvas.height - 50,
-  speed: 3,
-  width: 10,
-  height: 10
-};
 
 var bullets = [];
 
