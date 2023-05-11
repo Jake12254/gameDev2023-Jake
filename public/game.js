@@ -47,10 +47,6 @@ function updatePlayer() {
   }
 }
 
-// Update function to move game objects and check for collisions
-function update() {
-  // Update the player position
-  updatePlayer();
 // Define game objects
 
 var bullets = [];
