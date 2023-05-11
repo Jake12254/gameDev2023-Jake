@@ -41,8 +41,8 @@ function update() {
     // Calculate new x and y positions for the enemy
     var angle = Math.random() * Math.PI * 2;
     var distance = Math.random() * 50;
-    var dx = Math.cos(angle) * distance;
-    var dy = Math.sin(angle) * distance;
+    var dx = Math.cos(angle) * distance * 0.1;
+    var dy = Math.sin(angle) * distance; * 0.1;
     enemy.x += dx;
     enemy.y += dy;
 
