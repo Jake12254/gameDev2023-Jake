@@ -1,5 +1,8 @@
 // Define the player object
 var player = {
+  x: 200, 
+  y: 100,
+  speed: 3,
   width: 50,
   height: 50
 };
