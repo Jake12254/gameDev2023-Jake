@@ -44,17 +44,17 @@ var player = {
   x: canvas.width / 2 - 25,
   y: canvas.height - 50,
   speed: 3,
-  width: 50,
-  height: 50
+  width: 10,
+  height: 10
 };
 
 var bullets = [];
 
 var enemies = [
-  { x: 100, y: 100, width: 50, height: 50, speed: 2 },
-  { x: 200, y: 100, width: 50, height: 50, speed: 3 },
-  { x: 300, y: 100, width: 50, height: 50, speed: 4 },
-  { x: 400, y: 100, width: 50, height: 50, speed: 5 },
+  { x: 100, y: 100, width: 10, height: 10, speed: 2 },
+  { x: 200, y: 100, width: 10, height: 10, speed: 3 },
+  { x: 300, y: 100, width: 10, height: 10, speed: 4 },
+  { x: 400, y: 100, width: 10, height: 10, speed: 5 },
 ];
 
 // Set up the canvas and game loop
