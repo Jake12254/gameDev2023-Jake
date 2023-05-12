@@ -93,10 +93,7 @@ var player = {
 });
 
   // Draw the game objects
-    var enemies = [
-  { x: 100, y: canvas.height / 2, width: 15, height: 15, speed: 0.1 },
-  { x: canvas.width - 100, y: canvas.height / 2, width: 15, height: 15, speed: 0.1 },
-];
+   
     update();
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = "blue";
@@ -111,6 +108,11 @@ var player = {
     ctx.fillStyle = "green";
     ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
   });
+    
+    var enemies = [
+  { x: 100, y: canvas.height / 2, width: 15, height: 15, speed: 0.1 },
+  { x: canvas.width - 100, y: canvas.height / 2, width: 15, height: 15, speed: 0.1 },
+];
 }
 
 function loop() {
