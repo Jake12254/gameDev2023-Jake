@@ -83,13 +83,13 @@ var player = {
 
   // Move game objects
   enemies.forEach(function (enemy) {
-    // Calculate new x and y positions for the enemy
-    var angle = Math.random() * Math.PI * 2;
-    var distance = Math.random() * 50;
-    var dx = Math.cos(angle) * distance;
-    var dy = Math.sin(angle) * distance;
-    enemy.x += dx;
-    enemy.y += dy;
+  // Calculate new x and y positions for the enemy
+  enemy.angle = (enemy.angle || Math.random() * Math.PI * 2);
+  enemy.speed = (enemy.speed || Math.random() * 2 + 1); // set a random speed between 1 and 3
+  enemy.x += Math.cos(enemy.angle) * enemy.speed;
+  enemy.y += Math.sin(enemy.angle) * enemy.speed;
+  enemy.angle += 0.01; // increase the angle by a small value to make it move in a circle
+});
 
     // Make sure the enemy stays within the canvas bounds
     if (enemy.x < 0) {
