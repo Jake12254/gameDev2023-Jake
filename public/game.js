@@ -48,8 +48,6 @@ var bullets = [];
 var enemies = [
   { x: 100, y: 100, width: 15, height: 15, speed: 0.5 },
   { x: 200, y: 100, width: 15, height: 15, speed: 0.5 },
-  { x: 300, y: 100, width: 15, height: 15, speed: 0.5 },
-  { x: 400, y: 100, width: 15, height: 15, speed: 0.5 },
 ];
 
 // Set up the canvas and game loop
@@ -82,23 +80,15 @@ var player = {
   // ...
 
   // Move game objects
- enemies.forEach(function (enemy) {
+  enemies.forEach(function (enemy) {
+    enemy.angle += 0.01; // Increase the angle for each enemy to make them move in a circle
+    enemy.x = canvas.width / 2 + 100 * Math.cos(enemy.angle); // Update the x-coordinate using the cosine of the angle
+    enemy.y = canvas.height / 2 + 100 * Math.sin(enemy.angle); // Update the y-coordinate using the sine of the angle
+
     ctx.beginPath();
     ctx.arc(enemy.x, enemy.y, 10, 0, 2 * Math.PI);
     ctx.fillStyle = "red";
     ctx.fill();
-
-    // Make sure the enemy stays within the canvas bounds
-    if (enemy.x < 0) {
-      enemy.x = 0;
-    } else if (enemy.x + enemy.width > canvas.width) {
-      enemy.x = canvas.width - enemy.width;
-    }
-    if (enemy.y < 0) {
-      enemy.y = 0;
-    } else if (enemy.y + enemy.height > canvas.height) {
-      enemy.y = canvas.height - enemy.height;
-    }
   });
 
   // Draw the game objects
