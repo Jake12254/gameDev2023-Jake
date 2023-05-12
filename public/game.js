@@ -1,7 +1,4 @@
 
-
-
-// Define a dictionary to store key states
 var keys = {};
 
 // Add event listeners for keydown and keyup events
@@ -13,10 +10,33 @@ document.addEventListener("keyup", function (event) {
   keys[event.key] = false;
 });
 
-// Set up the canvas and game loop
-var canvas = document.getElementById("gameCanvas");
-var ctx = canvas.getContext("2d");
+// Update the player position based on key states
+function updatePlayer() {
+  if (keys["w"]) {
+    player.y -= 5;
+  }
+  if (keys["a"]) {
+    player.x -= 5;
+  }
+  if (keys["s"]) {
+    player.y += 5;
+  }
+  if (keys["d"]) {
+    player.x += 5;
+  }
 
+  // Make sure the player stays within the canvas bounds
+  if (player.x < 0) {
+    player.x = 0;
+  } else if (player.x + player.width > canvas.width) {
+    player.x = canvas.width - player.width;
+  }
+  if (player.y < 0) {
+    player.y = 0;
+  } else if (player.y + player.height > canvas.height) {
+    player.y = canvas.height - player.height;
+  }
+}
 // Define the player object
 var player = {
   x: 960,
