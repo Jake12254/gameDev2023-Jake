@@ -45,10 +45,7 @@ function updatePlayer() {
 
 var bullets = [];
 
-var enemies = [
-  { x: 100, y: canvas.height / 2, width: 15, height: 15, speed: 0.1 },
-  { x: canvas.width - 100, y: canvas.height / 2, width: 15, height: 15, speed: 0.1 },
-];
+
 
 // Set up the canvas and game loop
 var canvas = document.getElementById("gameCanvas");
@@ -95,6 +92,12 @@ var player = {
 });
 
   // Draw the game objects
+    
+    var enemies = [
+  { x: 100, y: canvas.height / 2, width: 15, height: 15, speed: 0.1 },
+  { x: canvas.width - 100, y: canvas.height / 2, width: 15, height: 15, speed: 0.1 },
+];
+    
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = "blue";
   ctx.fillRect(player.x, player.y, player.width, player.height);
