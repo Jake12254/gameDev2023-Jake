@@ -81,15 +81,18 @@ var player = {
 
   // Move game objects
   enemies.forEach(function (enemy) {
-    enemy.angle += 0.01; // Increase the angle for each enemy to make them move in a circle
-    enemy.x = canvas.width / 2 + 100 * Math.cos(enemy.angle); // Update the x-coordinate using the cosine of the angle
-    enemy.y = canvas.height / 2 + 100 * Math.sin(enemy.angle); // Update the y-coordinate using the sine of the angle
+  // Update the x-coordinate based on the enemy's position relative to the canvas
+  if (enemy.x < canvas.width / 2) {
+    enemy.x -= enemy.speed;
+  } else {
+    enemy.x += enemy.speed;
+  }
 
-    ctx.beginPath();
-    ctx.arc(enemy.x, enemy.y, 10, 0, 2 * Math.PI);
-    ctx.fillStyle = "red";
-    ctx.fill();
-  });
+  ctx.beginPath();
+  ctx.arc(enemy.x, enemy.y, 10, 0, 2 * Math.PI);
+  ctx.fillStyle = "red";
+  ctx.fill();
+});
 
   // Draw the game objects
   ctx.clearRect(0, 0, canvas.width, canvas.height);
