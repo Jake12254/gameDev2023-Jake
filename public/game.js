@@ -77,6 +77,7 @@ var player = {
   // ...
 
   // Move game objects
+    update();
   enemies.forEach(function (enemy) {
   // Update the x-coordinate based on the enemy's position relative to the canvas
   if (enemy.x < canvas.width / 2) {
@@ -96,7 +97,7 @@ var player = {
   { x: 100, y: canvas.height / 2, width: 15, height: 15, speed: 0.1 },
   { x: canvas.width - 100, y: canvas.height / 2, width: 15, height: 15, speed: 0.1 },
 ];
-    
+    update();
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = "blue";
   ctx.fillRect(player.x, player.y, player.width, player.height);
