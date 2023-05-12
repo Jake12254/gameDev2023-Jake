@@ -62,7 +62,7 @@ var player = {
 
   // Update the game state
   function update() {
-     updatePlayer();
+  updatePlayer();
 
   // Check for collisions
   // ...
@@ -76,28 +76,7 @@ var player = {
   // Spawn new bullets
   // ...
 
-  // Move game objects
-  enemies.forEach(function (enemy) {
-  // Update the x-coordinate based on the enemy's position relative to the canvas
-  if (enemy.x < canvas.width / 2) {
-    enemy.x -= enemy.speed;
-  } else {
-    enemy.x += enemy.speed;
-  }
-
-  ctx.beginPath();
-  ctx.arc(enemy.x, enemy.y, 10, 0, 2 * Math.PI);
-  ctx.fillStyle = "red";
-  ctx.fill();
-});
-
   // Draw the game objects
-    
-    var enemies = [
-  { x: 100, y: canvas.height / 2, width: 15, height: 15, speed: 0.1 },
-  { x: canvas.width - 100, y: canvas.height / 2, width: 15, height: 15, speed: 0.1 },
-];
-    
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = "blue";
   ctx.fillRect(player.x, player.y, player.width, player.height);
@@ -108,8 +87,20 @@ var player = {
   });
 
   enemies.forEach(function (enemy) {
+    ctx.beginPath();
+    ctx.arc(enemy.x, enemy.y, 10, 0, 2 * Math.PI);
     ctx.fillStyle = "green";
-    ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+    ctx.fill();
+  });
+
+  // Move game objects
+  enemies.forEach(function (enemy) {
+    // Update the x-coordinate based on the enemy's position relative to the canvas
+    if (enemy.x < canvas.width / 2) {
+      enemy.x -= enemy.speed;
+    } else {
+      enemy.x += enemy.speed;
+    }
   });
 }
 
