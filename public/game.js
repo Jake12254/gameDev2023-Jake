@@ -46,7 +46,7 @@ function updatePlayer() {
 var bullets = [];
 
 var enemies = [
-  { x: 540, y: 960, width: 15, height: 15, speed: 0.1 },
+  { x: 300, y: 540, width: 15, height: 15, speed: 0.1 },
   { x: 500, y: 500, width: 15, height: 15, speed: 0.1 },
 ];
 
