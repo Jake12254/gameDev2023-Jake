@@ -46,8 +46,8 @@ function updatePlayer() {
 var bullets = [];
 
 var enemies = [
-  { x: 500, width: 15, height: 15, speed: 0.1 },
-  { x: 500, height: 15, speed: 0.1 },
+  { x: 500, y: 500, width: 15, height: 15, speed: 0.1 },
+  { x: 500, y: 500, width: 15, height: 15, speed: 0.1 },
 ];
 
 // Set up the canvas and game loop
@@ -56,8 +56,8 @@ var ctx = canvas.getContext("2d");
 
 // Define the player object
 var player = {
-  x: canvas.width / 2,
-  y: canvas.height / 2,
+  x: 960,
+  y: 540,
   width: 15,
   height: 15,
   speed: 0.8
