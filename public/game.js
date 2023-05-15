@@ -138,6 +138,9 @@ function update() {
   }
 }
 
+var canvas = document.getElementById("canvas"); // Replace "canvas" with the actual ID of the canvas element
+var ctx = canvas.getContext("2d");
+
 // Draw the game objects
 ctx.clearRect(0, 0, canvas.width, canvas.height);
 ctx.fillStyle = "blue";
