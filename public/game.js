@@ -180,7 +180,7 @@ function update() {
     } else {
       enemy.x += enemy.speed;
     }
-
+let ctx;
     ctx.beginPath();
     ctx.arc(enemy.x, enemy.y, 10, 0, 2 * Math.PI);
     ctx.fillStyle = "red";
