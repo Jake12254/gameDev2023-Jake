@@ -138,7 +138,7 @@ function update() {
   }
 }
 
-var canvas = document.getElementById("canvas"); // Replace "canvas" with the actual ID of the canvas element
+var canvas = document.getElementById("gameCanvas"); // Replace "canvas" with the actual ID of the canvas element
 var ctx = canvas.getContext("2d");
 
 // Draw the game objects
