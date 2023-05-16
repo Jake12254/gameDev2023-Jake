@@ -212,5 +212,6 @@ function loop() {
   update();
   requestAnimationFrame(loop);
 }
+<script src="public/Final-Game-Level-2.html"></script>
 
 loop();
