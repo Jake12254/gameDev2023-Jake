@@ -50,6 +50,9 @@ player.y += player.speed;
 if (keys["d"]) {
 player.x += player.speed;
 }
+// Reference canvas
+  var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
 
 // Make sure the player stays within the canvas bounds
 if (player.x < 0) {
