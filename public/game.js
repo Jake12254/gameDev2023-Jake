@@ -1,40 +1,72 @@
 
 var keys = {};
 
-// Add event listeners for keydown and keyup events
-document.addEventListener("keydown", function (event) {
-keys[event.key] = true;
-});
-
-document.addEventListener("keyup", function (event) {
-keys[event.key] = false;
-});
-
 // Define the player object
 var player = {
-x: 960,
-y: 540,
-width: 15,
-height: 15,
-speed: 5
+  x: 960,
+  y: 540,
+  width: 15,
+  height: 15,
+  speed: 5
 };
 
 // Define enemy objects
 var enemy1 = {
-x: 100,
-y: 100,
-width: 20,
-height: 20,
-speed: 2
+  x: 100,
+  y: 100,
+  width: 20,
+  height: 20,
+  speed: 2
 };
 
 var enemy2 = {
-x: 800,
-y: 200,
-width: 20,
-height: 20,
-speed: 2
+  x: 800,
+  y: 200,
+  width: 20,
+  height: 20,
+  speed: 2
 };
+
+// Add event listeners for keydown and keyup events
+document.addEventListener("keydown", function (event) {
+  keys[event.key] = true;
+});
+
+document.addEventListener("keyup", function (event) {
+  keys[event.key] = false;
+});
+
+// Update the player position based on key states
+function updatePlayer() {
+  if (keys["w"]) {
+    player.y -= player.speed;
+  }
+  if (keys["a"]) {
+    player.x -= player.speed;
+  }
+  if (keys["s"]) {
+    player.y += player.speed;
+  }
+  if (keys["d"]) {
+    player.x += player.speed;
+  }
+
+  // Make sure the player stays within the canvas bounds
+  if (player.x < 0) {
+    player.x = 0;
+  } else if (player.x + player.width > canvas.width) {
+    player.x = canvas.width - player.width;
+  }
+  if (player.y < 0) {
+    player.y = 0;
+  } else if (player.y + player.height > canvas.height) {
+    player.y = canvas.height - player.height;
+  }
+}
+
+// Define game objects
+var bullets = [];
+var enemies = [enemy1, enemy2];
 
 // Reference canvas
   var canvas = document.getElementById("myCanvas");
@@ -68,11 +100,6 @@ player.y = 0;
 player.y = canvas.height - player.height;
 }
 }
-
-// Define game objects
-var bullets = [];
-var enemies = [enemy1, enemy2];
-
 // Spawn new enemies
 function spawnEnemy() {
 var newEnemy = {
