@@ -49,8 +49,8 @@ var player = {
 // Define game objects
 var bullets = [];
 var enemies = [
-  x: 100, y: 200, size: 20 ];
-  y: 100, y: 200, size: 20 
+  x: 700, y: 540, size: 20 ];
+  y: 600, y: 540, size: 20 
   size: 15 ];
 // Spawn new enemies
 function spawnEnemy() {
