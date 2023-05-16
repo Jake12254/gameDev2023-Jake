@@ -37,6 +37,7 @@ function updatePlayer() {
     player.y = canvas.height - player.height;
   }
 }
+
 // Define the player object
 var player = {
   x: 960,
@@ -48,10 +49,8 @@ var player = {
 
 // Define game objects
 var bullets = [];
-var enemies = [
-  x: 700, y: 540, size: 20 ];
-  y: 600, y: 540, size: 20 
-  size: 15 ];
+var enemies = [];
+
 // Spawn new enemies
 function spawnEnemy() {
   var newEnemy = {
@@ -78,31 +77,7 @@ function spawnBullet() {
 
 // Update the game state
 function update() {
-  // Update the player position based on key states
-  if (keys["w"]) {
-    player.y -= player.speed;
-  }
-  if (keys["a"]) {
-    player.x -= player.speed;
-  }
-  if (keys["s"]) {
-    player.y += player.speed;
-  }
-  if (keys["d"]) {
-    player.x += player.speed;
-  }
-
-  // Make sure the player stays within the canvas bounds
-  if (player.x < 0) {
-    player.x = 0;
-  } else if (player.x + player.width > canvas.width) {
-    player.x = canvas.width - player.width;
-  }
-  if (player.y < 0) {
-    player.y = 0;
-  } else if (player.y + player.height > canvas.height) {
-    player.y = canvas.height - player.height;
-  }
+  updatePlayer();
 
   // Move game objects
   bullets.forEach(function (bullet) {
@@ -138,65 +113,6 @@ function update() {
   if (keys[" "]) {
     spawnBullet();
   }
-}
-
-var canvas = document.createElement('canvas');
-canvas.width = 500; // Set the canvas width to 500 pixels
-canvas.height = 300; // Set the canvas height to 300 pixels
-
-var canvasContainer = document.getElementById('canvasContainer');
-canvasContainer.appendChild(canvas);
-
-var context = canvas.getContext('2d');
-
-// Draw the game objects
-ctx.clearRect(0, 0, canvas.width, canvas.height);
-ctx.fillStyle = "blue";
-ctx.fillRect(player.x, player.y, player.width, player.height);
-
-for (let i = 0; i < bullets.length; i++) {
-  const bullet = bullets[i];
-  ctx.fillStyle = "red";
-  ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
-}
-
-for (let i = 0; i < enemies.length; i++) {
-  const enemy = enemies[i];
-  ctx.beginPath();
-  ctx.arc(enemy.x, enemy.y, 10, 0, 2 * Math.PI);
-  ctx.fillStyle = "green";
-  ctx.fill();
-}
-// Update the game state
-function update() {
-  updatePlayer();
-
-  // Check for collisions
-  // ...
-
-  // Remove off-screen objects
-  // ...
-
-  // Spawn new enemies
-  // ...
-
-  // Spawn new bullets
-  // ...
-
-  // Move game objects
-  enemies.forEach(function (enemy) {
-    // Update the x-coordinate based on the enemy's position relative to the canvas
-    if (enemy.x < canvas.width / 2) {
-      enemy.x -= enemy.speed;
-    } else {
-      enemy.x += enemy.speed;
-    }
-let ctx;
-    ctx.beginPath();
-    ctx.arc(enemy.x, enemy.y, 10, 0, 2 * Math.PI);
-    ctx.fillStyle = "red";
-    ctx.fill();
-  });
 
   // Draw the game objects
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -209,8 +125,10 @@ let ctx;
   });
 
   enemies.forEach(function (enemy) {
+    ctx.beginPath();
+    ctx.arc(enemy.x, enemy.y, 10, 0, 2 * Math.PI);
     ctx.fillStyle = "green";
-    ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+    ctx.fill();
   });
 }
 
@@ -219,5 +137,3 @@ function loop() {
   requestAnimationFrame(loop);
 }
 loop();
-
-<script src="public/Final-Game-Level-2.html"></script>
