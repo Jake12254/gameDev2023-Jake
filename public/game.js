@@ -36,6 +36,10 @@ height: 20,
 speed: 2
 };
 
+// Reference canvas
+  var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
+
 // Update the player position based on key states
 function updatePlayer() {
 if (keys["w"]) {
@@ -50,9 +54,7 @@ player.y += player.speed;
 if (keys["d"]) {
 player.x += player.speed;
 }
-// Reference canvas
-  var canvas = document.getElementById("myCanvas");
-var ctx = canvas.getContext("2d");
+
 
 // Make sure the player stays within the canvas bounds
 if (player.x < 0) {
