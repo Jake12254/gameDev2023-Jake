@@ -1,4 +1,9 @@
-
+<html>
+  <body>
+    <canvas id="gameCanvas" width="1000" height="600"></canvas>
+    <script src="game.js"></script>
+  </body>
+</html>
 var keys = {};
 
 // Add event listeners for keydown and keyup events
