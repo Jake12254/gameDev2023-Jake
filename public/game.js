@@ -1,9 +1,4 @@
-<html>
-  <body>
-    <canvas id="gameCanvas" width="1000" height="600"></canvas>
-    <script src="game.js"></script>
-  </body>
-</html>
+
 var keys = {};
 
 // Add event listeners for keydown and keyup events
@@ -145,8 +140,14 @@ function update() {
   }
 }
 
-var canvas = document.getElementById("gameCanvas"); // Replace "canvas" with the actual ID of the canvas element
-var ctx = canvas.getContext("2d");
+var canvas = document.createElement('canvas');
+canvas.width = 500; // Set the canvas width to 500 pixels
+canvas.height = 300; // Set the canvas height to 300 pixels
+
+var canvasContainer = document.getElementById('canvasContainer');
+canvasContainer.appendChild(canvas);
+
+var context = canvas.getContext('2d');
 
 // Draw the game objects
 ctx.clearRect(0, 0, canvas.width, canvas.height);
