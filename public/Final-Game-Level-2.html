@@ -11,7 +11,7 @@
             margin: 0;
         }
         canvas {
-            border: 1px solid black;
+            border: 15px solid black;
         }
     </style>
 </head>
@@ -27,6 +27,13 @@
         var playerX = (canvas.width - playerWidth) / 2;
         var playerY = (canvas.height - playerHeight) / 2;
         var playerSpeed = 5;
+
+        // Set cube variables
+        var cubeWidth = 20;
+        var cubeHeight = playerHeight;
+        var cube1Y = 0;
+        var cube2Y = canvas.height - cubeHeight;
+        var cubeSpeed = 2;
 
         // Add event listeners for player movement
         document.addEventListener("keydown", movePlayer);
@@ -57,6 +64,24 @@
             }
         }
 
+        // Define the update function
+        function update() {
+            // Update cube positions
+            cube1Y += cubeSpeed;
+            cube2Y -= cubeSpeed;
+
+            // Check cube boundaries and reverse direction
+            if (cube1Y + cubeHeight > canvas.height || cube1Y < 0) {
+                cubeSpeed *= -1;
+            }
+            if (cube2Y + cubeHeight > canvas.height || cube2Y < 0) {
+                cubeSpeed *= -1;
+            }
+
+            // Call the update function again
+            requestAnimationFrame(update);
+        }
+
         // Define the draw function
         function draw() {
             // Clear the canvas
@@ -66,11 +91,17 @@
             ctx.fillStyle = "blue";
             ctx.fillRect(playerX, playerY, playerWidth, playerHeight);
 
+            // Draw red cubes
+            ctx.fillStyle = "red";
+            ctx.fillRect(20, cube1Y, cubeWidth, cubeHeight);
+            ctx.fillRect(canvas.width - 40, cube2Y, cubeWidth, cubeHeight);
+
             // Call the draw function again
             requestAnimationFrame(draw);
         }
 
-        // Call the draw function
+        // Call the update and draw functions
+        update();
         draw();
     </script>
 </body>
