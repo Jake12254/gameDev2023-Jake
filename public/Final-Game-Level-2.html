@@ -3,6 +3,13 @@
 <head>
     <title>Canvas Example</title>
     <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
         canvas {
             border: 1px solid black;
         }
@@ -18,27 +25,31 @@
         var playerWidth = 50;
         var playerHeight = 50;
         var playerX = (canvas.width - playerWidth) / 2;
-        var playerY = canvas.height - playerHeight - 10;
+        var playerY = (canvas.height - playerHeight) / 2;
         var playerSpeed = 5;
-
-        // Set cube variables
-        var cubeWidth = 20;
-        var cubeHeight = 20;
-        var cubeY = canvas.height - cubeHeight - 10;
-        var cubeSpeed = 3;
 
         // Add event listeners for player movement
         document.addEventListener("keydown", movePlayer);
 
         // Define the movePlayer function
         function movePlayer(event) {
-            switch (event.keyCode) {
-                case 37: // Left arrow
+            switch (event.key) {
+                case "w": // Up arrow
+                    if (playerY > 0) {
+                        playerY -= playerSpeed;
+                    }
+                    break;
+                case "a": // Left arrow
                     if (playerX > 0) {
                         playerX -= playerSpeed;
                     }
                     break;
-                case 39: // Right arrow
+                case "s": // Down arrow
+                    if (playerY < canvas.height - playerHeight) {
+                        playerY += playerSpeed;
+                    }
+                    break;
+                case "d": // Right arrow
                     if (playerX < canvas.width - playerWidth) {
                         playerX += playerSpeed;
                     }
@@ -54,25 +65,6 @@
             // Draw player
             ctx.fillStyle = "blue";
             ctx.fillRect(playerX, playerY, playerWidth, playerHeight);
-
-            // Draw cubes
-            ctx.fillStyle = "red";
-            ctx.fillRect(20, cubeY, cubeWidth, cubeHeight);
-            ctx.fillRect(canvas.width - cubeWidth - 20, cubeY, cubeWidth, cubeHeight);
-
-            // Move the cubes
-            cubeY -= cubeSpeed;
-            if (cubeY < 0) {
-                cubeY = canvas.height - cubeHeight - 10;
-            }
-
-            // Check for collisions
-            if ((playerX < 20 + cubeWidth && playerX + playerWidth > 20) || (playerX < canvas.width - 20 && playerX + playerWidth > canvas.width - 20 - cubeWidth)) {
-                if (playerY + playerHeight > cubeY && playerY < cubeY + cubeHeight) {
-                    alert("Game over!");
-                    location.reload();
-                }
-            }
 
             // Call the draw function again
             requestAnimationFrame(draw);
