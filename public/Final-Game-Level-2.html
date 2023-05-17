@@ -1,204 +1,85 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>My Bullet Hell Game</title>
-  <style>
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-
-    #myCanvas {
-      border: 15px solid black;
-    }
-  </style>
+    <title>Canvas Example</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
 </head>
 <body>
-  <canvas id="myCanvas" width="800" height="600"></canvas>
-  <script>
-    var keys = {};
+    <canvas id="myCanvas" width="600" height="400"></canvas>
+    <script>
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
 
-    // Define the player object
-    var player = {
-      x: 0,
-      y: 0,
-      width: 15,
-      height: 15,
-      speed: 5
-    };
+        // Set player variables
+        var playerWidth = 50;
+        var playerHeight = 50;
+        var playerX = (canvas.width - playerWidth) / 2;
+        var playerY = canvas.height - playerHeight - 10;
+        var playerSpeed = 5;
 
-    // Define enemy objects
-    var enemy1 = {
-      x: 0,
-      y: 0,
-      width: 20,
-      height: 20,
-      speed: 2
-    };
+        // Set cube variables
+        var cubeWidth = 20;
+        var cubeHeight = 20;
+        var cubeY = canvas.height - cubeHeight - 10;
+        var cubeSpeed = 3;
 
-    var enemy2 = {
-      x: 0,
-      y: 0,
-      width: 20,
-      height: 20,
-      speed: 2
-    };
+        // Add event listeners for player movement
+        document.addEventListener("keydown", movePlayer);
 
-    // Reference canvas
-    var canvas = document.getElementById("myCanvas");
-    var ctx = canvas.getContext("2d");
-
-    // Set initial player position
-    player.x = canvas.width / 2 - player.width / 2;
-    player.y = canvas.height / 2 - player.height / 2;
-
-    // Set initial enemy positions
-    enemy1.x = player.width; // Positioned to the right of the player
-    enemy1.y = canvas.height / 2 - enemy1.height / 2;
-
-    enemy2.x = canvas.width - enemy2.width * 2; // Positioned to the left of the player
-    enemy2.y = canvas.height / 2 - enemy2.height / 2;
-
-    // Add event listeners for keydown and keyup events
-    document.addEventListener("keydown", function (event) {
-      keys[event.key] = true;
-    });
-
-    document.addEventListener("keyup", function (event) {
-      keys[event.key] = false;
-    });
-
-    // Update the player position based on key states
-    function updatePlayer() {
-      if (keys["w"]) {
-        player.y -= player.speed;
-      }
-      if (keys["a"]) {
-        player.x -= player.speed;
-      }
-      if (keys["s"]) {
-        player.y += player.speed;
-      }
-      if (keys["d"]) {
-        player.x += player.speed;
-      }
-
-      // Make sure the player stays within the canvas bounds
-      if (player.x < 0) {
-        player.x = 0;
-      } else if (player.x + player.width > canvas.width) {
-        player.x = canvas.width - player.width;
-      }
-      if (player.y < 0) {
-        player.y = 0;
-      } else if (player.y + player.height > canvas.height) {
-        player.y = canvas.height - player.height;
-      }
-    }
-
-    // Define game objects
-    var bullets = [];
-    var enemies = [enemy1, enemy2];
-
-    // Spawn new enemies
-    function spawnEnemy() {
-      var newEnemy = {
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        width: 15,
-        height: 15,
-        speed: 2
-      };
-      enemies.push(newEnemy);
-    }
-
-    // Spawn new bullets
-    function spawnBullet() {
-      var newBullet = {
-        x: player.x + player.width / 2,
-        y: player.y,
-        width: 5,
-        height: 10,
-        speed: 10
-      };
-      bullets.push(newBullet);
-    }
-
-    // Update the game state
-    function update() {
-      updatePlayer();
-
-      // Move game objects
-      bullets.forEach(function (bullet) {
-        bullet.y -= bullet.speed;
-      });
-
-      enemies.forEach(function (enemy) {
-        if (enemy.x < canvas.width / 2) {
-          enemy.x -= enemy.speed;
-        } else {
-          enemy.x += enemy.speed;
+        // Define the movePlayer function
+        function movePlayer(event) {
+            switch (event.keyCode) {
+                case 37: // Left arrow
+                    if (playerX > 0) {
+                        playerX -= playerSpeed;
+                    }
+                    break;
+                case 39: // Right arrow
+                    if (playerX < canvas.width - playerWidth) {
+                        playerX += playerSpeed;
+                    }
+                    break;
+            }
         }
-      });
 
-      // Remove off-screen objects
-      bullets = bullets.filter(function (bullet) {
-        return bullet.y > 0;
-      });
+        // Define the draw function
+        function draw() {
+            // Clear the canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      enemies = enemies.filter(function (enemy) {
-        return enemy.x > -enemy.width && enemy.x < canvas.width + enemy.width;
-      });
+            // Draw player
+            ctx.fillStyle = "blue";
+            ctx.fillRect(playerX, playerY, playerWidth, playerHeight);
 
-      // Check for collisions
-    if (
-      player.x < enemy.x + enemy.width &&
-      player.x + player.width > enemy.x &&
-      player.y < enemy.y + enemy.height &&
-      player.y + player.height > enemy.y
-    ) {
-      // Collision occurred
-      alert("Game Over!");
-      location.reload();
-    }
-  });
+            // Draw cubes
+            ctx.fillStyle = "red";
+            ctx.fillRect(20, cubeY, cubeWidth, cubeHeight);
+            ctx.fillRect(canvas.width - cubeWidth - 20, cubeY, cubeWidth, cubeHeight);
 
-      // Spawn new enemies
-      if (Math.random() < 0.05) {
-        spawnEnemy();
-      }
+            // Move the cubes
+            cubeY -= cubeSpeed;
+            if (cubeY < 0) {
+                cubeY = canvas.height - cubeHeight - 10;
+            }
 
-      // Spawn new bullets
-      if (keys[" "]) {
-        spawnBullet();
-      }
+            // Check for collisions
+            if ((playerX < 20 + cubeWidth && playerX + playerWidth > 20) || (playerX < canvas.width - 20 && playerX + playerWidth > canvas.width - 20 - cubeWidth)) {
+                if (playerY + playerHeight > cubeY && playerY < cubeY + cubeHeight) {
+                    alert("Game over!");
+                    location.reload();
+                }
+            }
 
-      // Draw the game objects
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "blue";
-      ctx.fillRect(player.x, player.y, player.width, player.height);
+            // Call the draw function again
+            requestAnimationFrame(draw);
+        }
 
-      bullets.forEach(function (bullet) {
-        ctx.fillStyle = "red";
-        ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
-      });
-
-      enemies.forEach(function (enemy) {
-        ctx.beginPath();
-        ctx.arc(enemy.x, enemy.y, 10, 0, 2 * Math.PI);
-        ctx.fillStyle = "green";
-        ctx.fill();
-      });
-
-      // Request the next animation frame
-      requestAnimationFrame(update);
-    }
-
-    // Call the update function to start the game
-    update();
-  </script>
+        // Call the draw function
+        draw();
+    </script>
 </body>
 </html>
