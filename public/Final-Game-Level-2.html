@@ -48,6 +48,17 @@ var enemy2 = {
   height: 20,
   speed: 2
 };
+  // Set initial player position
+player.x = canvas.width / 2 - player.width / 2;
+player.y = canvas.height / 2 - player.height / 2;
+
+// Set initial enemy positions
+enemy1.x = 0;
+enemy1.y = canvas.height / 2 - enemy1.height / 2;
+
+enemy2.x = canvas.width - enemy2.width;
+enemy2.y = canvas.height / 2 - enemy2.height / 2;
+
 
 // Add event listeners for keydown and keyup events
 document.addEventListener("keydown", function (event) {
