@@ -10,14 +10,25 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            position: relative;
         }
         canvas {
             border: 1px solid black;
+        }
+        #restartButton {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            padding: 8px 16px;
+            display: none;
         }
     </style>
 </head>
 <body>
     <canvas id="myCanvas" width="600" height="400"></canvas>
+    <button id="restartButton">Restart</button>
     <script>
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
@@ -41,8 +52,7 @@
         var bullets = [];
 
         var isPlayerAlive = true;
-        var deathScreenElement = document.createElement('div');
-        var restartButtonElement = document.createElement('button');
+        var restartButtonElement = document.getElementById('restartButton');
 
         document.addEventListener("keydown", function(event) {
             keys[event.key] = true;
@@ -87,7 +97,7 @@
 
                     if (distance < playerWidth / 2 + bulletRadius) {
                         isPlayerAlive = false;
-                        showDeathScreen();
+                        showRestartButton();
                     }
                 });
 
@@ -119,35 +129,18 @@
             }
         }
 
-        function showDeathScreen() {
-            deathScreenElement.style.position = 'absolute';
-            deathScreenElement.style.top = '50%';
-            deathScreenElement.style.left = '50%';
-            deathScreenElement.style.transform = 'translate(-50%, -50%)';
-            deathScreenElement.style.color = 'white';
-            deathScreenElement.style.fontSize = '24px';
-            deathScreenElement.textContent = 'You died!';
-
-            restartButtonElement.textContent = 'Restart';
-            restartButtonElement.style.fontSize = '18px';
-            restartButtonElement.style.padding = '8px 16px';
-            restartButtonElement.style.marginTop = '16px';
-
+        function showRestartButton() {
+            restartButtonElement.style.display = 'block';
             restartButtonElement.addEventListener('click', restartGame);
-
-            document.body.appendChild(deathScreenElement);
-            document.body.appendChild(restartButtonElement);
         }
 
         function restartGame() {
-            document.body.removeChild(deathScreenElement);
-            document.body.removeChild(restartButtonElement);
+            isPlayerAlive = true;
+            restartButtonElement.style.display = 'none';
+            bullets = [];
 
             playerX = (canvas.width - playerWidth) / 2;
             playerY = (canvas.height - playerHeight) / 2;
-            bullets = [];
-
-            isPlayerAlive = true;
 
             draw();
         }
