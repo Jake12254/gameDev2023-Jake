@@ -43,6 +43,21 @@
         var bulletRadius = 5;
         var bulletSpeed = 3;
         var bullets = [];
+        
+        // Set high score variable
+        var highScore = 0;
+
+        // ...
+
+        // Draw high score
+        ctx.fillStyle = "darkred";
+        ctx.fillRect(canvas.width - 110, 10, 100, 30);
+
+        ctx.fillStyle = "white";
+        ctx.font = "16px Arial";
+        ctx.textAlign = "right";
+        ctx.fillText("High Score: " + highScore, canvas.width - 20, 30);
+
 
         // Set collectable variables
         var collectableRadius = 10;
