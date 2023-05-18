@@ -24,11 +24,19 @@
             padding: 8px 16px;
             display: none;
         }
+        #timer {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
     <canvas id="myCanvas" width="600" height="400"></canvas>
     <button id="restartButton">Restart</button>
+    <div id="timer">Survival Time: 0s</div>
     <script>
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
@@ -53,6 +61,9 @@
 
         var isPlayerAlive = true;
         var restartButtonElement = document.getElementById('restartButton');
+        var timerElement = document.getElementById('timer');
+        var startTime = null;
+        var elapsedTime = 0;
 
         document.addEventListener("keydown", function(event) {
             keys[event.key] = true;
@@ -99,11 +110,14 @@
                         isPlayerAlive = false;
                         showRestartButton();
                     }
+
+                    if (bullet.x < 0 || bullet.x > canvas.width || bullet.y < 0 || bullet.y > canvas.height) {
+                        bullets.splice(index, 1);
+                    }
                 });
 
-                bullets = bullets.filter(function(bullet) {
-                    return bullet.x >= 0 && bullet.x <= canvas.width && bullet.y >= 0 && bullet.y <= canvas.height;
-                });
+                elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+                timerElement.textContent = 'Survival Time: ' + elapsedTime + 's';
             }
         }
 
@@ -142,6 +156,10 @@
             playerX = (canvas.width - playerWidth) / 2;
             playerY = (canvas.height - playerHeight) / 2;
 
+            startTime = Date.now();
+            elapsedTime = 0;
+            timerElement.textContent = 'Survival Time: 0s';
+
             draw();
         }
 
@@ -164,7 +182,7 @@
             var speedX2 = (dx2 / distance2) * bulletSpeed;
             var speedY2 = (dy2 / distance2) * bulletSpeed;
 
-            var bulletAngleOffset = Math.PI / 6; // Adjust the angle offset here
+            var bulletAngleOffset = Math.PI / 6;
 
             bullets.push({ x: rect1X, y: rect1Y + rectHeight / 2, speedX: speedX1 * Math.cos(bulletAngleOffset), speedY: speedY1 * Math.sin(bulletAngleOffset) });
             bullets.push({ x: rect1X, y: rect1Y + rectHeight / 2, speedX: speedX1, speedY: speedY1 });
