@@ -12,23 +12,19 @@
             margin: 0;
         }
         canvas {
-            border: 20px solid black;
+            border: 1px solid black;
         }
     </style>
 </head>
 <body>
     <canvas id="myCanvas" width="600" height="400"></canvas>
-    <div id="usernameMenu" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-        <input type="text" id="usernameInput" placeholder="Enter your username">
-        <button onclick="startGame()">Start Game</button>
-    </div>
     <script>
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
 
         // Set player variables
-        var playerWidth = 20;
-        var playerHeight = 20;
+        var playerWidth = 50;
+        var playerHeight = 50;
         var playerX = (canvas.width - playerWidth) / 2;
         var playerY = (canvas.height - playerHeight) / 2;
         var playerSpeed = 5;
@@ -55,14 +51,10 @@
         var lastCollectableSpawnTime = Date.now();
 
         // Set game state variables
-        var isPlayerAlive = false;
-        var isGameOver = false;
+        var isPlayerAlive = true;
         var startTime = Date.now();
         var elapsedTime = 0;
-
-        // Set high score variables
-        var highScores = [];
-        var maxHighScores = 10;
+        var score = 0;
 
         // Add event listeners for player movement
         document.addEventListener("keydown", function(event) {
@@ -73,281 +65,213 @@
             keys[event.key] = false;
         });
 
-        // Show username menu
-        function showUsernameMenu() {
-            var usernameMenu = document.getElementById("usernameMenu");
-            usernameMenu.style.display = "block";
-        }
+        // Define the update function
+        function update() {
+            if (!isPlayerAlive) return;
 
-        // Start the game
-        function startGame() {
-            var usernameInput = document.getElementById("usernameInput");
-            var username = usernameInput.value.trim();
-
-            if (username === "") {
-                alert("Please enter a valid username.");
-                return;
+            // Update player position
+            if (keys["w"] && playerY > 0) {
+                playerY -= playerSpeed;
+            }
+            if (keys["a"] && playerX > 0) {
+                playerX -= playerSpeed;
+            }
+            if (keys["s"] && playerY < canvas.height - playerHeight) {
+                playerY += playerSpeed;
+            }
+            if (keys["d"] && playerX < canvas.width - playerWidth) {
+                playerX += playerSpeed;
             }
 
-            hideUsernameMenu();
-            resetGame();
-            isPlayerAlive = true;
+            // Update rectangle positions
+            rect1Y += rectSpeed * rectDirection1;
+            rect2Y += rectSpeed * rectDirection2;
+
+            // Check rectangle boundaries and reverse direction
+            if (rect1Y <= 0 || rect1Y + rectHeight >= canvas.height) {
+                rectDirection1 *= -1;
+            }
+            if (rect2Y <= 0 || rect2Y + rectHeight >= canvas.height) {
+                rectDirection2 *= -1;
+            }
+
+            // Update bullet positions
+            bullets.forEach(function(bullet) {
+                bullet.x += bullet.speedX;
+                bullet.y += bullet.speedY;
+            });
+
+            // Remove bullets that are off-screen
+            bullets = bullets.filter(function(bullet) {
+                return bullet.x >= 0 && bullet.x <= canvas.width && bullet.y >= 0 && bullet.y <= canvas.height;
+            });
+
+            // Check bullet-player collision
+            bullets.forEach(function(bullet) {
+                if (checkCollision(playerX, playerY, playerWidth, playerHeight, bullet.x - bulletRadius, bullet.y - bulletRadius, bulletRadius * 2, bulletRadius * 2)) {
+                    isPlayerAlive = false;
+                }
+            });
+
+            // Check collectable-player collision
+            collectables.forEach(function(collectable, index) {
+                if (checkCollision(playerX, playerY, playerWidth, playerHeight, collectable.x - collectableRadius, collectable.y - collectableRadius, collectableRadius * 2, collectableRadius * 2)) {
+                    collectables.splice(index, 1);
+                    score += 10; // Increase score by 10 for each collectable collected
+                }
+            });
+
+            // Check if it's time to spawn a new collectable
+            var currentTime = Date.now();
+            if (currentTime - lastCollectableSpawnTime > collectableSpawnInterval) {
+                lastCollectableSpawnTime = currentTime;
+                generateCollectable();
+            }
+
+            // Update elapsed time
+            elapsedTime = currentTime - startTime;
         }
 
-        // Hide username menu
-        function hideUsernameMenu() {
-            var usernameMenu = document.getElementById("usernameMenu");
-            usernameMenu.style.display = "none";
+        // Define the draw function
+        function draw() {
+            // Clear the canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw player
+            ctx.fillStyle = "blue";
+            ctx.fillRect(playerX, playerY, playerWidth, playerHeight);
+
+            // Draw rectangles
+            ctx.fillStyle = "red";
+            ctx.fillRect(20, rect1Y, rectWidth, rectHeight);
+            ctx.fillRect(canvas.width - 40, rect2Y, rectWidth, rectHeight);
+
+            // Draw bullets
+            ctx.fillStyle = "black";
+            bullets.forEach(function(bullet) {
+                ctx.beginPath();
+                ctx.arc(bullet.x, bullet.y, bulletRadius, 0, 2 * Math.PI);
+                ctx.fill();
+            });
+
+            // Draw collectables
+            ctx.fillStyle = "yellow";
+            collectables.forEach(function(collectable) {
+                ctx.beginPath();
+                ctx.arc(collectable.x, collectable.y, collectableRadius, 0, 2 * Math.PI);
+                ctx.fill();
+            });
+
+            // Draw timer and score
+            ctx.fillStyle = "white";
+            ctx.font = "16px Arial";
+            ctx.fillText("Time: " + formatTime(elapsedTime), 10, 20);
+            ctx.fillText("Score: " + score, 10, 40);
+
+            // Check game over condition and display restart button
+            if (!isPlayerAlive) {
+                ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = "white";
+                ctx.font = "30px Arial";
+                ctx.textAlign = "center";
+                ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2 - 30);
+
+                ctx.fillStyle = "green";
+                ctx.fillRect(canvas.width / 2 - 80, canvas.height / 2 + 10, 160, 40);
+
+                ctx.fillStyle = "white";
+                ctx.font = "20px Arial";
+                ctx.fillText("Restart", canvas.width / 2, canvas.height / 2 + 38);
+            }
+
+            // Call the draw function again
+            requestAnimationFrame(draw);
         }
 
-        // Reset the game
-        function resetGame() {
+        // Call the draw function
+        var startTime = Date.now();
+        draw();
+        setInterval(update, 16);
+
+        // Fire bullets from rectangles towards the center
+        setInterval(function() {
+            var rect1X = 20 + rectWidth / 2;
+            var rect2X = canvas.width - 40 + rectWidth / 2;
+
+            var dx1 = playerX - rect1X;
+            var dy1 = playerY - (rect1Y + rectHeight / 2);
+            var distance1 = Math.sqrt(dx1 * dx1 + dy1 * dy1);
+            var speedX1 = (dx1 / distance1) * bulletSpeed;
+            var speedY1 = (dy1 / distance1) * bulletSpeed;
+            bullets.push({ x: rect1X, y: rect1Y + rectHeight / 2, speedX: speedX1, speedY: speedY1 });
+
+            var dx2 = playerX - rect2X;
+            var dy2 = playerY - (rect2Y + rectHeight / 2);
+            var distance2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+            var speedX2 = (dx2 / distance2) * bulletSpeed;
+            var speedY2 = (dy2 / distance2) * bulletSpeed;
+            bullets.push({ x: rect2X, y: rect2Y + rectHeight / 2, speedX: speedX2, speedY: speedY2 });
+        }, 1000); // Fire bullets every 1 second
+
+        // Restart the game when the restart button is clicked
+        canvas.addEventListener("click", function(event) {
+            if (!isPlayerAlive && event.offsetX > canvas.width / 2 - 80 && event.offsetX < canvas.width / 2 + 80 && event.offsetY > canvas.height / 2 + 10 && event.offsetY < canvas.height / 2 + 50) {
+                restartGame();
+            }
+        });
+
+        // Restart the game
+        function restartGame() {
             playerX = (canvas.width - playerWidth) / 2;
             playerY = (canvas.height - playerHeight) / 2;
             bullets = [];
             collectables = [];
             rect1Y = 0;
             rect2Y = canvas.height - rectHeight;
-            rectDirection1 = 1;
-            rectDirection2 = -1;
+            isPlayerAlive = true;
             startTime = Date.now();
-            elapsedTime = 0;
-            isGameOver = false;
+            score = 0; // Reset the score
         }
 
-        // Update game objects
-        function update() {
-            if (!isPlayerAlive) {
-                return;
-            }
+        // Generate a collectable at a random position
+        function generateCollectable() {
+            var newX, newY;
+            do {
+                newX = Math.floor(Math.random() * (canvas.width - 2 * collectableRadius)) + collectableRadius;
+                newY = Math.floor(Math.random() * (canvas.height - 2 * collectableRadius)) + collectableRadius;
+            } while (!isCollectablePositionValid(newX, newY));
+            collectables.push({ x: newX, y: newY });
+        }
 
-            if (keys["ArrowUp"] && playerY > 0) {
-                playerY -= playerSpeed;
-            }
-
-            if (keys["ArrowDown"] && playerY + playerHeight < canvas.height) {
-                playerY += playerSpeed;
-            }
-
-            if (keys["ArrowLeft"] && playerX > 0) {
-                playerX -= playerSpeed;
-            }
-
-            if (keys["ArrowRight"] && playerX + playerWidth < canvas.width) {
-                playerX += playerSpeed;
-            }
-
-            // Move rectangles
-            rect1Y += rectSpeed * rectDirection1;
-            rect2Y += rectSpeed * rectDirection2;
-
-            if (rect1Y <= 0 || rect1Y + rectHeight >= canvas.height) {
-                rectDirection1 *= -1;
-            }
-
-            if (rect2Y <= 0 || rect2Y + rectHeight >= canvas.height) {
-                rectDirection2 *= -1;
-            }
-
-            // Move bullets
-            for (var i = 0; i < bullets.length; i++) {
-                bullets[i].y -= bulletSpeed;
-
-                if (bullets[i].y < 0) {
-                    bullets.splice(i, 1);
-                    i--;
-                }
-            }
-
-            // Check bullet collision with rectangles
-            for (var i = 0; i < bullets.length; i++) {
-                if (
-                    bullets[i].x > 0 &&
-                    bullets[i].x < canvas.width &&
-                    bullets[i].y > rect1Y &&
-                    bullets[i].y < rect1Y + rectHeight
-                ) {
-                    rect1Y = canvas.height;
-                    bullets.splice(i, 1);
-                    i--;
-                }
-
-                if (
-                    bullets[i].x > 0 &&
-                    bullets[i].x < canvas.width &&
-                    bullets[i].y > rect2Y &&
-                    bullets[i].y < rect2Y + rectHeight
-                ) {
-                    rect2Y = -rectHeight;
-                    bullets.splice(i, 1);
-                    i--;
-                }
-            }
-
-            // Check player collision with rectangles
-            if (
-                playerX < rectWidth &&
-                playerY + playerHeight > rect1Y &&
-                playerY < rect1Y + rectHeight
-            ) {
-                gameOver();
-            }
-
-            if (
-                playerX + playerWidth > canvas.width - rectWidth &&
-                playerY + playerHeight > rect2Y &&
-                playerY < rect2Y + rectHeight
-            ) {
-                gameOver();
-            }
-
-            // Check player collision with collectables
+        // Check if a collectable position is valid
+        function isCollectablePositionValid(x, y) {
             for (var i = 0; i < collectables.length; i++) {
-                if (
-                    playerX < collectables[i].x + collectableRadius &&
-                    playerX + playerWidth > collectables[i].x - collectableRadius &&
-                    playerY < collectables[i].y + collectableRadius &&
-                    playerY + playerHeight > collectables[i].y - collectableRadius
-                ) {
-                    collectables.splice(i, 1);
-                    i--;
-                    updateScore(10);
+                var collectable = collectables[i];
+                var distance = Math.sqrt((x - collectable.x) * (x - collectable.x) + (y - collectable.y) * (y - collectable.y));
+                if (distance < 60) {
+                    return false;
                 }
             }
-
-            // Spawn collectables
-            var currentTime = Date.now();
-            if (currentTime - lastCollectableSpawnTime > collectableSpawnInterval) {
-                spawnCollectable();
-                lastCollectableSpawnTime = currentTime;
-            }
-
-            // Calculate elapsed time
-            elapsedTime = Math.floor((currentTime - startTime) / 1000);
-
-            // Request animation frame
-            requestAnimationFrame(update);
+            return true;
         }
 
-        // Render game objects
-        function render() {
-            // Clear canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Draw player
-            ctx.fillStyle = "white";
-            ctx.fillRect(playerX, playerY, playerWidth, playerHeight);
-
-            // Draw rectangles
-            ctx.fillStyle = "red";
-            ctx.fillRect(0, rect1Y, rectWidth, rectHeight);
-            ctx.fillRect(canvas.width - rectWidth, rect2Y, rectWidth, rectHeight);
-
-            // Draw bullets
-            ctx.fillStyle = "blue";
-            for (var i = 0; i < bullets.length; i++) {
-                ctx.beginPath();
-                ctx.arc(bullets[i].x, bullets[i].y, bulletRadius, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.closePath();
-            }
-
-            // Draw collectables
-            ctx.fillStyle = "green";
-            for (var i = 0; i < collectables.length; i++) {
-                ctx.beginPath();
-                ctx.arc(collectables[i].x, collectables[i].y, collectableRadius, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.closePath();
-            }
-
-            // Draw score
-            ctx.font = "16px Arial";
-            ctx.fillStyle = "white";
-            ctx.fillText("Score: " + getScore(), 10, 20);
-
-            // Draw timer
-            ctx.font = "16px Arial";
-            ctx.fillStyle = "white";
-            ctx.fillText("Time: " + elapsedTime + "s", canvas.width / 2 - 40, 20);
-
-            // Draw high scores
-            ctx.font = "16px Arial";
-            ctx.fillStyle = "white";
-            ctx.fillText("High Scores:", canvas.width - 150, 20);
-
-            ctx.font = "14px Arial";
-            for (var i = 0; i < highScores.length; i++) {
-                ctx.fillStyle = i === 0 ? "red" : "white";
-                ctx.fillText(highScores[i].username + ": " + highScores[i].score, canvas.width - 150, 40 + i * 20);
-            }
-
-            // Game over message
-            if (isGameOver) {
-                ctx.font = "40px Arial";
-                ctx.fillStyle = "white";
-                ctx.fillText("Game Over", canvas.width / 2 - 100, canvas.height / 2);
-            }
+        // Check collision between two rectangles
+        function checkCollision(x1, y1, w1, h1, x2, y2, w2, h2) {
+            return x1 < x2 + w2 &&
+                x1 + w1 > x2 &&
+                y1 < y2 + h2 &&
+                y1 + h1 > y2;
         }
 
-        // Update score
-        function updateScore(points) {
-            score += points;
+        // Format time in seconds to MM:SS format
+        function formatTime(time) {
+            var minutes = Math.floor(time / 60000);
+            var seconds = Math.floor((time % 60000) / 1000);
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+            return minutes + ":" + seconds;
         }
-
-        // Get current score
-        function getScore() {
-            return score;
-        }
-
-        // Game over
-        function gameOver() {
-            isPlayerAlive = false;
-            isGameOver = true;
-
-            var usernameInput = document.getElementById("usernameInput");
-            var username = usernameInput.value.trim();
-
-            if (username === "") {
-                username = "Anonymous";
-            }
-
-            var newScore = {
-                username: username,
-                score: getScore()
-            };
-
-            highScores.push(newScore);
-            highScores.sort((a, b) => b.score - a.score);
-            highScores = highScores.slice(0, maxHighScores);
-        }
-
-        // Spawn collectable
-        function spawnCollectable() {
-            var x = Math.random() * (canvas.width - collectableRadius * 2) + collectableRadius;
-            var y = Math.random() * (canvas.height - collectableRadius * 2) + collectableRadius;
-
-            collectables.push({ x: x, y: y });
-        }
-
-        // Start the game loop
-        function startGameLoop() {
-            update();
-            render();
-
-            if (!isGameOver) {
-                requestAnimationFrame(startGameLoop);
-            }
-        }
-
-        // Initialize game
-        function initializeGame() {
-            showUsernameMenu();
-            startGameLoop();
-        }
-
-        // Call initializeGame when the page has loaded
-        window.onload = initializeGame;
     </script>
 </body>
 </html>
