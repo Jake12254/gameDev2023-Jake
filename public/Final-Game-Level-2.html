@@ -4,7 +4,6 @@
     <title>Canvas Example</title>
     <style>
         body {
-      
             background-color: Brown;
             display: flex;
             justify-content: center;
@@ -23,7 +22,6 @@
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
 
-        // Set player variables
         var playerWidth = 50;
         var playerHeight = 50;
         var playerX = (canvas.width - playerWidth) / 2;
@@ -31,7 +29,6 @@
         var playerSpeed = 5;
         var keys = {};
 
-        // Set rectangle variables
         var rectWidth = 20;
         var rectHeight = playerHeight;
         var rect1Y = 0;
@@ -43,7 +40,10 @@
         var bulletSpeed = 3;
         var bullets = [];
 
-        // Add event listeners for player movement
+        var isPlayerAlive = true;
+        var deathScreenElement = document.createElement('div');
+        var restartButtonElement = document.createElement('button');
+
         document.addEventListener("keydown", function(event) {
             keys[event.key] = true;
         });
@@ -52,61 +52,61 @@
             keys[event.key] = false;
         });
 
-        // Define the update function
         function update() {
-            // Update player position
-            if (keys["w"] && playerY > 0) {
-                playerY -= playerSpeed;
-            }
-            if (keys["a"] && playerX > 0) {
-                playerX -= playerSpeed;
-            }
-            if (keys["s"] && playerY < canvas.height - playerHeight) {
-                playerY += playerSpeed;
-            }
-            if (keys["d"] && playerX < canvas.width - playerWidth) {
-                playerX += playerSpeed;
-            }
+            if (isPlayerAlive) {
+                if (keys["w"] && playerY > 0) {
+                    playerY -= playerSpeed;
+                }
+                if (keys["a"] && playerX > 0) {
+                    playerX -= playerSpeed;
+                }
+                if (keys["s"] && playerY < canvas.height - playerHeight) {
+                    playerY += playerSpeed;
+                }
+                if (keys["d"] && playerX < canvas.width - playerWidth) {
+                    playerX += playerSpeed;
+                }
 
-            // Update rectangle positions
-            rect1Y += rectSpeed * rectDirection1;
-            rect2Y += rectSpeed * rectDirection2;
+                rect1Y += rectSpeed * rectDirection1;
+                rect2Y += rectSpeed * rectDirection2;
 
-            // Check rectangle boundaries and reverse direction
-            if (rect1Y <= 0 || rect1Y + rectHeight >= canvas.height) {
-                rectDirection1 *= -1;
+                if (rect1Y <= 0 || rect1Y + rectHeight >= canvas.height) {
+                    rectDirection1 *= -1;
+                }
+                if (rect2Y <= 0 || rect2Y + rectHeight >= canvas.height) {
+                    rectDirection2 *= -1;
+                }
+
+                bullets.forEach(function(bullet, index) {
+                    bullet.x += bullet.speedX;
+                    bullet.y += bullet.speedY;
+
+                    var dx = playerX + playerWidth / 2 - bullet.x;
+                    var dy = playerY + playerHeight / 2 - bullet.y;
+                    var distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < playerWidth / 2 + bulletRadius) {
+                        isPlayerAlive = false;
+                        showDeathScreen();
+                    }
+                });
+
+                bullets = bullets.filter(function(bullet) {
+                    return bullet.x >= 0 && bullet.x <= canvas.width && bullet.y >= 0 && bullet.y <= canvas.height;
+                });
             }
-            if (rect2Y <= 0 || rect2Y + rectHeight >= canvas.height) {
-                rectDirection2 *= -1;
-            }
-
-            // Update bullet positions
-            bullets.forEach(function(bullet) {
-                bullet.x += bullet.speedX;
-                bullet.y += bullet.speedY;
-            });
-
-            // Remove bullets that are off-screen
-            bullets = bullets.filter(function(bullet) {
-                return bullet.x >= 0 && bullet.x <= canvas.width && bullet.y >= 0 && bullet.y <= canvas.height;
-            });
         }
 
-        // Define the draw function
         function draw() {
-            // Clear the canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Draw player
             ctx.fillStyle = "blue";
             ctx.fillRect(playerX, playerY, playerWidth, playerHeight);
 
-            // Draw rectangles
             ctx.fillStyle = "red";
             ctx.fillRect(20, rect1Y, rectWidth, rectHeight);
             ctx.fillRect(canvas.width - 40, rect2Y, rectWidth, rectHeight);
 
-            // Draw bullets
             ctx.fillStyle = "black";
             bullets.forEach(function(bullet) {
                 ctx.beginPath();
@@ -114,17 +114,47 @@
                 ctx.fill();
             });
 
-            // Call the draw function again
-            requestAnimationFrame(draw);
+            if (isPlayerAlive) {
+                requestAnimationFrame(draw);
+            }
         }
 
-        // Call the update function periodically
-        setInterval(update, 16); // Update every 16ms (approximately 60 FPS)
+        function showDeathScreen() {
+            deathScreenElement.style.position = 'absolute';
+            deathScreenElement.style.top = '50%';
+            deathScreenElement.style.left = '50%';
+            deathScreenElement.style.transform = 'translate(-50%, -50%)';
+            deathScreenElement.style.color = 'white';
+            deathScreenElement.style.fontSize = '24px';
+            deathScreenElement.textContent = 'You died!';
 
-        // Call the draw function
+            restartButtonElement.textContent = 'Restart';
+            restartButtonElement.style.fontSize = '18px';
+            restartButtonElement.style.padding = '8px 16px';
+            restartButtonElement.style.marginTop = '16px';
+
+            restartButtonElement.addEventListener('click', restartGame);
+
+            document.body.appendChild(deathScreenElement);
+            document.body.appendChild(restartButtonElement);
+        }
+
+        function restartGame() {
+            document.body.removeChild(deathScreenElement);
+            document.body.removeChild(restartButtonElement);
+
+            playerX = (canvas.width - playerWidth) / 2;
+            playerY = (canvas.height - playerHeight) / 2;
+            bullets = [];
+
+            isPlayerAlive = true;
+
+            draw();
+        }
+
+        setInterval(update, 16);
         draw();
 
-        // Fire bullets from rectangles towards the center
         setInterval(function() {
             var rect1X = 20 + rectWidth / 2;
             var rect2X = canvas.width - 40 + rectWidth / 2;
@@ -142,7 +172,7 @@
             var speedX2 = (dx2 / distance2) * bulletSpeed;
             var speedY2 = (dy2 / distance2) * bulletSpeed;
             bullets.push({ x: rect2X, y: rect2Y + rectHeight / 2, speedX: speedX2, speedY: speedY2 });
-        }, 1000); // Fire bullets every 1 second
+        }, 1000);
     </script>
 </body>
 </html>
