@@ -23,8 +23,8 @@
         var ctx = canvas.getContext("2d");
 
         // Set player variables
-        var playerWidth = 20;
-        var playerHeight = 20;
+        var playerWidth = 50;
+        var playerHeight = 50;
         var playerX = (canvas.width - playerWidth) / 2;
         var playerY = (canvas.height - playerHeight) / 2;
         var playerSpeed = 5;
@@ -54,6 +54,7 @@
         var isPlayerAlive = true;
         var startTime = Date.now();
         var elapsedTime = 0;
+        var score = 0;
 
         // Add event listeners for player movement
         document.addEventListener("keydown", function(event) {
@@ -116,6 +117,7 @@
             collectables.forEach(function(collectable, index) {
                 if (checkCollision(playerX, playerY, playerWidth, playerHeight, collectable.x - collectableRadius, collectable.y - collectableRadius, collectableRadius * 2, collectableRadius * 2)) {
                     collectables.splice(index, 1);
+                    score += 10; // Increase score by 10 for each collectable collected
                 }
             });
 
@@ -160,10 +162,11 @@
                 ctx.fill();
             });
 
-            // Draw timer
+            // Draw timer and score
             ctx.fillStyle = "white";
             ctx.font = "16px Arial";
             ctx.fillText("Time: " + formatTime(elapsedTime), 10, 20);
+            ctx.fillText("Score: " + score, 10, 40);
 
             // Check game over condition and display restart button
             if (!isPlayerAlive) {
@@ -229,6 +232,7 @@
             rect2Y = canvas.height - rectHeight;
             isPlayerAlive = true;
             startTime = Date.now();
+            score = 0; // Reset the score
         }
 
         // Generate a collectable at a random position
@@ -265,7 +269,8 @@
         function formatTime(time) {
             var minutes = Math.floor(time / 60000);
             var seconds = Math.floor((time % 60000) / 1000);
-            return (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+            return minutes + ":" + seconds;
         }
     </script>
 </body>
