@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Four Corner Cataclysm: Cube Theory</title>
+    <title>Four Corner Cataclysm</title>
     <style>
         body {
             display: flex;
@@ -64,7 +64,7 @@
 
             // Update rectangle positions
             rect1Y += rectSpeed * rectDirection;
-            rect2Y -= rectSpeed * rectDirection;
+            rect2Y += rectSpeed * rectDirection;
 
             // Check rectangle boundaries and reverse direction
             if (rect1Y <= 0 || rect1Y + rectHeight >= canvas.height) {
