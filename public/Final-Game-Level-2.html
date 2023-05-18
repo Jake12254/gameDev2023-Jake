@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Bullet Hell: Cube Theory</title>
+    <title>Four Corner Cataclysm: Cube Theory</title>
     <style>
         body {
             display: flex;
@@ -11,12 +11,12 @@
             margin: 0;
         }
         canvas {
-            border: 15px solid black;
+            border: 1px solid black;
         }
     </style>
 </head>
 <body>
-    <canvas id="myCanvas" width="800" height="600"></canvas>
+    <canvas id="myCanvas" width="600" height="400"></canvas>
     <script>
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
@@ -27,19 +27,29 @@
         var playerX = (canvas.width - playerWidth) / 2;
         var playerY = (canvas.height - playerHeight) / 2;
         var playerSpeed = 5;
+        var keys = {};
 
-        // Set cube variables
-        var cubeWidth = 20;
-        var cubeHeight = playerHeight;
-        var cube1Y = 0;
-        var cube2Y = canvas.height - cubeHeight;
-        var cubeSpeed = 2;
+        // Set rectangle variables
+        var rectWidth = 20;
+        var rectHeight = playerHeight;
+        var rect1Y = 0;
+        var rect2Y = canvas.height - rectHeight;
+        var rectSpeed = 2;
+        var rectDirection = 1;
 
         // Add event listeners for player movement
-        document.addEventListener("keydown", movePlayer);
+        document.addEventListener("keydown", function(event) {
+            keys[event.key] = true;
+        });
 
-        // Define the movePlayer function
-       if (keys["w"] && playerY > 0) {
+        document.addEventListener("keyup", function(event) {
+            keys[event.key] = false;
+        });
+
+        // Define the update function
+        function update() {
+            // Update player position
+            if (keys["w"] && playerY > 0) {
                 playerY -= playerSpeed;
             }
             if (keys["a"] && playerX > 0) {
@@ -51,22 +61,18 @@
             if (keys["d"] && playerX < canvas.width - playerWidth) {
                 playerX += playerSpeed;
             }
-        // Define the update function
-        function update() {
-            // Update cube positions
-            cube1Y += cubeSpeed;
-            cube2Y -= cubeSpeed;
 
-            // Check cube boundaries and reverse direction
-            if (cube1Y + cubeHeight > canvas.height || cube1Y < 0) {
-                cubeSpeed *= -1;
-            }
-            if (cube2Y + cubeHeight > canvas.height || cube2Y < 0) {
-                cubeSpeed *= -1;
-            }
+            // Update rectangle positions
+            rect1Y += rectSpeed * rectDirection;
+            rect2Y -= rectSpeed * rectDirection;
 
-            // Call the update function again
-            requestAnimationFrame(update);
+            // Check rectangle boundaries and reverse direction
+            if (rect1Y <= 0 || rect1Y + rectHeight >= canvas.height) {
+                rectDirection *= -1;
+            }
+            if (rect2Y <= 0 || rect2Y + rectHeight >= canvas.height) {
+                rectDirection *= -1;
+            }
         }
 
         // Define the draw function
@@ -78,17 +84,19 @@
             ctx.fillStyle = "blue";
             ctx.fillRect(playerX, playerY, playerWidth, playerHeight);
 
-            // Draw red cubes
+            // Draw rectangles
             ctx.fillStyle = "red";
-            ctx.fillRect(20, cube1Y, cubeWidth, cubeHeight);
-            ctx.fillRect(canvas.width - 40, cube2Y, cubeWidth, cubeHeight);
+            ctx.fillRect(20, rect1Y, rectWidth, rectHeight);
+            ctx.fillRect(canvas.width - 40, rect2Y, rectWidth, rectHeight);
 
             // Call the draw function again
             requestAnimationFrame(draw);
         }
 
-        // Call the update and draw functions
-        update();
+        // Call the update function periodically
+        setInterval(update, 16); // Update every 16ms (approximately 60 FPS)
+
+        // Call the draw function
         draw();
     </script>
 </body>
