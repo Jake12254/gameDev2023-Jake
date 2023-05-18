@@ -35,7 +35,8 @@
         var rect1Y = 0;
         var rect2Y = canvas.height - rectHeight;
         var rectSpeed = 2;
-        var rectDirection = 1;
+        var rectDirection1 = 1;
+        var rectDirection2 = -1;
 
         // Add event listeners for player movement
         document.addEventListener("keydown", function(event) {
@@ -63,15 +64,15 @@
             }
 
             // Update rectangle positions
-            rect1Y += rectSpeed * rectDirection;
-            rect2Y += rectSpeed * rectDirection;
+            rect1Y += rectSpeed * rectDirection1;
+            rect2Y += rectSpeed * rectDirection2;
 
             // Check rectangle boundaries and reverse direction
             if (rect1Y <= 0 || rect1Y + rectHeight >= canvas.height) {
-                rectDirection *= -1;
+                rectDirection1 *= -1;
             }
             if (rect2Y <= 0 || rect2Y + rectHeight >= canvas.height) {
-                rectDirection *= -1;
+                rectDirection2 *= -1;
             }
         }
 
