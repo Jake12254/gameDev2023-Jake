@@ -39,31 +39,18 @@
         document.addEventListener("keydown", movePlayer);
 
         // Define the movePlayer function
-        function movePlayer(event) {
-            switch (event.key) {
-                case "w": // Up arrow
-                    if (playerY > 0) {
-                        playerY -= playerSpeed;
-                    }
-                    break;
-                case "a": // Left arrow
-                    if (playerX > 0) {
-                        playerX -= playerSpeed;
-                    }
-                    break;
-                case "s": // Down arrow
-                    if (playerY < canvas.height - playerHeight) {
-                        playerY += playerSpeed;
-                    }
-                    break;
-                case "d": // Right arrow
-                    if (playerX < canvas.width - playerWidth) {
-                        playerX += playerSpeed;
-                    }
-                    break;
+       if (keys["w"] && playerY > 0) {
+                playerY -= playerSpeed;
             }
-        }
-
+            if (keys["a"] && playerX > 0) {
+                playerX -= playerSpeed;
+            }
+            if (keys["s"] && playerY < canvas.height - playerHeight) {
+                playerY += playerSpeed;
+            }
+            if (keys["d"] && playerX < canvas.width - playerWidth) {
+                playerX += playerSpeed;
+            }
         // Define the update function
         function update() {
             // Update cube positions
