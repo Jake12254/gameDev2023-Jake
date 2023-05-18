@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Four Corner Cataclysm</title>
+    <title>Canvas Example</title>
     <style>
         body {
             display: flex;
@@ -37,6 +37,9 @@
         var rectSpeed = 2;
         var rectDirection1 = 1;
         var rectDirection2 = -1;
+        var bulletRadius = 5;
+        var bulletSpeed = 3;
+        var bullets = [];
 
         // Add event listeners for player movement
         document.addEventListener("keydown", function(event) {
@@ -74,6 +77,17 @@
             if (rect2Y <= 0 || rect2Y + rectHeight >= canvas.height) {
                 rectDirection2 *= -1;
             }
+
+            // Update bullet positions
+            bullets.forEach(function(bullet) {
+                bullet.x += bullet.speedX;
+                bullet.y += bullet.speedY;
+            });
+
+            // Remove bullets that are off-screen
+            bullets = bullets.filter(function(bullet) {
+                return bullet.x >= 0 && bullet.x <= canvas.width && bullet.y >= 0 && bullet.y <= canvas.height;
+            });
         }
 
         // Define the draw function
@@ -90,6 +104,14 @@
             ctx.fillRect(20, rect1Y, rectWidth, rectHeight);
             ctx.fillRect(canvas.width - 40, rect2Y, rectWidth, rectHeight);
 
+            // Draw bullets
+            ctx.fillStyle = "black";
+            bullets.forEach(function(bullet) {
+                ctx.beginPath();
+                ctx.arc(bullet.x, bullet.y, bulletRadius, 0, 2 * Math.PI);
+                ctx.fill();
+            });
+
             // Call the draw function again
             requestAnimationFrame(draw);
         }
@@ -99,6 +121,26 @@
 
         // Call the draw function
         draw();
+
+        // Fire bullets from rectangles towards the center
+        setInterval(function() {
+            var rect1X = 20 + rectWidth / 2;
+            var rect2X = canvas.width - 40 + rectWidth / 2;
+
+            var dx1 = playerX - rect1X;
+            var dy1 = playerY - (rect1Y + rectHeight / 2);
+            var distance1 = Math.sqrt(dx1 * dx1 + dy1 * dy1);
+            var speedX1 = (dx1 / distance1) * bulletSpeed;
+            var speedY1 = (dy1 / distance1) * bulletSpeed;
+            bullets.push({ x: rect1X, y: rect1Y + rectHeight / 2, speedX: speedX1, speedY: speedY1 });
+
+            var dx2 = playerX - rect2X;
+            var dy2 = playerY - (rect2Y + rectHeight / 2);
+            var distance2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+            var speedX2 = (dx2 / distance2) * bulletSpeed;
+            var speedY2 = (dy2 / distance2) * bulletSpeed;
+            bullets.push({ x: rect2X, y: rect2Y + rectHeight / 2, speedX: speedX2, speedY: speedY2 });
+        }, 1000); // Fire bullets every 1 second
     </script>
 </body>
 </html>
