@@ -22,38 +22,48 @@
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
 
-        var playerWidth = 50; // Initial player width
-        var playerHeight = 50; // Initial player height
+        // Set player variables
+        var playerWidth = 50;
+        var playerHeight = 50;
         var playerX = (canvas.width - playerWidth) / 2;
         var playerY = (canvas.height - playerHeight) / 2;
         var playerSpeed = 5;
         var keys = {};
 
+        // Set rectangle variables
         var rectWidth = 20;
-        var rectHeight = 100;
+        var rectHeight = playerHeight;
         var rect1Y = 0;
         var rect2Y = canvas.height - rectHeight;
         var rectSpeed = 2;
         var rectDirection1 = 1;
         var rectDirection2 = -1;
 
+        // Set bullet variables
         var bulletRadius = 5;
+        var bulletSpeed = 3;
         var bullets = [];
 
+        // Set collectable variables
         var collectableRadius = 10;
         var collectables = [];
+        var collectableSpawnInterval = 3000; // Interval for spawning collectables (in milliseconds)
+        var lastCollectableSpawnTime = Date.now();
 
-        var score = 0;
-        var time = 0;
+        // Set game state variables
         var isPlayerAlive = true;
+        var startTime = Date.now();
+        var elapsedTime = 0;
+        var score = 0;
+        var collectedPoints = 0;
 
         // Add event listeners for player movement
-        document.addEventListener("keydown", function (event) {
-            keys[event.keyCode] = true;
+        document.addEventListener("keydown", function(event) {
+            keys[event.key] = true;
         });
 
-        document.addEventListener("keyup", function (event) {
-            delete keys[event.keyCode];
+        document.addEventListener("keyup", function(event) {
+            keys[event.key] = false;
         });
 
         // Define the update function
@@ -61,16 +71,16 @@
             if (!isPlayerAlive) return;
 
             // Update player position
-            if (keys[38] && playerY > 0) {
+            if (keys["w"] && playerY > 0) {
                 playerY -= playerSpeed;
             }
-            if (keys[40] && playerY < canvas.height - playerHeight) {
-                playerY += playerSpeed;
-            }
-            if (keys[37] && playerX > 0) {
+            if (keys["a"] && playerX > 0) {
                 playerX -= playerSpeed;
             }
-            if (keys[39] && playerX < canvas.width - playerWidth) {
+            if (keys["s"] && playerY < canvas.height - playerHeight) {
+                playerY += playerSpeed;
+            }
+            if (keys["d"] && playerX < canvas.width - playerWidth) {
                 playerX += playerSpeed;
             }
 
@@ -78,118 +88,138 @@
             rect1Y += rectSpeed * rectDirection1;
             rect2Y += rectSpeed * rectDirection2;
 
-            if (rect1Y <= 0 || rect1Y >= canvas.height - rectHeight) {
+            // Check rectangle boundaries and reverse direction
+            if (rect1Y <= 0 || rect1Y + rectHeight >= canvas.height) {
                 rectDirection1 *= -1;
             }
-            if (rect2Y <= 0 || rect2Y >= canvas.height - rectHeight) {
+            if (rect2Y <= 0 || rect2Y + rectHeight >= canvas.height) {
                 rectDirection2 *= -1;
             }
 
             // Update bullet positions
-            bullets.forEach(function (bullet) {
+            bullets.forEach(function(bullet) {
                 bullet.x += bullet.speedX;
                 bullet.y += bullet.speedY;
             });
 
             // Remove bullets that are off-screen
-            bullets = bullets.filter(function (bullet) {
-                return bullet.x > 0 && bullet.x < canvas.width &&
-                    bullet.y > 0 && bullet.y < canvas.height;
+            bullets = bullets.filter(function(bullet) {
+                return bullet.x >= 0 && bullet.x <= canvas.width && bullet.y >= 0 && bullet.y <= canvas.height;
             });
 
-            // Check bullet-player collision
-            bullets.forEach(function (bullet) {
-                if (bullet.x > playerX && bullet.x < playerX + playerWidth &&
-                    bullet.y > playerY && bullet.y < playerY + playerHeight) {
-                    isPlayerAlive = false;
+            // Check bullet collisions with rectangles
+            bullets.forEach(function(bullet, bulletIndex) {
+                if (
+                    (bullet.y >= rect1Y && bullet.y <= rect1Y + rectHeight && bullet.speedY < 0) ||
+                    (bullet.y + bulletRadius >= rect2Y && bullet.y + bulletRadius <= rect2Y + rectHeight && bullet.speedY > 0)
+                ) {
+                    bullets.splice(bulletIndex, 1); // Remove bullet
+                    score += 5; // Increase score by 5 for hitting a rectangle
                 }
             });
 
-           // Update collectable positions
-collectables.forEach(function (collectable) {
-    collectable.x += collectable.speedX;
-    collectable.y += collectable.speedY;
-});
+            // Check collectable-player collision
+            collectables.forEach(function(collectable, index) {
+                if (checkCollision(playerX, playerY, playerWidth, playerHeight, collectable.x - collectableRadius, collectable.y - collectableRadius, collectableRadius * 2, collectableRadius * 2)) {
+                    collectables.splice(index, 1);
+                    score += 10; // Increase score by 10 for each collectable collected
+                    collectedPoints += 10; // Increase collectedPoints by 10
 
-// Remove collectables that are off-screen
-collectables = collectables.filter(function (collectable) {
-    return collectable.x > 0 && collectable.x < canvas.width &&
-        collectable.y > 0 && collectable.y < canvas.height;
-});
+                    // Check if collectedPoints is a multiple of 100
+                    if (collectedPoints % 100 === 0) {
+                        playerWidth -= 5; // Decrease player size by 5 pixels
+                        playerHeight -= 5;
+                    }
+                }
+            });
 
-// Check collectable-player collision
-collectables.forEach(function (collectable) {
-    if (collectable.x > playerX && collectable.x < playerX + playerWidth &&
-        collectable.y > playerY && collectable.y < playerY + playerHeight) {
-        score += 10;
-        if (score % 100 === 0) {
-            playerWidth += 10; // Increase player width by 10
-            playerHeight += 10; // Increase player height by 10
+            // Check player collisions with rectangles
+            if (
+                (playerY + playerHeight >= rect1Y && playerY + playerHeight <= rect1Y + rectHeight && playerSpeed > 0) ||
+                (playerY <= rect2Y + rectHeight && playerY >= rect2Y && playerSpeed < 0)
+            ) {
+                isPlayerAlive = false;
+            }
+
+            // Spawn new collectable if enough time has passed
+            if (Date.now() - lastCollectableSpawnTime >= collectableSpawnInterval) {
+                spawnCollectable();
+                lastCollectableSpawnTime = Date.now();
+            }
+
+            // Update elapsed time
+            elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+
+            // Call the draw function
+            draw();
+
+            // Call the update function again on the next animation frame
+            requestAnimationFrame(update);
         }
-        collectables = collectables.filter(function (col) {
-            return col !== collectable;
-        });
-    }
-});
 
-// Update score and time
-score += 1;
-time += 1;
-}
+        // Define the draw function
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-// Define the draw function
-function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Draw player
+            ctx.fillStyle = "blue";
+            ctx.fillRect(playerX, playerY, playerWidth, playerHeight);
 
-    // Draw player
-    ctx.fillStyle = "blue";
-    ctx.fillRect(playerX, playerY, playerWidth, playerHeight);
+            // Draw rectangles
+            ctx.fillStyle = "red";
+            ctx.fillRect(0, rect1Y, canvas.width, rectHeight);
+            ctx.fillStyle = "green";
+            ctx.fillRect(0, rect2Y, canvas.width, rectHeight);
 
-    // Draw rectangles
-    ctx.fillStyle = "red";
-    ctx.fillRect(50, rect1Y, rectWidth, rectHeight);
-    ctx.fillRect(canvas.width - 50 - rectWidth, rect2Y, rectWidth, rectHeight);
+            // Draw bullets
+            ctx.fillStyle = "yellow";
+            bullets.forEach(function(bullet) {
+                ctx.beginPath();
+                ctx.arc(bullet.x, bullet.y, bulletRadius, 0, Math.PI * 2);
+                ctx.fill();
+            });
 
-    // Draw bullets
-    ctx.fillStyle = "yellow";
-    bullets.forEach(function (bullet) {
-        ctx.beginPath();
-        ctx.arc(bullet.x, bullet.y, bulletRadius, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.closePath();
-    });
+            // Draw collectables
+            ctx.fillStyle = "orange";
+            collectables.forEach(function(collectable) {
+                ctx.beginPath();
+                ctx.arc(collectable.x, collectable.y, collectableRadius, 0, Math.PI * 2);
+                ctx.fill();
+            });
 
-    // Draw collectables
-    ctx.fillStyle = "green";
-    collectables.forEach(function (collectable) {
-        ctx.beginPath();
-        ctx.arc(collectable.x, collectable.y, collectableRadius, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.closePath();
-    });
+            // Draw score and elapsed time
+            ctx.fillStyle = "white";
+            ctx.font = "20px Arial";
+            ctx.fillText("Score: " + score, 10, 30);
+            ctx.fillText("Time: " + elapsedTime + "s", 10, 60);
 
-    // Draw score and time
-    ctx.fillStyle = "white";
-    ctx.font = "20px Arial";
-    ctx.fillText("Time: " + Math.floor(time / 1000) + "s", 10, 20);
-    ctx.fillText("Score: " + score, 10, 40);
+            // Draw game over message if player is not alive
+            if (!isPlayerAlive) {
+                ctx.fillStyle = "white";
+                ctx.font = "30px Arial";
+                ctx.fillText("Game Over", canvas.width / 2 - 80, canvas.height / 2);
+            }
+        }
 
-    // Draw game over condition
-    if (!isPlayerAlive) {
-        ctx.fillStyle = "white";
-        ctx.font = "30px Arial";
-        ctx.fillText("Game Over", canvas.width / 2 - 80, canvas.height / 2);
-    }
+        // Spawn a new collectable at a random position
+        function spawnCollectable() {
+            var collectableX = Math.random() * (canvas.width - collectableRadius * 2) + collectableRadius;
+            var collectableY = Math.random() * (canvas.height - collectableRadius * 2) + collectableRadius;
+            collectables.push({ x: collectableX, y: collectableY });
+        }
 
-    // Call the update function
-    update();
+        // Check collision between two rectangles
+        function checkCollision(rect1X, rect1Y, rect1Width, rect1Height, rect2X, rect2Y, rect2Width, rect2Height) {
+            return (
+                rect1X < rect2X + rect2Width &&
+                rect1X + rect1Width > rect2X &&
+                rect1Y < rect2Y + rect2Height &&
+                rect1Y + rect1Height > rect2Y
+            );
+        }
 
-    // Call the draw function again
-    requestAnimationFrame(draw);
-}
-
-// Call the draw function to start the game loop
-draw();
-</script>
+        // Start the game loop
+        update();
+    </script>
 </body>
 </html>
