@@ -164,8 +164,9 @@
             // Draw timer and score
             ctx.fillStyle = "white";
             ctx.font = "16px Arial";
-            ctx.fillText("Time: " + formatTime(elapsedTime), 10, 20);
-            ctx.fillText("Score: " + score, 10, 40);
+            ctx.fillText("Time: " + formatTime(elapsedTime), canvas.width - 100, 20);
+            ctx.fillText("Score: " + score, canvas.width - 100, 40);
+
 
             // Check game over condition and display restart button
             if (!isPlayerAlive) {
