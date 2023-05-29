@@ -129,6 +129,13 @@
 
             // Update elapsed time
             elapsedTime = currentTime - startTime;
+
+            // Check if player score reaches 100
+            if (score >= 100) {
+                playerWidth -= 5; // Decrease player size by 5 pixels
+                bulletSpeed += 1; // Increase bullet speed by 1
+                score = 0; // Reset score to continue the game
+            }
         }
 
         // Define the draw function
@@ -265,12 +272,12 @@
                 y1 + h1 > y2;
         }
 
-        // Format time in seconds to MM:SS format
-        function formatTime(time) {
-            var minutes = Math.floor(time / 60000);
-            var seconds = Math.floor((time % 60000) / 1000);
-            seconds = seconds < 10 ? "0" + seconds : seconds;
-            return minutes + ":" + seconds;
+        // Format time in MM:SS format
+        function formatTime(milliseconds) {
+            var seconds = Math.floor(milliseconds / 1000);
+            var minutes = Math.floor(seconds / 60);
+            seconds = seconds % 60;
+            return (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
         }
     </script>
 </body>
