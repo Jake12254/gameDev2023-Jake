@@ -22,11 +22,6 @@
         var bullets = [];
         var bulletRadius = 2;
 
-        var collectables = [];
-        var collectableRadius = 5;
-        var collectableSpawnInterval = 3000; // milliseconds
-        var lastCollectableSpawnTime = 0;
-
         var score = 0;
         var startTime = Date.now();
         var elapsedTime = 0;
@@ -53,51 +48,30 @@
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Check bullet-enemy collision
-            bullets.forEach(function(bullet) {
+            // Update bullet positions
+            bullets.forEach(function (bullet) {
+                bullet.y -= 5; // Move bullet upwards
+
+                // Check bullet-enemy collision
                 enemies.forEach(function (enemy) {
                     if (checkCollision(bullet.x, bullet.y, bulletRadius * 2, bulletRadius * 2, enemy.x, enemy.y, rectWidth, rectHeight)) {
                         // Remove the collided bullet and enemy
-                        bullets = bullets.filter(function(b) {
-                            return b !== bullet;
-                        });
-                        enemies = enemies.filter(function(e) {
-                            return e !== enemy;
-                        });
+                        bullets.splice(bullets.indexOf(bullet), 1);
+                        enemies.splice(enemies.indexOf(enemy), 1);
                         score += 10;
                     }
                 });
             });
 
-            // Check player-enemy collision
+            // Update enemy positions
             enemies.forEach(function (enemy) {
+                enemy.y += 2; // Move enemy downwards
+
+                // Check player-enemy collision
                 if (checkCollision(playerX, playerY, playerWidth, playerHeight, enemy.x, enemy.y, rectWidth, rectHeight)) {
                     isPlayerAlive = false;
                 }
             });
-
-            // Check player-collectable collision
-            collectables.forEach(function(collectable) {
-                if (checkCollision(playerX, playerY, playerWidth, playerHeight, collectable.x - collectableRadius, collectable.y - collectableRadius, collectableRadius * 2, collectableRadius * 2)) {
-                    // Remove the collected collectable
-                    collectables = collectables.filter(function(c) {
-                        return c !== collectable;
-                    });
-                    score += 20;
-                }
-            });
-
-            // Spawn new collectable if enough time has passed
-            var currentTime = Date.now();
-            if (currentTime - lastCollectableSpawnTime >= collectableSpawnInterval) {
-                spawnCollectable();
-                lastCollectableSpawnTime = currentTime;
-            }
-
-            // Spawn additional enemy if score is a multiple of 50
-            if (score % 50 === 0 && score > 0) {
-                spawnEnemy();
-            }
 
             draw();
             requestAnimationFrame(update);
@@ -124,15 +98,6 @@
                 ctx.closePath();
             });
 
-            // Draw collectables
-            ctx.fillStyle = "#00FF00";
-            collectables.forEach(function(collectable) {
-                ctx.beginPath();
-                ctx.arc(collectable.x, collectable.y, collectableRadius, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.closePath();
-            });
-
             // Draw score and elapsed time
             ctx.fillStyle = "#000000";
             ctx.font = "16px Arial";
@@ -155,23 +120,7 @@
                 y1 + h1 > y2;
         }
 
-        // Function to spawn a new collectable at a random position
-        function spawnCollectable() {
-            var x = Math.random() * (canvas.width - collectableRadius * 2) + collectableRadius;
-            var y = Math.random() * (canvas.height - collectableRadius * 2) + collectableRadius;
-
-            collectables.push({ x: x, y: y });
-        }
-
-        // Function to spawn a new enemy at a random position
-        function spawnEnemy() {
-            var x = Math.random() * (canvas.width - rectWidth);
-            var y = Math.random() * (canvas.height - rectHeight);
-
-            enemies.push({ x: x, y: y, direction: 1 });
-        }
-
-        // Start the game loop
+        // Start the game
         update();
     </script>
 </body>
