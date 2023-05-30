@@ -1,4 +1,7 @@
- <title>Canvas Example</title>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Canvas Example</title>
     <style>
         body {
             background-color: Brown;
@@ -14,6 +17,15 @@
     </style>
 </head>
 <body>
+    <div id="difficultySelection">
+        <label for="difficulty">Select difficulty:</label>
+        <select id="difficulty">
+            <option value="easy">Easy</option>
+            <option value="normal">Normal</option>
+            <option value="hard">Hard</option>
+        </select>
+        <button onclick="startGame()">Start</button>
+    </div>
     <canvas id="myCanvas" width="600" height="400"></canvas>
     <script>
         var canvas = document.getElementById("myCanvas");
@@ -48,10 +60,13 @@
         var lastCollectableSpawnTime = Date.now();
 
         // Set game state variables
-        var isPlayerAlive = true;
+        var isPlayerAlive = false;
         var startTime = Date.now();
         var elapsedTime = 0;
         var score = 0;
+
+        // Set difficulty variables
+        var difficultyMultiplier = 1;
 
         // Add event listeners for player movement
         document.addEventListener("keydown", function(event) {
@@ -62,27 +77,46 @@
             keys[event.key] = false;
         });
 
+        // Start the game based on the selected difficulty
+        function startGame() {
+            var difficultySelect = document.getElementById("difficulty");
+            var difficulty = difficultySelect.value;
+            if (difficulty === "easy") {
+                difficultyMultiplier = 0.5;
+            } else if (difficulty === "normal") {
+                difficultyMultiplier = 1;
+            } else if (difficulty === "hard") {
+                difficultyMultiplier = 2;
+            }
+            isPlayerAlive = true;
+            startTime = Date.now();
+            score = 0;
+            document.getElementById("difficultySelection").style.display = "none";
+            draw();
+            setInterval(update, 16);
+        }
+
         // Define the update function
         function update() {
             if (!isPlayerAlive) return;
 
             // Update player position
             if (keys["w"] && playerY > 0) {
-                playerY -= playerSpeed;
+                playerY -= playerSpeed * difficultyMultiplier;
             }
             if (keys["a"] && playerX > 0) {
-                playerX -= playerSpeed;
+                playerX -= playerSpeed * difficultyMultiplier;
             }
             if (keys["s"] && playerY < canvas.height - playerHeight) {
-                playerY += playerSpeed;
+                playerY += playerSpeed * difficultyMultiplier;
             }
             if (keys["d"] && playerX < canvas.width - playerWidth) {
-                playerX += playerSpeed;
+                playerX += playerSpeed * difficultyMultiplier;
             }
 
             // Update rectangle positions
-            rect1Y += rectSpeed * rectDirection1;
-            rect2Y += rectSpeed * rectDirection2;
+            rect1Y += rectSpeed * rectDirection1 * difficultyMultiplier;
+            rect2Y += rectSpeed * rectDirection2 * difficultyMultiplier;
 
             // Check rectangle boundaries and reverse direction
             if (rect1Y <= 0 || rect1Y + rectHeight >= canvas.height) {
@@ -94,8 +128,8 @@
 
             // Update bullet positions
             bullets.forEach(function(bullet) {
-                bullet.x += bullet.speedX;
-                bullet.y += bullet.speedY;
+                bullet.x += bullet.speedX * difficultyMultiplier;
+                bullet.y += bullet.speedY * difficultyMultiplier;
             });
 
             // Remove bullets that are off-screen
@@ -201,17 +235,17 @@
             var dx1 = playerX - rect1X;
             var dy1 = playerY - (rect1Y + rectHeight / 2);
             var distance1 = Math.sqrt(dx1 * dx1 + dy1 * dy1);
-            var speedX1 = (dx1 / distance1) * bulletSpeed;
-            var speedY1 = (dy1 / distance1) * bulletSpeed;
+            var speedX1 = (dx1 / distance1) * bulletSpeed * difficultyMultiplier;
+            var speedY1 = (dy1 / distance1) * bulletSpeed * difficultyMultiplier;
             bullets.push({ x: rect1X, y: rect1Y + rectHeight / 2, speedX: speedX1, speedY: speedY1 });
 
             var dx2 = playerX - rect2X;
             var dy2 = playerY - (rect2Y + rectHeight / 2);
             var distance2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
-            var speedX2 = (dx2 / distance2) * bulletSpeed;
-            var speedY2 = (dy2 / distance2) * bulletSpeed;
+            var speedX2 = (dx2 / distance2) * bulletSpeed * difficultyMultiplier;
+            var speedY2 = (dy2 / distance2) * bulletSpeed * difficultyMultiplier;
             bullets.push({ x: rect2X, y: rect2Y + rectHeight / 2, speedX: speedX2, speedY: speedY2 });
-        }, 1000); // Fire bullets every 1 second
+        }, 1000 * difficultyMultiplier); // Fire bullets every 1 second
 
         // Restart the game when the restart button is clicked
         canvas.addEventListener("click", function(event) {
@@ -239,36 +273,30 @@
             do {
                 newX = Math.floor(Math.random() * (canvas.width - 2 * collectableRadius)) + collectableRadius;
                 newY = Math.floor(Math.random() * (canvas.height - 2 * collectableRadius)) + collectableRadius;
-            } while (!isCollectablePositionValid(newX, newY));
+            } while (checkCollision(playerX, playerY, playerWidth, playerHeight, newX - collectableRadius, newY - collectableRadius, collectableRadius * 2, collectableRadius * 2));
+
             collectables.push({ x: newX, y: newY });
         }
 
-        // Check if a collectable position is valid
-        function isCollectablePositionValid(x, y) {
-            for (var i = 0; i < collectables.length; i++) {
-                var collectable = collectables[i];
-                var distance = Math.sqrt((x - collectable.x) * (x - collectable.x) + (y - collectable.y) * (y - collectable.y));
-                if (distance < 60) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
         // Check collision between two rectangles
-        function checkCollision(x1, y1, w1, h1, x2, y2, w2, h2) {
-            return x1 < x2 + w2 &&
-                x1 + w1 > x2 &&
-                y1 < y2 + h2 &&
-                y1 + h1 > y2;
+        function checkCollision(rect1X, rect1Y, rect1Width, rect1Height, rect2X, rect2Y, rect2Width, rect2Height) {
+            return rect1X < rect2X + rect2Width &&
+                rect1X + rect1Width > rect2X &&
+                rect1Y < rect2Y + rect2Height &&
+                rect1Y + rect1Height > rect2Y;
         }
 
-        // Format time in seconds to MM:SS format
-        function formatTime(time) {
-            var minutes = Math.floor(time / 60000);
-            var seconds = Math.floor((time % 60000) / 1000);
-            seconds = seconds < 10 ? "0" + seconds : seconds;
-            return minutes + ":" + seconds;
+        // Format time in MM:SS format
+        function formatTime(milliseconds) {
+            var seconds = Math.floor(milliseconds / 1000);
+            var minutes = Math.floor(seconds / 60);
+            seconds = seconds % 60;
+            return padZero(minutes) + ":" + padZero(seconds);
+        }
+
+        // Pad zero to the left of a number if it is a single digit
+        function padZero(number) {
+            return number < 10 ? "0" + number : number;
         }
     </script>
 </body>
