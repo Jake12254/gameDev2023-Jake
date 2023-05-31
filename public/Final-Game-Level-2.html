@@ -3,15 +3,17 @@
 <head>
     <title>Canvas Example</title>
     <style>
-        <div style = "text-align:center;">
         body {
             background-color: Brown;
             margin: 0;
         }
+
         canvas {
             border: 1px solid black;
+            display: block;
+            margin: 0 auto;
         }
-         </div>
+
         #menu {
             position: absolute;
             top: 50%;
@@ -21,32 +23,32 @@
             color: white;
             z-index: 1;
         }
-        
+
         #menu h1 {
             font-size: 48px;
             margin-bottom: 20px;
         }
-        
+
         #menu ul {
             list-style: none;
             padding: 0;
         }
-        
+
         #menu ul li {
             margin-bottom: 10px;
         }
-        
+
         #menu ul li a {
             color: white;
             text-decoration: none;
             font-size: 24px;
             transition: color 0.3s;
         }
-        
+
         #menu ul li a:hover {
             color: yellow;
         }
-        
+
         #difficulty {
             display: none;
             position: absolute;
@@ -57,118 +59,201 @@
             color: white;
             z-index: 1;
         }
-        
+
         #difficulty h2 {
             font-size: 36px;
             margin-bottom: 20px;
         }
-        
+
         #difficulty ul {
             list-style: none;
             padding: 0;
         }
-        
+
         #difficulty ul li {
             margin-bottom: 10px;
         }
-        
+
         #difficulty ul li a {
             color: white;
             text-decoration: none;
             font-size: 20px;
             transition: color 0.3s;
         }
-        
+
         #difficulty ul li a:hover {
             color: yellow;
+        }
+
+        /* Adjustments for centering */
+
+        #menu,
+        #difficulty {
+            transform: translate(-50%, -50%);
+            left: 50%;
+        }
+
+        #menu {
+            top: 50%;
+        }
+
+        #difficulty {
+            top: 55%;
         }
     </style>
 </head>
 <body>
     <canvas id="myCanvas" width="600" height="400"></canvas>
+
     <div id="menu">
-        <h1>Hectic GeometriX</h1>
+        <h1>Main Menu</h1>
         <ul>
             <li><a href="#" id="startGame">Start Game</a></li>
             <li><a href="#" id="options">Options</a></li>
             <li><a href="#" id="extras">Extras</a></li>
         </ul>
     </div>
+
     <div id="difficulty">
-        <h2>Select Difficulty:</h2>
+        <h2>Select Difficulty</h2>
         <ul>
-            <li><a href="#" class="difficulty-option" data-difficulty="easy">Easy</a></li>
-            <li><a href="#" class="difficulty-option" data-difficulty="normal">Normal</a></li>
-            <li><a href="#" class="difficulty-option" data-difficulty="hard">Hard</a></li>
+            <li><a href="#" id="easy">Easy</a></li>
+            <li><a href="#" id="normal">Normal</a></li>
+            <li><a href="#" id="hard">Hard</a></li>
         </ul>
     </div>
+
     <script>
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
 
-        // Set player variables and other game variables
+        // Set player variables
+        var playerWidth = 50;
+        var playerHeight = 50;
+        var playerX = (canvas.width - playerWidth) / 2;
+        var playerY = (canvas.height - playerHeight) / 2;
+        var playerSpeed = 5;
+        var keys = {};
 
-        var menu = document.getElementById("menu");
-        var difficultyMenu = document.getElementById("difficulty");
-        var startGameButton = document.getElementById("startGame");
-        var difficultyOptions = document.getElementsByClassName("difficulty-option");
+        // Set rectangle variables
+        var rectWidth = 20;
+        var rectHeight = 20;
+        var rectX = [];
+        var rectY = [];
+        var rectSpeed = [];
 
-        // Add event listener to show difficulty menu when Start Game is clicked
-        startGameButton.addEventListener("click", function() {
-            menu.style.display = "none";
-            difficultyMenu.style.display = "block";
+        // Set game variables
+        var interval;
+        var isGameRunning = false;
+        var difficulty = "";
+
+        // Event listener for starting the game
+        document.getElementById("startGame").addEventListener("click", function() {
+            document.getElementById("menu").style.display = "none";
+            document.getElementById("difficulty").style.display = "block";
         });
 
-        // Add event listeners to difficulty options
-        for (var i = 0; i < difficultyOptions.length; i++) {
-            difficultyOptions[i].addEventListener("click", function() {
-                var selectedDifficulty = this.getAttribute("data-difficulty");
-                startGame(selectedDifficulty);
-                difficultyMenu.style.display = "none";
-            });
-        }
+        // Event listener for selecting difficulty
+        document.getElementById("easy").addEventListener("click", function() {
+            startGame("easy");
+        });
 
-        // Define the startGame function
-        function startGame(difficulty) {
-            // Logic to start the game with the selected difficulty
-            console.log("Starting game with difficulty: " + difficulty);
+        document.getElementById("normal").addEventListener("click", function() {
+            startGame("normal");
+        });
 
-            // Set the number of enemies and rate of fire based on the difficulty
-            var numEnemies, bulletRate;
+        document.getElementById("hard").addEventListener("click", function() {
+            startGame("hard");
+        });
 
+        // Event listeners for player movement
+        document.addEventListener("keydown", function(event) {
+            keys[event.key] = true;
+        });
+
+        document.addEventListener("keyup", function(event) {
+            keys[event.key] = false;
+        });
+
+        function startGame(selectedDifficulty) {
+            difficulty = selectedDifficulty;
+
+            document.getElementById("difficulty").style.display = "none";
+
+            // Set initial values based on difficulty
             if (difficulty === "easy") {
-                numEnemies = 2;
-                bulletRate = 1;
+                rectX = [50, 150];
+                rectY = [50, 150];
+                rectSpeed = [2, 2];
             } else if (difficulty === "normal") {
-                numEnemies = 4;
-                bulletRate = 2;
+                rectX = [50, 150, 250, 350];
+                rectY = [50, 150, 250, 350];
+                rectSpeed = [3, 3, 3, 3];
             } else if (difficulty === "hard") {
-                numEnemies = 6;
-                bulletRate = 3;
+                rectX = [50, 150, 250, 350, 450, 550];
+                rectY = [50, 150, 250, 350, 450, 550];
+                rectSpeed = [4, 4, 4, 4, 4, 4];
             }
 
-            // Start the game with the specified difficulty
-            console.log("Number of enemies: " + numEnemies);
-            console.log("Rate of fire for enemy bullets: " + bulletRate);
+            isGameRunning = true;
+
+            interval = setInterval(updateGame, 10);
         }
 
-        // Define the update function
+        function updateGame() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Define the draw function
+            // Move player
+            if (keys["ArrowUp"] && playerY > 0) {
+                playerY -= playerSpeed;
+            }
+            if (keys["ArrowDown"] && playerY < canvas.height - playerHeight) {
+                playerY += playerSpeed;
+            }
+            if (keys["ArrowLeft"] && playerX > 0) {
+                playerX -= playerSpeed;
+            }
+            if (keys["ArrowRight"] && playerX < canvas.width - playerWidth) {
+                playerX += playerSpeed;
+            }
 
-        // Call the draw function
+            // Draw player
+            ctx.fillStyle = "blue";
+            ctx.fillRect(playerX, playerY, playerWidth, playerHeight);
 
-        // Handle menu option clicks
+            // Move rectangles
+            for (var i = 0; i < rectX.length; i++) {
+                rectX[i] += rectSpeed[i];
+                rectY[i] += rectSpeed[i];
 
-        // Restart the game when the restart button is clicked
+                // Check collision with canvas edges
+                if (
+                    rectX[i] < 0 ||
+                    rectX[i] + rectWidth > canvas.width ||
+                    rectY[i] < 0 ||
+                    rectY[i] + rectHeight > canvas.height
+                ) {
+                    rectSpeed[i] = -rectSpeed[i];
+                }
 
-        // Generate a collectable at a random position
+                // Check collision with player
+                if (
+                    playerX < rectX[i] + rectWidth &&
+                    playerX + playerWidth > rectX[i] &&
+                    playerY < rectY[i] + rectHeight &&
+                    playerY + playerHeight > rectY[i]
+                ) {
+                    isGameRunning = false;
+                    clearInterval(interval);
+                    alert("Game Over!");
+                    location.reload();
+                }
 
-        // Check if a collectable position is valid
-
-        // Check collision between two rectangles
-
-        // Format time in seconds to MM:SS format
+                // Draw rectangles
+                ctx.fillStyle = "red";
+                ctx.fillRect(rectX[i], rectY[i], rectWidth, rectHeight);
+            }
+        }
     </script>
 </body>
 </html>
