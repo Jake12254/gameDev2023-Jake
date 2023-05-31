@@ -5,14 +5,12 @@
     <style>
         body {
             background-color: Brown;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             margin: 0;
         }
         canvas {
             border: 1px solid black;
+            display: block;
+            margin: 0 auto;
         }
         
         #menu {
@@ -22,6 +20,7 @@
             transform: translate(-50%, -50%);
             text-align: center;
             color: white;
+            z-index: 1;
         }
         
         #menu h1 {
@@ -51,7 +50,18 @@
         
         #difficulty {
             display: none;
-            margin-top: 20px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            z-index: 1;
+        }
+        
+        #difficulty h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
         }
         
         #difficulty ul {
@@ -78,7 +88,7 @@
 <body>
     <canvas id="myCanvas" width="600" height="400"></canvas>
     <div id="menu">
-        <h1>Hectic GeometriX</h1>
+        <h1>Half-Life</h1>
         <ul>
             <li><a href="#" id="startGame">Start Game</a></li>
             <li><a href="#" id="options">Options</a></li>
@@ -110,11 +120,12 @@
             difficultyMenu.style.display = "block";
         });
 
-        // Add event listener to start game with selected difficulty
+        // Add event listeners to difficulty options
         for (var i = 0; i < difficultyOptions.length; i++) {
             difficultyOptions[i].addEventListener("click", function() {
                 var selectedDifficulty = this.getAttribute("data-difficulty");
                 startGame(selectedDifficulty);
+                difficultyMenu.style.display = "none";
             });
         }
 
@@ -122,6 +133,24 @@
         function startGame(difficulty) {
             // Logic to start the game with the selected difficulty
             console.log("Starting game with difficulty: " + difficulty);
+
+            // Set the number of enemies and rate of fire based on the difficulty
+            var numEnemies, bulletRate;
+
+            if (difficulty === "easy") {
+                numEnemies = 2;
+                bulletRate = 1;
+            } else if (difficulty === "normal") {
+                numEnemies = 4;
+                bulletRate = 2;
+            } else if (difficulty === "hard") {
+                numEnemies = 6;
+                bulletRate = 3;
+            }
+
+            // Start the game with the specified difficulty
+            console.log("Number of enemies: " + numEnemies);
+            console.log("Rate of fire for enemy bullets: " + bulletRate);
         }
 
         // Define the update function
