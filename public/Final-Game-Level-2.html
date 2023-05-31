@@ -1,113 +1,86 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Canvas Example</title>
+    <title>Simple Game</title>
     <style>
-        body {
-            background-color: Brown;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        canvas {
+        #canvas {
             border: 1px solid black;
-        }
-        .menu {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1;
-        }
-        .menu h1 {
-            color: white;
-            font-size: 40px;
-            margin-bottom: 20px;
-        }
-        .menu button {
-            font-size: 20px;
-            padding: 10px 20px;
-            margin-bottom: 10px;
-        }
-        .difficulty-options {
             display: none;
         }
-        .difficulty-options button {
-            margin: 5px;
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .difficulty-options {
+            display: none;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <canvas id="myCanvas" width="600" height="400"></canvas>
     <div class="menu">
-        <h1>Main Menu</h1>
+        <h2>Simple Game</h2>
         <button onclick="showDifficultyOptions()">Start Game</button>
         <div class="difficulty-options">
+            <h3>Select Difficulty</h3>
             <button onclick="startGame(1)">Easy</button>
             <button onclick="startGame(2)">Medium</button>
             <button onclick="startGame(3)">Hard</button>
         </div>
     </div>
+
+    <canvas id="canvas" width="600" height="400"></canvas>
+
     <script>
-        var canvas = document.getElementById("myCanvas");
+        var canvas = document.getElementById("canvas");
         var ctx = canvas.getContext("2d");
 
-        // Set player variables
-        var playerWidth = 50;
-        var playerHeight = 50;
+        var playerWidth = 20;
+        var playerHeight = 20;
         var playerX = (canvas.width - playerWidth) / 2;
         var playerY = (canvas.height - playerHeight) / 2;
         var playerSpeed = 5;
-        var keys = {};
 
-        // Set rectangle variables
-        var rectWidth = 20;
-        var rectHeight = playerHeight;
+        var rectWidth = 40;
+        var rectHeight = 100;
         var rect1Y = 0;
         var rect2Y = canvas.height - rectHeight;
-        var rectSpeed = 2;
+        var rectSpeed = 3;
         var rectDirection1 = 1;
         var rectDirection2 = -1;
 
-        // Set bullet variables
         var bulletRadius = 5;
-        var bulletSpeed = 3;
+        var bulletSpeed = 8;
         var bullets = [];
 
-        // Set collectable variables
         var collectableRadius = 10;
         var collectables = [];
-        var collectableSpawnInterval = 3000; // Interval for spawning collectables (in milliseconds)
-        var lastCollectableSpawnTime = Date.now();
+        var collectableSpawnInterval = 3000;
+        var lastCollectableSpawnTime = 0;
 
-        // Set game state variables
+        var score = 0;
         var isPlayerAlive = true;
+
         var startTime = Date.now();
         var elapsedTime = 0;
-        var score = 0;
 
-        // Add event listeners for player movement
-        document.addEventListener("keydown", function(event) {
+        var keys = {};
+
+        // Keyboard event listeners
+        document.addEventListener("keydown", function (event) {
             keys[event.key] = true;
         });
 
-        document.addEventListener("keyup", function(event) {
+        document.addEventListener("keyup", function (event) {
             keys[event.key] = false;
         });
 
-        // Define the update function
+        // Update function
         function update() {
-            if (!isPlayerAlive) return;
-
-            // Update player position
+            // Move the player
             if (keys["ArrowUp"]) {
                 playerY -= playerSpeed;
             }
@@ -151,55 +124,63 @@
             if (
                 playerY < rect2Y + rectHeight &&
                 playerY + playerHeight > rect2Y &&
-                playerX > canvas.width / 2 &&
+                playerX > canvas.width / 2 + rectWidth &&
                 playerX + playerWidth < canvas.width
             ) {
                 isPlayerAlive = false;
             }
 
+            // Update bullet positions
+            for (var i = 0; i < bullets.length; i++) {
+                bullets[i].x += bulletSpeed;
+                if (bullets[i].x > canvas.width) {
+                    bullets.splice(i, 1);
+                    i--;
+                }
+            }
+
+            // Check collision with bullets
+            for (var i = 0; i < bullets.length; i++) {
+                if (
+                    playerY < bullets[i].y + bulletRadius &&
+                    playerY + playerHeight > bullets[i].y - bulletRadius &&
+                    playerX < bullets[i].x + bulletRadius &&
+                    playerX + playerWidth > bullets[i].x - bulletRadius
+                ) {
+                    bullets.splice(i, 1);
+                    i--;
+                    isPlayerAlive = false;
+                }
+            }
+
             // Spawn collectables
             if (Date.now() - lastCollectableSpawnTime > collectableSpawnInterval) {
-                var collectableX = Math.random() * (canvas.width - collectableRadius * 2) + collectableRadius;
-                var collectableY = Math.random() * (canvas.height - collectableRadius * 2) + collectableRadius;
+                var collectableX = canvas.width;
+                var collectableY = Math.random() * (canvas.height - 2 * collectableRadius) + collectableRadius;
                 collectables.push({ x: collectableX, y: collectableY });
                 lastCollectableSpawnTime = Date.now();
             }
 
-            // Update bullet positions
-            for (var i = 0; i < bullets.length; i++) {
-                bullets[i].x += bulletSpeed;
-
-                // Check collision with collectables
-                for (var j = 0; j < collectables.length; j++) {
-                    var dx = bullets[i].x - collectables[j].x;
-                    var dy = bullets[i].y - collectables[j].y;
-                    var distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < bulletRadius + collectableRadius) {
-                        bullets.splice(i, 1);
-                        collectables.splice(j, 1);
-                        score++;
-                        break;
-                    }
-                }
-
-                // Remove bullets that are out of bounds
-                if (bullets[i] && bullets[i].x > canvas.width) {
-                    bullets.splice(i, 1);
+            // Update collectable positions
+            for (var i = 0; i < collectables.length; i++) {
+                collectables[i].x -= rectSpeed;
+                if (collectables[i].x + collectableRadius < 0) {
+                    collectables.splice(i, 1);
                     i--;
                 }
             }
 
             // Check collision with collectables
             for (var i = 0; i < collectables.length; i++) {
-                var dx = playerX - collectables[i].x;
-                var dy = playerY - collectables[i].y;
-                var distance = Math.sqrt(dx * dx + dy * dy);
-
-                if (distance < playerWidth / 2 + collectableRadius) {
+                if (
+                    playerY < collectables[i].y + collectableRadius &&
+                    playerY + playerHeight > collectables[i].y - collectableRadius &&
+                    playerX < collectables[i].x + collectableRadius &&
+                    playerX + playerWidth > collectables[i].x - collectableRadius
+                ) {
                     collectables.splice(i, 1);
+                    i--;
                     score++;
-                    break;
                 }
             }
 
@@ -209,16 +190,16 @@
             // Clear the canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Draw player
-            ctx.fillStyle = "white";
+            // Draw the player
+            ctx.fillStyle = "red";
             ctx.fillRect(playerX, playerY, playerWidth, playerHeight);
 
-            // Draw rectangles
-            ctx.fillStyle = "red";
+            // Draw the rectangles
+            ctx.fillStyle = "black";
             ctx.fillRect(0, rect1Y, canvas.width / 2 - rectWidth, rectHeight);
             ctx.fillRect(canvas.width / 2 + rectWidth, rect2Y, canvas.width / 2 - rectWidth, rectHeight);
 
-            // Draw bullets
+            // Draw the bullets
             ctx.fillStyle = "blue";
             for (var i = 0; i < bullets.length; i++) {
                 ctx.beginPath();
@@ -226,7 +207,7 @@
                 ctx.fill();
             }
 
-            // Draw collectables
+            // Draw the collectables
             ctx.fillStyle = "green";
             for (var i = 0; i < collectables.length; i++) {
                 ctx.beginPath();
@@ -234,63 +215,79 @@
                 ctx.fill();
             }
 
-            // Draw score and elapsed time
-            ctx.fillStyle = "white";
-            ctx.font = "20px Arial";
+            // Draw the score
+            ctx.fillStyle = "black";
+            ctx.font = "16px Arial";
             ctx.fillText("Score: " + score, 10, 20);
-            ctx.fillText("Time: " + elapsedTime + "s", canvas.width - 100, 20);
 
-            // Call the update function again
-            requestAnimationFrame(update);
+            // Draw the elapsed time
+            ctx.fillText("Time: " + elapsedTime + "s", canvas.width - 80, 20);
+
+            if (isPlayerAlive) {
+                requestAnimationFrame(update);
+            } else {
+                gameOver();
+            }
+        }
+
+        // Game over function
+        function gameOver() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "black";
+            ctx.font = "30px Arial";
+            ctx.fillText("Game Over", canvas.width / 2 - 80, canvas.height / 2);
+            ctx.font = "16px Arial";
+            ctx.fillText("Score: " + score, canvas.width / 2 - 40, canvas.height / 2 + 30);
+            ctx.fillText("Time: " + elapsedTime + "s", canvas.width / 2 - 50, canvas.height / 2 + 50);
+        }
+
+        // Show difficulty options
+        function showDifficultyOptions() {
+            var menu = document.querySelector(".menu");
+            var difficultyOptions = document.querySelector(".difficulty-options");
+            menu.style.display = "none";
+            difficultyOptions.style.display = "block";
         }
 
         // Start the game
         function startGame(difficulty) {
-            // Reset player position
+            var menu = document.querySelector(".menu");
+            var canvas = document.getElementById("canvas");
+            canvas.style.display = "block";
+            menu.style.display = "none";
+
+            switch (difficulty) {
+                case 1:
+                    rectSpeed = 2;
+                    collectableSpawnInterval = 4000;
+                    break;
+                case 2:
+                    rectSpeed = 4;
+                    collectableSpawnInterval = 3000;
+                    break;
+                case 3:
+                    rectSpeed = 6;
+                    collectableSpawnInterval = 2000;
+                    break;
+                default:
+                    rectSpeed = 4;
+                    collectableSpawnInterval = 3000;
+            }
+
+            // Reset game variables
             playerX = (canvas.width - playerWidth) / 2;
             playerY = (canvas.height - playerHeight) / 2;
-
-            // Reset rectangle positions
             rect1Y = 0;
             rect2Y = canvas.height - rectHeight;
-
-            // Reset bullet positions
             bullets = [];
-
-            // Reset collectables
             collectables = [];
-
-            // Reset game state variables
+            score = 0;
             isPlayerAlive = true;
             startTime = Date.now();
             elapsedTime = 0;
-            score = 0;
 
-            // Set difficulty based on the selected option
-            if (difficulty === 1) {
-                rectSpeed = 2;
-                collectableSpawnInterval = 3000;
-            } else if (difficulty === 2) {
-                rectSpeed = 4;
-                collectableSpawnInterval = 2000;
-            } else if (difficulty === 3) {
-                rectSpeed = 6;
-                collectableSpawnInterval = 1000;
-            }
-
-            // Hide the menu and show the canvas
-            var menu = document.querySelector(".menu");
-            menu.style.display = "none";
-            canvas.style.display = "block";
-
-            // Start the update loop
+            // Start the game loop
             update();
-        }
-
-        // Show the difficulty options
-        function showDifficultyOptions() {
-            var difficultyOptions = document.querySelector(".difficulty-options");
-            difficultyOptions.style.display = "flex";
         }
     </script>
 </body>
