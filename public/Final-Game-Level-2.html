@@ -1,4 +1,7 @@
-<title>Canvas Example</title>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Canvas Example</title>
     <style>
         body {
             background-color: Brown;
@@ -11,10 +14,39 @@
         canvas {
             border: 1px solid black;
         }
+        .menu {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+        .menu h1 {
+            color: white;
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+        .menu button {
+            font-size: 20px;
+            padding: 10px 20px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <canvas id="myCanvas" width="600" height="400"></canvas>
+    <div class="menu">
+        <h1>Main Menu</h1>
+        <button onclick="startGame(1)">Easy</button>
+        <button onclick="startGame(2)">Medium</button>
+        <button onclick="startGame(3)">Hard</button>
+    </div>
     <script>
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
@@ -189,7 +221,6 @@
         }
 
         // Call the draw function
-        var startTime = Date.now();
         draw();
         setInterval(update, 16);
 
@@ -245,30 +276,57 @@
 
         // Check if a collectable position is valid
         function isCollectablePositionValid(x, y) {
-            for (var i = 0; i < collectables.length; i++) {
-                var collectable = collectables[i];
-                var distance = Math.sqrt((x - collectable.x) * (x - collectable.x) + (y - collectable.y) * (y - collectable.y));
-                if (distance < 60) {
-                    return false;
+            var isValid = true;
+            collectables.forEach(function(collectable) {
+                if (checkCollision(x - collectableRadius, y - collectableRadius, collectableRadius * 2, collectableRadius * 2, collectable.x - collectableRadius, collectable.y - collectableRadius, collectableRadius * 2, collectableRadius * 2)) {
+                    isValid = false;
                 }
-            }
-            return true;
+            });
+            return isValid;
         }
 
         // Check collision between two rectangles
-        function checkCollision(x1, y1, w1, h1, x2, y2, w2, h2) {
-            return x1 < x2 + w2 &&
-                x1 + w1 > x2 &&
-                y1 < y2 + h2 &&
-                y1 + h1 > y2;
+        function checkCollision(x1, y1, width1, height1, x2, y2, width2, height2) {
+            return x1 < x2 + width2 &&
+                x1 + width1 > x2 &&
+                y1 < y2 + height2 &&
+                y1 + height1 > y2;
         }
 
-        // Format time in seconds to MM:SS format
-        function formatTime(time) {
-            var minutes = Math.floor(time / 60000);
-            var seconds = Math.floor((time % 60000) / 1000);
-            seconds = seconds < 10 ? "0" + seconds : seconds;
-            return minutes + ":" + seconds;
+        // Format time as MM:SS
+        function formatTime(milliseconds) {
+            var seconds = Math.floor(milliseconds / 1000);
+            var minutes = Math.floor(seconds / 60);
+            seconds %= 60;
+            return padNumber(minutes) + ":" + padNumber(seconds);
+        }
+
+        // Pad number with leading zeros
+        function padNumber(number) {
+            return number.toString().padStart(2, "0");
+        }
+
+        // Start the game with the specified difficulty
+        function startGame(difficulty) {
+            switch (difficulty) {
+                case 1: // Easy
+                    rectSpeed = 1;
+                    collectableSpawnInterval = 3000;
+                    bulletSpeed = 2;
+                    break;
+                case 2: // Medium
+                    rectSpeed = 3;
+                    collectableSpawnInterval = 2000;
+                    bulletSpeed = 3;
+                    break;
+                case 3: // Hard
+                    rectSpeed = 5;
+                    collectableSpawnInterval = 1000;
+                    bulletSpeed = 5;
+                    break;
+            }
+            restartGame();
+            document.querySelector(".menu").style.display = "none";
         }
     </script>
 </body>
