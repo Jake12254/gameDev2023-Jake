@@ -13,6 +13,7 @@
         }
         canvas {
             border: 1px solid black;
+            display: none;
         }
         .menu {
             position: absolute;
@@ -37,9 +38,6 @@
             padding: 10px 20px;
             margin-bottom: 10px;
         }
-        .menu button:nth-child(1) {
-            margin-top: 40px;
-        }
     </style>
 </head>
 <body>
@@ -50,13 +48,13 @@
         <button onclick="openOptions()">Options</button>
         <button onclick="openExtras()">Extras</button>
     </div>
-    <div class="options" style="display: none;">
+    <div class="options">
         <h1>Options</h1>
-        <button onclick="goBack()">Back</button>
+        <button onclick="closeOptions()">Back</button>
     </div>
-    <div class="extras" style="display: none;">
+    <div class="extras">
         <h1>Extras</h1>
-        <button onclick="goBack()">Back</button>
+        <button onclick="closeExtras()">Back</button>
     </div>
     <script>
         var canvas = document.getElementById("myCanvas");
@@ -105,202 +103,185 @@
             keys[event.key] = false;
         });
 
-       .
-        // Function to start the game
-        function startGame(option) {
-            // Hide the main menu
-            var menu = document.querySelector('.menu');
-            menu.style.display = 'none';
+        // Define the update function
+        function update() {
+            if (!isPlayerAlive) return;
 
-            // Show the canvas
-            canvas.style.display = 'block';
-
-            // Start the game loop
-            gameLoop();
-        }
-
-        // Function to open the options menu
-        function openOptions() {
-            // Hide the main menu
-            var menu = document.querySelector('.menu');
-            menu.style.display = 'none';
-
-            // Show the options menu
-            var options = document.querySelector('.options');
-            options.style.display = 'block';
-        }
-
-        // Function to open the extras menu
-        function openExtras() {
-            // Hide the main menu
-            var menu = document.querySelector('.menu');
-            menu.style.display = 'none';
-
-            // Show the extras menu
-            var extras = document.querySelector('.extras');
-            extras.style.display = 'block';
-        }
-
-        // Function to go back to the main menu
-        function goBack() {
-            // Hide the current menu
-            var currentMenu = document.querySelector('.options') || document.querySelector('.extras');
-            currentMenu.style.display = 'none';
-
-            // Show the main menu
-            var menu = document.querySelector('.menu');
-            menu.style.display = 'flex';
-        }
-
-        // Function to handle player movement
-        function movePlayer() {
-            if (keys["ArrowUp"] && playerY > 0) {
+            // Update player position
+            if (keys["w"] && playerY > 0) {
                 playerY -= playerSpeed;
             }
-
-            if (keys["ArrowDown"] && playerY + playerHeight < canvas.height) {
+            if (keys["s"] && playerY < canvas.height - playerHeight) {
                 playerY += playerSpeed;
             }
-
-            if (keys["ArrowLeft"] && playerX > 0) {
+            if (keys["a"] && playerX > 0) {
                 playerX -= playerSpeed;
             }
-
-            if (keys["ArrowRight"] && playerX + playerWidth < canvas.width) {
+            if (keys["d"] && playerX < canvas.width - playerWidth) {
                 playerX += playerSpeed;
             }
-        }
 
-        // Function to handle bullet movement
-        function moveBullets() {
+            // Update rectangle positions
+            rect1Y += rectSpeed * rectDirection1;
+            if (rect1Y <= 0 || rect1Y >= canvas.height - rectHeight) {
+                rectDirection1 *= -1;
+            }
+
+            rect2Y += rectSpeed * rectDirection2;
+            if (rect2Y <= 0 || rect2Y >= canvas.height - rectHeight) {
+                rectDirection2 *= -1;
+            }
+
+            // Update bullet positions
             for (var i = 0; i < bullets.length; i++) {
                 bullets[i].y -= bulletSpeed;
-                
+
+                // Check for bullet collision with rectangles
+                if (
+                    bullets[i].x > playerX &&
+                    bullets[i].x < playerX + playerWidth &&
+                    bullets[i].y > playerY &&
+                    bullets[i].y < playerY + playerHeight
+                ) {
+                    isPlayerAlive = false;
+                    break;
+                }
+
+                // Remove bullets that have gone offscreen
                 if (bullets[i].y < 0) {
                     bullets.splice(i, 1);
                     i--;
                 }
             }
-        }
 
-        // Function to handle rectangle movement
-        function moveRectangles() {
-            rect1Y += rectSpeed * rectDirection1;
-            rect2Y += rectSpeed * rectDirection2;
-
-            if (rect1Y <= 0 || rect1Y + rectHeight >= canvas.height) {
-                rectDirection1 *= -1;
-            }
-
-            if (rect2Y <= 0 || rect2Y + rectHeight >= canvas.height) {
-                rectDirection2 *= -1;
-            }
-        }
-
-        // Function to handle collision detection
-        function checkCollisions() {
-            // Check player-rectangle collision
-            if (
-                (playerY + playerHeight > rect1Y && playerY < rect1Y + rectHeight && playerX + playerWidth > 0 && playerX < canvas.width) ||
-                (playerY + playerHeight > rect2Y && playerY < rect2Y + rectHeight && playerX + playerWidth > 0 && playerX < canvas.width)
-            ) {
-                isPlayerAlive = false;
-            }
-
-            // Check bullet-rectangle collision
-            for (var i = 0; i < bullets.length; i++) {
+            // Check for player collision with collectables
+            for (var i = 0; i < collectables.length; i++) {
                 if (
-                    (bullets[i].y - bulletRadius < rect1Y + rectHeight && bullets[i].y + bulletRadius > rect1Y && bullets[i].x + bulletRadius > 0 && bullets[i].x - bulletRadius < canvas.width) ||
-                    (bullets[i].y - bulletRadius < rect2Y + rectHeight && bullets[i].y + bulletRadius > rect2Y && bullets[i].x + bulletRadius > 0 && bullets[i].x - bulletRadius < canvas.width)
+                    playerX < collectables[i].x + collectableRadius &&
+                    playerX + playerWidth > collectables[i].x - collectableRadius &&
+                    playerY < collectables[i].y + collectableRadius &&
+                    playerY + playerHeight > collectables[i].y - collectableRadius
                 ) {
-                    bullets.splice(i, 1);
-                    i--;
+                    collectables.splice(i, 1);
+                    score++;
                 }
             }
+
+            // Update elapsed time
+            elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+
+            // Clear the canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw the player
+            ctx.fillStyle = "blue";
+            ctx.fillRect(playerX, playerY, playerWidth, playerHeight);
+
+            // Draw the rectangles
+            ctx.fillStyle = "red";
+            ctx.fillRect(0, rect1Y, rectWidth, rectHeight);
+            ctx.fillRect(canvas.width - rectWidth, rect2Y, rectWidth, rectHeight);
+
+            // Draw the bullets
+            ctx.fillStyle = "yellow";
+            for (var i = 0; i < bullets.length; i++) {
+                ctx.beginPath();
+                ctx.arc(bullets[i].x, bullets[i].y, bulletRadius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.closePath();
+            }
+
+            // Draw the collectables
+            ctx.fillStyle = "green";
+            for (var i = 0; i < collectables.length; i++) {
+                ctx.beginPath();
+                ctx.arc(collectables[i].x, collectables[i].y, collectableRadius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.closePath();
+            }
+
+            // Draw the score and elapsed time
+            ctx.fillStyle = "white";
+            ctx.font = "20px Arial";
+            ctx.fillText("Score: " + score, 10, 20);
+            ctx.fillText("Time: " + elapsedTime + "s", 10, 40);
+
+            // Call the update function again
+            requestAnimationFrame(update);
         }
 
-        // Function to handle game over
-        function gameOver() {
-            // Stop the game loop
-            cancelAnimationFrame(animationFrame);
+        // Function to start the game
+        function startGame(option) {
+            // Hide the menu
+            var menu = document.querySelector(".menu");
+            menu.style.display = "none";
 
-            // Show the game over menu
-            var gameOverMenu = document.querySelector('.game-over');
-            gameOverMenu.style.display = 'block';
-        }
+            // Show canvas
+            canvas.style.display = "block";
 
-        // Function to restart the game
-        function restartGame() {
+            // Reset game state variables
+            isPlayerAlive = true;
+            startTime = Date.now();
+            elapsedTime = 0;
+            score = 0;
+
             // Reset player position
-            playerX = canvas.width / 2 - playerWidth / 2;
-            playerY = canvas.height - playerHeight - 10;
+            playerX = (canvas.width - playerWidth) / 2;
+            playerY = (canvas.height - playerHeight) / 2;
 
             // Reset rectangle positions
             rect1Y = 0;
             rect2Y = canvas.height - rectHeight;
 
-            // Reset game state
-            isPlayerAlive = true;
+            // Clear existing bullets and collectables
             bullets = [];
+            collectables = [];
 
-            // Hide the game over menu
-            var gameOverMenu = document.querySelector('.game-over');
-            gameOverMenu.style.display = 'none';
+            // Set interval to spawn collectables
+            lastCollectableSpawnTime = Date.now();
+            setInterval(spawnCollectable, collectableSpawnInterval);
 
-            // Start the game loop
-            gameLoop();
+            // Call the update function to start the game loop
+            update();
         }
 
-        // Game loop function
-        function gameLoop() {
-            // Clear the canvas
-            context.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Draw player
-            context.fillStyle = 'blue';
-            context.fillRect(playerX, playerY, playerWidth, playerHeight);
-
-            // Draw bullets
-            context.fillStyle = 'red';
-            for (var i = 0; i < bullets.length; i++) {
-                context.beginPath();
-                context.arc(bullets[i].x, bullets[i].y, bulletRadius, 0, Math.PI * 2);
-                context.fill();
-            }
-
-            // Draw rectangles
-            context.fillStyle = 'green';
-            context.fillRect(0, rect1Y, canvas.width, rectHeight);
-            context.fillRect(0, rect2Y, canvas.width, rectHeight);
-
-            // Move player
-            movePlayer();
-
-            // Move bullets
-            moveBullets();
-
-            // Move rectangles
-            moveRectangles();
-
-            // Check collisions
-            checkCollisions();
-
-            // Check if the player is still alive
-            if (!isPlayerAlive) {
-                gameOver();
-                return;
-            }
-
-            // Call the game loop again
-            animationFrame = requestAnimationFrame(gameLoop);
+        // Function to open the options menu
+        function openOptions() {
+            var optionsMenu = document.querySelector(".options");
+            optionsMenu.style.display = "block";
         }
 
-        // Event listeners for keyboard input
-        window.addEventListener('keydown', function(event) {
-            keys[event.key] = true;
-        });
+        // Function to close the options menu
+        function closeOptions() {
+            var optionsMenu = document.querySelector(".options");
+            optionsMenu.style.display = "none";
+        }
 
-        window.addEventListener('keyup', function(event) {
-            keys[event.key] = false;
+        // Function to open the extras menu
+        function openExtras() {
+            var extrasMenu = document.querySelector(".extras");
+            extrasMenu.style.display = "block";
+        }
+
+        // Function to close the extras menu
+        function closeExtras() {
+            var extrasMenu = document.querySelector(".extras");
+            extrasMenu.style.display = "none";
+        }
+
+        // Function to spawn collectables
+        function spawnCollectable() {
+            var collectableX = Math.random() * (canvas.width - collectableRadius * 2) + collectableRadius;
+            var collectableY = Math.random() * (canvas.height - collectableRadius * 2) + collectableRadius;
+
+            collectables.push({ x: collectableX, y: collectableY });
+        }
+
+        // Add event listener to start the game when the page loads
+        window.addEventListener("load", function() {
+            var menu = document.querySelector(".menu");
+            menu.style.display = "flex";
         });
+    </script>
+</body>
 </html>
