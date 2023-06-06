@@ -142,8 +142,7 @@
                 }
             });
            
-    var startGameSound = new Audio('retro-wave-style-track-59892.mp3');
-    var soundEffect = new Audio('coin-collect-retro-8-bit-sound-effect-145251.mp3');
+   
             // Check collectable-player collision
     collectables.forEach(function(collectable, index) {
     if (checkCollision(playerX, playerY, playerWidth, playerHeight, collectable.x - collectableRadius, collectable.y - collectableRadius, collectableRadius * 2, collectableRadius * 2)) {
@@ -330,7 +329,10 @@ function startGame(difficulty) {
     }
      startGameSound.play(); 
             restartGame();
-        }
+        } 
+        var startGameSound = new Audio('retro-wave-style-track-59892.mp3');
+    var soundEffect = new Audio('coin-collect-retro-8-bit-sound-effect-145251.mp3');
     </script>
+  
 </body>
 </html>
