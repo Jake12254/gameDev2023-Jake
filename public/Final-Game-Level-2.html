@@ -40,15 +40,15 @@
         }
     </style>
     <audio id="collisionSound">
-    <source src="collision_sound.mp3" type="public/080047_lose_funny_retro_video-game-80925.mp3">
+    <source src="collision_sound.mp3" type="audio/mpeg">
 </audio>
 
 <audio id="collectSound">
-    <source src="public/coin-collect-retro-8-bit-sound-effect-145251.mp3" type="audio/mpeg">
+    <source src="collect_sound.mp3" type="audio/mpeg">
 </audio>
 
 <audio id="music" loop>
-    <source src="background_music.mp3" type="public/retro-wave-style-track-59892.mp3">
+    <source src="background_music.mp3" type="audio/mpeg">
 </audio>
 
 </head>
@@ -355,7 +355,6 @@ if (!isPlayerAlive) {
 
         // Start the game with the specified difficulty
         function startGame(difficulty) {
-             music.play();
             switch (difficulty) {
                 case 1: // Easy
                     rectSpeed = 1;
