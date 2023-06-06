@@ -240,43 +240,30 @@ v2
             collectableSound.play();
         }
 
-        // Function to start the game
-        function startGame(difficulty) {
-            // Hide the menu
-            var menu = document.querySelector(".menu");
-            menu.style.display = "none";
+        // Start the game with the specified difficulty
+function startGame(difficulty) {
+    switch (difficulty) {
+        case 1: // Easy
+            rectSpeed = 1;
+            collectableSpawnInterval = 3000;
+            bulletSpeed = 2;
+            break;
+        case 2: // Medium
+            rectSpeed = 3;
+            collectableSpawnInterval = 2000;
+            bulletSpeed = 3;
+            break;
+        case 3: // Hard
+            rectSpeed = 5;
+            collectableSpawnInterval = 1000;
+            bulletSpeed = 5;
+            break;
+    }
+    restartGame();
+    document.querySelector(".menu").style.display = "none";
+    playBackgroundMusic(); // Start playing the background music
+}
 
-            // Play background music
-            var backgroundMusic = document.getElementById("backgroundMusic");
-            backgroundMusic.play();
-
-            // Reset game variables
-            isPlayerAlive = true;
-            startTime = Date.now();
-            elapsedTime = 0;
-            score = 0;
-            bullets = [];
-            collectables = [];
-
-            // Set difficulty
-            switch (difficulty) {
-                case 1:
-                    rectSpeed = 2;
-                    collectableSpawnInterval = 3000;
-                    break;
-                case 2:
-                    rectSpeed = 4;
-                    collectableSpawnInterval = 2000;
-                    break;
-                case 3:
-                    rectSpeed = 6;
-                    collectableSpawnInterval = 1000;
-                    break;
-                default:
-                    rectSpeed = 2;
-                    collectableSpawnInterval = 3000;
-                    break;
-            }
 
             // Start the update loop
             update();
