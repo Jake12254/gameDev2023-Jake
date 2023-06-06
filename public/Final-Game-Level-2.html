@@ -141,6 +141,8 @@
                     isPlayerAlive = false;
                 }
             });
+           
+    var startGameSound = new Audio('retro-wave-style-track-59892.mp3');
     var soundEffect = new Audio('coin-collect-retro-8-bit-sound-effect-145251.mp3');
             // Check collectable-player collision
     collectables.forEach(function(collectable, index) {
@@ -308,24 +310,26 @@
         }
 
         // Start the game with the specified difficulty
-        function startGame(difficulty) {
-            switch (difficulty) {
-                case 1: // Easy
-                    rectSpeed = 1;
-                    collectableSpawnInterval = 3000;
-                    bulletSpeed = 2;
-                    break;
-                case 2: // Medium
-                    rectSpeed = 3;
-                    collectableSpawnInterval = 2000;
-                    bulletSpeed = 3;
-                    break;
-                case 3: // Hard
-                    rectSpeed = 5;
-                    collectableSpawnInterval = 1000;
-                    bulletSpeed = 5;
-                    break;
-            }
+function startGame(difficulty) {
+    switch (difficulty) {
+        case 1: // Easy
+            rectSpeed = 1;
+            collectableSpawnInterval = 3000;
+            bulletSpeed = 2;
+            break;
+        case 2: // Medium
+            rectSpeed = 3;
+            collectableSpawnInterval = 2000;
+            bulletSpeed = 3;
+            break;
+        case 3: // Hard
+            rectSpeed = 5;
+            collectableSpawnInterval = 1000;
+            bulletSpeed = 5;
+            break;
+    }
+    startGameSound.play(); // Play the start game sound effect
+}
             restartGame();
             document.querySelector(".menu").style.display = "none";
         }
