@@ -337,13 +337,15 @@ function stopBackgroundMusic() {
                     collectableSpawnInterval = 1000;
                     bulletSpeed = 5;
                     break;
-            }
+            } 
+            startgame();
+            playBackgroundMusic();
             restartGame();
             document.querySelector(".menu").style.display = "none";
-            playBackgroundMusic();
+           
         }
     // Call the startgame function
-startgame();
+
     </script>
 </body>
 </html>
