@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>Canvas Example</title>
-    <style>
+     <style>
         body {
             background-color: Brown;
             display: flex;
@@ -39,18 +39,6 @@
             margin-bottom: 10px;
         }
     </style>
-    <audio id="collisionSound">
-    <source src="collision_sound.mp3" type="audio/mpeg">
-</audio>
-
-<audio id="collectSound">
-    <source src="collect_sound.mp3" type="audio/mpeg">
-</audio>
-
-<audio id="music" loop>
-    <source src="background_music.mp3" type="audio/mpeg">
-</audio>
-
 </head>
 <body>
     <canvas id="myCanvas" width="600" height="400"></canvas>
@@ -60,42 +48,27 @@
         <button onclick="startGame(2)">Medium</button>
         <button onclick="startGame(3)">Hard</button>
     </div>
+
+    <!-- Sound effects -->
+    <audio id="bulletSound" src="public/080047_lose_funny_retro_video-game-80925.mp3"></audio>
+    <audio id="collectSound" src="public/coin-collect-retro-8-bit-sound-effect-145251.mp3"></audio>
+
+    <!-- Background music -->
+    <audio id="backgroundMusic" src="public/retro-wave-style-track-59892.mp3" autoplay loop></audio>
+
     <script>
-        // Define the collision sound element
-var collisionSound = document.getElementById("collisionSound");
-
-// Define the collect sound element
-var collectSound = document.getElementById("collectSound");
-
-// Define the music element
-var music = document.getElementById("music");
-
-// Play collision sound when player collides with a bullet
-bullets.forEach(function(bullet) {
-    if (checkCollision(playerX, playerY, playerWidth, playerHeight, bullet.x - bulletRadius, bullet.y - bulletRadius, bulletRadius * 2, bulletRadius * 2)) {
-        collisionSound.play();
-        isPlayerAlive = false;
-    }
-});
-
-// Play collect sound when player collects a collectable
-collectables.forEach(function(collectable, index) {
-    if (checkCollision(playerX, playerY, playerWidth, playerHeight, collectable.x - collectableRadius, collectable.y - collectableRadius, collectableRadius * 2, collectableRadius * 2)) {
-        collectSound.play();
-        collectables.splice(index, 1);
-        score += 10; // Increase score by 10 for each collectable collected
-    }
-});
-
-
-
-// Stop music when the game ends
-if (!isPlayerAlive) {
-    // ...
-    music.pause();
-    // ...
-}
         var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+
+        // Sound effects
+        var bulletSound = document.getElementById("bulletSound");
+        var collectSound = document.getElementById("collectSound");
+
+        // Background music
+        var backgroundMusic = document.getElementById("backgroundMusic");
+
+        // Rest of the code omitted for brevity
+     var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
 
         // Set player variables
@@ -182,21 +155,42 @@ if (!isPlayerAlive) {
                 return bullet.x >= 0 && bullet.x <= canvas.width && bullet.y >= 0 && bullet.y <= canvas.height;
             });
 
-            // Check bullet-player collision
-            bullets.forEach(function(bullet) {
-                if (checkCollision(playerX, playerY, playerWidth, playerHeight, bullet.x - bulletRadius, bullet.y - bulletRadius, bulletRadius * 2, bulletRadius * 2)) {
-                    isPlayerAlive = false;
-                }
-            });
+        // Check bullet-player collision
+        bullets.forEach(function(bullet) {
+            if (checkCollision(playerX, playerY, playerWidth, playerHeight, bullet.x - bulletRadius, bullet.y - bulletRadius, bulletRadius * 2, bulletRadius * 2)) {
+                isPlayerAlive = false;
+                playCollisionSound(); // Play collision sound effect
+            }
+        });
 
-            // Check collectable-player collision
-            collectables.forEach(function(collectable, index) {
-                if (checkCollision(playerX, playerY, playerWidth, playerHeight, collectable.x - collectableRadius, collectable.y - collectableRadius, collectableRadius * 2, collectableRadius * 2)) {
-                    collectables.splice(index, 1);
-                    score += 10; // Increase score by 10 for each collectable collected
-                }
-            });
+        // Check collectable-player collision
+        collectables.forEach(function(collectable, index) {
+            if (checkCollision(playerX, playerY, playerWidth, playerHeight, collectable.x - collectableRadius, collectable.y - collectableRadius, collectableRadius * 2, collectableRadius * 2)) {
+                collectables.splice(index, 1);
+                score += 10; // Increase score by 10 for each collectable collected
+                playCollectSound(); // Play collect sound effect
+            }
+        });
 
+        // Function to play collision sound effect
+        function playCollisionSound() {
+            bulletSound.currentTime = 0; // Reset sound to the beginning
+            bulletSound.play();
+        }
+
+        // Function to play collect sound effect
+        function playCollectSound() {
+            collectSound.currentTime = 0; // Reset sound to the beginning
+            collectSound.play();
+        }
+
+        // Function to start the background music
+        function startBackgroundMusic() {
+            backgroundMusic.currentTime = 0; // Reset music to the beginning
+            backgroundMusic.play();
+        }
+
+        // Rest of the code omitted for brevity
             // Check if it's time to spawn a new collectable
             var currentTime = Date.now();
             if (currentTime - lastCollectableSpawnTime > collectableSpawnInterval) {
@@ -371,15 +365,10 @@ if (!isPlayerAlive) {
                     collectableSpawnInterval = 1000;
                     bulletSpeed = 5;
                     break;
-            } 
-           
+            }
             restartGame();
             document.querySelector(".menu").style.display = "none";
         }
-      
-
-       
-
     </script>
 </body>
 </html>
