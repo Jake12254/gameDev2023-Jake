@@ -88,9 +88,6 @@ collectables.forEach(function(collectable, index) {
 });
 
 
-   
-    // ...
-}
 
 // Stop music when the game ends
 if (!isPlayerAlive) {
@@ -358,7 +355,8 @@ if (!isPlayerAlive) {
 
         // Start the game with the specified difficulty
         function startGame(difficulty) {
-            music.play();
+             // ...
+             music.play();
             switch (difficulty) {
                 case 1: // Easy
                     rectSpeed = 1;
@@ -375,11 +373,12 @@ if (!isPlayerAlive) {
                     collectableSpawnInterval = 1000;
                     bulletSpeed = 5;
                     break;
-                    
             }
             restartGame();
             document.querySelector(".menu").style.display = "none";
         }
+      
+
        
 
     </script>
