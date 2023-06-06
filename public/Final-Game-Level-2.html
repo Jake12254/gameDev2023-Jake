@@ -309,7 +309,7 @@
             return number.toString().padStart(2, "0");
         }
 
-  // Listen for the 'canplaythrough' event to ensure the audio is fully loaded
+// Listen for the 'canplaythrough' event to ensure the audio is fully loaded
 startGameSound.addEventListener('canplaythrough', function() {
     // Start the game with the specified difficulty
     function startGame(difficulty) {
@@ -331,19 +331,10 @@ startGameSound.addEventListener('canplaythrough', function() {
                 break;
         }
         startGameSound.play(); // Play the start game sound effect
-    } restartGame();
+    }
+});
+            restartGame();
             document.querySelector(".menu").style.display = "none";
-});
-
-// If you need to handle errors loading the audio file, you can add an error event listener as well
-startGameSound.addEventListener('error', function() {
-    console.error('Error loading the start game sound effect file.');
-});
-
-// You can also preload the audio to ensure it's loaded before starting the game
-startGameSound.preload = 'auto';
-     startGameSound.play(); 
-           
         }
     </script>
 </body>
