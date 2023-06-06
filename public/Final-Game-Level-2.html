@@ -309,28 +309,41 @@
             return number.toString().padStart(2, "0");
         }
 
-        // Start the game with the specified difficulty
-function startGame(difficulty) {
-    switch (difficulty) {
-        case 1: // Easy
-            rectSpeed = 1;
-            collectableSpawnInterval = 3000;
-            bulletSpeed = 2;
-            break;
-        case 2: // Medium
-            rectSpeed = 3;
-            collectableSpawnInterval = 2000;
-            bulletSpeed = 3;
-            break;
-        case 3: // Hard
-            rectSpeed = 5;
-            collectableSpawnInterval = 1000;
-            bulletSpeed = 5;
-            break;
-    }
-     startGameSound.play(); 
-            restartGame();
+  // Listen for the 'canplaythrough' event to ensure the audio is fully loaded
+startGameSound.addEventListener('canplaythrough', function() {
+    // Start the game with the specified difficulty
+    function startGame(difficulty) {
+        switch (difficulty) {
+            case 1: // Easy
+                rectSpeed = 1;
+                collectableSpawnInterval = 3000;
+                bulletSpeed = 2;
+                break;
+            case 2: // Medium
+                rectSpeed = 3;
+                collectableSpawnInterval = 2000;
+                bulletSpeed = 3;
+                break;
+            case 3: // Hard
+                rectSpeed = 5;
+                collectableSpawnInterval = 1000;
+                bulletSpeed = 5;
+                break;
+        }
+        startGameSound.play(); // Play the start game sound effect
+    } restartGame();
             document.querySelector(".menu").style.display = "none";
+});
+
+// If you need to handle errors loading the audio file, you can add an error event listener as well
+startGameSound.addEventListener('error', function() {
+    console.error('Error loading the start game sound effect file.');
+});
+
+// You can also preload the audio to ensure it's loaded before starting the game
+startGameSound.preload = 'auto';
+     startGameSound.play(); 
+           
         }
     </script>
 </body>
