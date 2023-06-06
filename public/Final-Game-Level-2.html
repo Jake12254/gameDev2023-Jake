@@ -138,6 +138,7 @@
             // Check bullet-player collision
             bullets.forEach(function(bullet) {
                 if (checkCollision(playerX, playerY, playerWidth, playerHeight, bullet.x - bulletRadius, bullet.y - bulletRadius, bulletRadius * 2, bulletRadius * 2)) {
+                    playPlayerCollisionSound();
                     isPlayerAlive = false;
                 }
             });
@@ -145,8 +146,10 @@
             // Check collectable-player collision
             collectables.forEach(function(collectable, index) {
                 if (checkCollision(playerX, playerY, playerWidth, playerHeight, collectable.x - collectableRadius, collectable.y - collectableRadius, collectableRadius * 2, collectableRadius * 2)) {
-                    collectables.splice(index, 1);
+                    collectables.splice(index, 1); 
+                    playCollectSound();
                     score += 10; // Increase score by 10 for each collectable collected
+                  
                 }
             });
 
@@ -341,6 +344,7 @@ function playCollectSound() {
 
         // Start the game with the specified difficulty
         function startGame(difficulty) {
+            playGameStartSound();
             switch (difficulty) {
                 case 1: // Easy
                     rectSpeed = 1;
