@@ -12,7 +12,7 @@
             margin: 0;
         }
         canvas {
-            border: 5px solid black;
+            border: 1px solid black;
         }
         .menu {
             position: absolute;
@@ -138,18 +138,15 @@
             // Check bullet-player collision
             bullets.forEach(function(bullet) {
                 if (checkCollision(playerX, playerY, playerWidth, playerHeight, bullet.x - bulletRadius, bullet.y - bulletRadius, bulletRadius * 2, bulletRadius * 2)) {
-                    isPlayerAlive = false; 
-                    playPlayerCollisionSound();
+                    isPlayerAlive = false;
                 }
             });
 
             // Check collectable-player collision
             collectables.forEach(function(collectable, index) {
                 if (checkCollision(playerX, playerY, playerWidth, playerHeight, collectable.x - collectableRadius, collectable.y - collectableRadius, collectableRadius * 2, collectableRadius * 2)) {
-                    collectables.splice(index, 1); 
+                    collectables.splice(index, 1);
                     score += 10; // Increase score by 10 for each collectable collected
-                    playCollectSound();
-                  
                 }
             });
 
@@ -307,62 +304,25 @@
         // Pad number with leading zeros
         function padNumber(number) {
             return number.toString().padStart(2, "0");
-            // Player Collision Sounds
-const playerCollisionSound1 = new Audio('080047_lose_funny_retro_video-game-80925.mp3');
-
-
-// Game Start Sounds
-const gameStartSound1 = new Audio('retro-wave-style-track-59892.mp3');
-
-
-// Collecting Collectables Sounds
-const collectSound1 = new Audio('coin-collect-retro-8-bit-sound-effect-145251.mp3');
-
-
-// Function to play player collision sound
-function playPlayerCollisionSound() {
-  // Randomly choose one of the collision sounds
-  const randomCollisionSound = Math.random() < 0.5 ? playerCollisionSound1 : playerCollisionSound2;
-  randomCollisionSound.play();
-}
-
-// Function to play game start sound
-function playGameStartSound() {
-  // Randomly choose one of the game start sounds
-  const randomGameStartSound = Math.random() < 0.5 ? gameStartSound1 : gameStartSound2;
-  randomGameStartSound.play();
-}
-
-// Function to play collectables sound
-function playCollectSound() {
-  // Randomly choose one of the collectables sounds
-  const randomCollectSound = Math.random() < 0.5 ? collectSound1 : collectSound2;
-  randomCollectSound.play();
-}
-
         }
 
         // Start the game with the specified difficulty
         function startGame(difficulty) {
-            
             switch (difficulty) {
                 case 1: // Easy
                     rectSpeed = 1;
                     collectableSpawnInterval = 3000;
                     bulletSpeed = 2;
-                     playGameStartSound();
                     break;
                 case 2: // Medium
                     rectSpeed = 3;
                     collectableSpawnInterval = 2000;
                     bulletSpeed = 3;
-                    playGameStartSound();
                     break;
                 case 3: // Hard
                     rectSpeed = 5;
                     collectableSpawnInterval = 1000;
                     bulletSpeed = 5;
-                     playGameStartSound();
                     break;
             }
             restartGame();
