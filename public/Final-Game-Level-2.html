@@ -355,7 +355,7 @@ if (!isPlayerAlive) {
 
         // Start the game with the specified difficulty
         function startGame(difficulty) {
-            
+             music.play();
             switch (difficulty) {
                 case 1: // Easy
                     rectSpeed = 1;
@@ -373,7 +373,7 @@ if (!isPlayerAlive) {
                     bulletSpeed = 5;
                     break;
             } 
-            music.play();
+           
             restartGame();
             document.querySelector(".menu").style.display = "none";
         }
