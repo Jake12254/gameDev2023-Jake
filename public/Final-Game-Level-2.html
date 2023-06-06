@@ -1,53 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Canvas Example</title>
     <style>
-        body {
-            background-color: Brown;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
         canvas {
             border: 1px solid black;
         }
         .menu {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
             display: flex;
-            justify-content: center;
-            align-items: center;
             flex-direction: column;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1;
-        }
-        .menu h1 {
-            color: white;
-            font-size: 40px;
-            margin-bottom: 20px;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
         .menu button {
-            font-size: 20px;
+            margin: 10px;
             padding: 10px 20px;
-            margin-bottom: 10px;
+            font-size: 18px;
         }
     </style>
 </head>
 <body>
-    <canvas id="myCanvas" width="600" height="400"></canvas>
+    <canvas id="gameCanvas" width="480" height="320"></canvas>
+
     <div class="menu">
-        <h1>Main Menu</h1>
-        <button onclick="startGame(1)">Easy</button>
-        <button onclick="startGame(2)">Medium</button>
-        <button onclick="startGame(3)">Hard</button>
+        <button onclick="startGameMenu()">Start</button>
+        <button onclick="showOptions()">Options</button>
+        <button onclick="showExtras()">Extras</button>
+        <div id="options" style="display: none;">
+            <h2>Options</h2>
+            <!-- Your options content here -->
+        </div>
+        <div id="extras" style="display: none;">
+            <h2>Extras</h2>
+            <!-- Your extras content here -->
+        </div>
     </div>
+
     <script>
+        // Game code here
+ <script>
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
 
@@ -328,6 +319,51 @@
             restartGame();
             document.querySelector(".menu").style.display = "none";
         }
+
+        var canvas = document.getElementById("gameCanvas");
+        var ctx = canvas.getContext("2d");
+
+        // Rest of the game code
+
+        // Define the start game menu function
+        function startGameMenu() {
+            // Hide the menu
+            var menu = document.getElementsByClassName("menu")[0];
+            menu.style.display = "none";
+
+            // Show the difficulty selection
+            var difficultyMenu = document.getElementById("difficultyMenu");
+            difficultyMenu.style.display = "flex";
+        }
+
+        // Define the show options function
+        function showOptions() {
+            // Hide the menu
+            var menu = document.getElementsByClassName("menu")[0];
+            menu.style.display = "none";
+
+            // Show the options
+            var options = document.getElementById("options");
+            options.style.display = "block";
+        }
+
+        // Define the show extras function
+        function showExtras() {
+            // Hide the menu
+            var menu = document.getElementsByClassName("menu")[0];
+            menu.style.display = "none";
+
+            // Show the extras
+            var extras = document.getElementById("extras");
+            extras.style.display = "block";
+        }
+
+        // Define the start game function
+        function startGame(difficulty) {
+            // Rest of the startGame function
+        }
     </script>
 </body>
 </html>
+
+   
