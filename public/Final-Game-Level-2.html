@@ -327,13 +327,19 @@ function startGame(difficulty) {
             bulletSpeed = 5;
             break;
     }
-            startGameSound.play();
-            restartGame();
-            // Call the game loop
-            update();
-            draw();
-    
-        } 
+
+    // Hide the menu element
+    var menuElement = document.querySelector('.menu');
+    menuElement.style.display = 'none';
+
+    // Start the game
+    startGameSound.play();
+    restartGame();
+    // Call the game loop
+    update();
+    draw();
+}
+
     var startGameSound = new Audio('retro-wave-style-track-59892.mp3');
     var soundEffect = new Audio('coin-collect-retro-8-bit-sound-effect-145251.mp3');
     </script>
