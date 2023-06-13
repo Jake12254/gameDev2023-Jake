@@ -43,4 +43,17 @@ Note: ! = Not, &amp; = AND, || = OR
     }
 }">
 
+<input type="button" value="Nested if...else" onclick="{
+    let myInel = parseFloat(document.getElementById('myNum1').value);
+    if (myInel > 0) {
+        if (myInel <= 10) {
+            document.getElementById('myDiv1').innerHTML = myInel + ' is between 0 and 10';
+        } else {
+            document.getElementById('myDiv1').innerHTML = myInel + ' is greater than 10';
+        }
+    } else {
+        document.getElementById('myDiv1').innerHTML = myInel + ' is less than or equal to 0';
+    }
+}">
+
 <div id="myDiv1">...</div>
