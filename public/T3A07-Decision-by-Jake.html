@@ -13,54 +13,75 @@ if (myHour < 10) {
 
 </pre>
 <p>"Good day"</p>
+
 <h3>Example working code</h3>
 <input type="number" id="myNum1" value="4"><br>
 
 <input type="button" value="Simple if Statement for Decision Making" onclick="{
- let myInel = parseFloat(document.getElementById('myNum1').value);
- if (myInel >= 3) {
-     document.getElementById('myDiv1').innerHTML = myInel + ' is greater than or equal to 3';
- }
+    let myInel = parseFloat(document.getElementById('myNum1').value);
+    if (myInel >= 3) {
+        document.getElementById('myDiv1').innerHTML = myInel + ' is greater than or equal to 3';
+    }
+    else {
+        document.getElementById('myDiv1').innerHTML = myInel + ' is less than 3';
+    }
 }">
 
 <input type="button" value="if...else" onclick="{
- let myInel = parseFloat(document.getElementById('myNum1').value);
- if (myInel >= 3) {
-     document.getElementById('myDiv1').innerHTML = myInel + ' is greater than or equal to 3';
- } else {
-     document.getElementById('myDiv1').innerHTML = myInel + ' is less than 3';
- }
+    let myInel = parseFloat(document.getElementById('myNum1').value);
+    if (myInel >= 3) {
+        document.getElementById('myDiv1').innerHTML = myInel + ' is greater than or equal to 3';
+    }
+    else if (myInel === 2) {
+        document.getElementById('myDiv1').innerHTML = myInel + ' is equal to 2';
+    }
+    else {
+        document.getElementById('myDiv1').innerHTML = myInel + ' is less than 2';
+    }
 }">
 
 <input type="button" value="Complex if" onclick="{
- let myInel = parseFloat(document.getElementById('myNum1').value);
- if ((myInel !== 3 || myInel > -3) && myInel <= 166) {
-     document.getElementById('myDiv1').innerHTML = myInel + ' is complex';
- } else {
-     document.getElementById('myDiv1').innerHTML = myInel + ' is not complex';
- }
+    let myInel = parseFloat(document.getElementById('myNum1').value);
+    if ((myInel !== 3 || myInel > -3) && myInel <= 166) {
+        document.getElementById('myDiv1').innerHTML = myInel + ' is complex';
+    }
+    else if (myInel === 3) {
+        document.getElementById('myDiv1').innerHTML = myInel + ' is equal to 3';
+    }
+    else {
+        document.getElementById('myDiv1').innerHTML = myInel + ' is not complex';
+    }
 }">
 
 <input type="button" value="Nested if...else" onclick="{
- let myInel = parseFloat(document.getElementById('myNum1').value);
- if (myInel > 0) {
-     if (myInel <= 10) {
-         document.getElementById('myDiv1').innerHTML = myInel + ' is between 0 and 10';
-     } else {
-         document.getElementById('myDiv1').innerHTML = myInel + ' is greater than 10';
-     }
- } else {
-     document.getElementById('myDiv1').innerHTML = myInel + ' is less than or equal to 0';
- }
+    let myInel = parseFloat(document.getElementById('myNum1').value);
+    if (myInel > 0) {
+        if (myInel <= 10) {
+            document.getElementById('myDiv1').innerHTML = myInel + ' is between 0 and 10';
+        }
+        else if (myInel === 11) {
+            document.getElementById('myDiv1').innerHTML = myInel + ' is equal to 11';
+        }
+        else {
+            document.getElementById('myDiv1').innerHTML = myInel + ' is greater than 11';
+        }
+    }
+    else {
+        document.getElementById('myDiv1').innerHTML = myInel + ' is less than or equal to 0';
+    }
 }">
+
 <input type="button" value="Check Password Strength" onclick="{
     let password = document.getElementById('myNum1').value;
     if (password.length >= 8) {
         document.getElementById('myDiv1').innerHTML = 'Password is strong';
-    } else {
+    }
+    else if (password.length >= 4) {
+        document.getElementById('myDiv1').innerHTML = 'Password is moderate';
+    }
+    else {
         document.getElementById('myDiv1').innerHTML = 'Password is weak';
     }
 }">
-
 
 <div id="myDiv1">...</div>
