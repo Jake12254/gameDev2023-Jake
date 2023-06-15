@@ -52,5 +52,14 @@ Note: ! = Not, & = AND, || = OR
      document.getElementById('myDiv1').innerHTML = myInel + ' is less than or equal to 0';
  }
 }">
+<input type="button" value="Check Password Strength" onclick="{
+    let password = document.getElementById('myNum1').value;
+    if (password.length >= 8) {
+        document.getElementById('myDiv1').innerHTML = 'Password is strong';
+    } else {
+        document.getElementById('myDiv1').innerHTML = 'Password is weak';
+    }
+}">
+
 
 <div id="myDiv1">...</div>
